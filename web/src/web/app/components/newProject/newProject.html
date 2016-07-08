@@ -1,0 +1,51 @@
+<div class="row">
+    <div class="col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1 page-bg">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                <div class="col-md-5 col-xs-5">
+                    Liczba studnetow
+                </div>
+                <div class="col-md-6 col-xs-6">
+                    <input type="text">
+                </div>
+            </div>
+            <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                <div class="col-md-5 col-xs-5">
+					Liczba punktów
+                </div>
+                <div class="col-md-6 col-xs-6">
+                    <input type="text">
+                </div>
+            </div>
+            <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                <div class="col-md-5 col-xs-5">
+                    Termin zgłoszeń zespołów
+                </div>
+                <div class="col-md-6 col-xs-6">
+                    <input type="text">
+                </div>
+            </div>
+            <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                <div class="col-md-5 col-xs-5">
+                    Termin zakończenia projektu
+                </div>
+                <div class="col-md-6 col-xs-6">
+                    <input type="text">
+                </div>
+            </div>
+            <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                <span>Lista studnetów z prowadzącymi</span>
+                <input type="file" nv-file-select uploader="ctrl.uploader">
+                <ul>
+                    <li ng-repeat="item in ctrl.uploader.queue">
+                        Nazwa: <span ng-bind="item.file.name"></span>
+                        <br/>
+                        <button ng-click="item.upload()">upload</button>
+                        <button ng-click="item.remove()">remove</button>
+                    </li>
+                </ul>
+            </div>
+			<button type="button" class="btn btn-pro">Potwierdź</button>
+        </div>
+    </div>
+</div>

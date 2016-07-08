@@ -1,0 +1,74 @@
+<div class="row">
+    <div class="col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1">
+        <div class="page-bg">
+            <div ng-if='ctrl.show()'>
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                        Dodaj osobe do projektu:
+                    </div>
+                    <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                        <input class="form-control" size="100%" type="text" placeholder="Imie nazwisko">
+                        </input>
+                    </div>
+                    <div class="col-md-2 character-padding glyphicon glyphicon-plus"></div>
+                    <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                        Jan Kowalski
+                    </div>
+                    <div class="col-md-2 character-padding glyphicon glyphicon-minus"></div>
+                    <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                        <button type="button" class="btn btn-nav">Wyślij</button>
+                    </div>
+                </div>
+            </div>
+            <div ng-if='ctrl.show()'>
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                        <div>
+                            Strona projektu:
+                            <button type="button" class="btn btn-nav">GitLab</button>
+                        </div>
+                        <div>
+                            Ilosc punktów:
+                        </div>
+                        <div>
+                            Członkowie:
+                        </div>
+                        <div>
+                            Temat
+                        </div>
+                        <div>
+                            Termin
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-if='ctrl.show()'>
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                        Zostałeś wybrany do zespołu przez:
+                        <ui>
+                            <li>Jan Kowalski</li>
+                            <li>Jan Kowalski</li>
+                        </ui>
+                    </div>
+                    <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                        <button type="button" class="btn btn-accept">Zaakceptuj</button>
+                        <button type="button" class="btn btn-reject">Odrzuc</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                    <label for="sel1">Wybierz do kogo wysłać maila</label>
+                    <select class="form-control" id="sel1">
+                        <option>Prowadzący projekt</option>
+                        <option>Prowadzący przedmiot</option>
+                    </select>
+                </div>
+                <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                    <email title="Napisz e-mail"></email>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

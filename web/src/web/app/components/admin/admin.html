@@ -1,0 +1,16 @@
+<div class="row">
+    <div class="col-md-8 col-md-offset-4">
+        <div class="admin-file">
+            <span>Dodaj plik konfiguracyjny</span>
+            <input type="file" nv-file-select uploader="ctrl.uploader">
+            <ul>
+                <li ng-repeat="item in ctrl.uploader.queue">
+                    Nazwa: <span ng-bind="item.file.name"></span>
+                    <br/>
+                    <button ng-click="item.upload()">upload</button>
+                    <button ng-click="item.remove()">remove</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

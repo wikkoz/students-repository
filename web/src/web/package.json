@@ -1,0 +1,26 @@
+{
+	"version": "0.0.0",
+	"private": true,
+	"name": "webravler",
+	"scripts": {
+			"postinstall": "node_modules/.bin/bower prune && bower update && bower install && gulp build"
+	},
+	"devDependencies": {
+		"add-stream": "1.0.0",
+		"bower" : "^1.x",
+		"gulp": "^3.x",
+		"gulp-angular-gettext": "2.x",
+		"gulp-autoprefixer": "^3.1.0",
+		"gulp-concat": "^2.x",
+		"gulp-cssmin": "0.1.7",
+		"gulp-environments": "^0.1.1",
+		"gulp-less": "^3.x",
+		"gulp-ng-annotate": "^1.x",
+		"gulp-plumber": "^1.0.1",
+		"gulp-rename": "^1.x",
+		"gulp-remove-code":"^1.0.2",
+		"gulp-uglify": "^1.5.3",
+		"rimraf": "^2.4.4",
+		"run-sequence": "^1.1.5"
+	}
+}

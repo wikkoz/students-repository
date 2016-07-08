@@ -1,0 +1,47 @@
+<div>
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#home">Student</a></li>
+        <li><a data-toggle="tab" href="#menu1">Laborant</a></li>
+        <li><a data-toggle="tab" href="#menu2">Prowadzacy przedmiot</a></li>
+        <li><a data-toggle="tab" href="#menu3">Admin</a></li>
+    </ul>
+    <div class="tab-content">
+        <div id="home" class="tab-pane fade in active">
+            <div class="row row-eq-height">
+                <div class="col-md-12 content-bg">
+                    <table-student> </table-student>
+                </div>
+            </div>
+        </div>
+        <div id="menu1" class="tab-pane fade">
+            <div class="row row-eq-height">
+                <div class="col-md-8 table-bg">
+                    <table-lab> </table-lab>
+                </div>
+                <div class="col-md-4 side-bg">
+                    <side-lab></side-lab>
+                </div>
+            </div>
+        </div>
+        <div id="menu2" class="tab-pane fade">
+            <div class="row row-eq-height">
+                <div class="col-md-8 table-bg">
+                    <table-subject> </table-subject>
+                </div>
+                <div class="col-md-4 side-bg">
+                    <side-subject></side-subject>
+                </div>
+            </div>
+             <div class="row col-md-8 col-md-offset-2">
+                <email title="Do przedmiotu"></email>
+            </div>
+        </div>
+        <div id="menu3" class="tab-pane fade">
+            <div class="row row-eq-height">
+                <div class="col-md-12 content-bg">
+                    <admin></admin>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
