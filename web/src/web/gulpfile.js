@@ -17,7 +17,7 @@ var sequence             = require('run-sequence');
 var uglify               = require('gulp-uglify');
 
 // 2. VARIABLES
-// - - - - - - - - - - - - - - -
+// - - - - - - - - - - - - - - - 
 var lib = {
 	scripts: [
 		'bower_components/jquery/dist/jquery.js',
