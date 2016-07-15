@@ -99,6 +99,7 @@ crashlytics-build.properties
 # Created by .ignore support plugin (hsz.mobi)
 repository.iml
 npm-debug.log
-repository-web/web/src/web/web/bower_components
-repository-web/web/src/web/web/node_modules
+web/src/web/bower_components
+web/src/web/node_modules
 src/main/resources/static
+**/target

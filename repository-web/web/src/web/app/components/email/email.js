@@ -11,7 +11,7 @@
           title: '@'
         },
         controllerAs: 'ctrl',
-        controller: emailCtrl,
+        controller: emailCtrl
       };
   }
 
