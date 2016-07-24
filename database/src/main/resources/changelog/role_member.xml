@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="role.member.1" author="wiktor" context="db-init">
+        <createTable tableName="role_member">
+            <column name="id_user" type="number"/>
+            <column name="id_role" type="number" />
+        </createTable>
+    </changeSet>
+    <changeSet id="role.member.2" author="wiktor">
+        <addForeignKeyConstraint baseTableName="role_member" baseColumnNames="id_user"
+                                 constraintName="id_user_foreign" referencedTableName="user" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="role_member" baseColumnNames="id_role"
+                                 constraintName="id_role_foreign" referencedTableName="role" referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

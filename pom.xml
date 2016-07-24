@@ -10,6 +10,7 @@
 		<module>resources</module>
 		<module>database</module>
 		<module>repository-web</module>
+		<module>services</module>
 	</modules>
 	<packaging>pom</packaging>
 

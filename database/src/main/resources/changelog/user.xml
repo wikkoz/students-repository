@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="user.1" author="wiktor" context="db-init">
+        <createTable tableName="user">
+            <column name="id" type="number"/>
+            <column name="mail" type="varchar(100)" />
+            <column name="name" type="varchar(100)" />
+        </createTable>
+    </changeSet>
+    <changeSet id="user.2" author="wiktor">
+        <addPrimaryKey tableName="user" columnNames="id"/>
+        <createSequence sequenceName="user_seq" startValue="1" cycle="false"/>
+    </changeSet>
+</databaseChangeLog>
