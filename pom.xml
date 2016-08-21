@@ -7,10 +7,11 @@
 	<artifactId>students-repository</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<modules>
-		<module>resources</module>
 		<module>database</module>
-		<module>repository-web</module>
+		<module>gitlab</module>
 		<module>services</module>
+		<module>resources</module>
+		<module>repository-web</module>
 	</modules>
 	<packaging>pom</packaging>
 
@@ -20,16 +21,29 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.3.6.RELEASE</version>
+		<version>1.4.0.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
+		<jackson.version>2.8.1</jackson.version>
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>18.0</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>

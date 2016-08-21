@@ -9,18 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>services</artifactId>
-
+    <artifactId>gitlab</artifactId>
     <dependencies>
         <dependency>
-            <groupId>com</groupId>
-            <artifactId>database</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com</groupId>
-            <artifactId>gitlab</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>org.gitlab</groupId>
+            <artifactId>java-gitlab-api</artifactId>
+            <version>1.2.5</version>
         </dependency>
     </dependencies>
 

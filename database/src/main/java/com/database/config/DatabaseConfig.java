@@ -1,4 +1,4 @@
-package com;
+package com.database.config;
 
 import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @PropertySource("classpath:/repository.properties")
-public class DatabaseApplication {
+public class DatabaseConfig {
 
 	@Autowired
 	private Environment environment;
@@ -21,10 +21,10 @@ public class DatabaseApplication {
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
-		dataSource.setDriverClassName(environment.getProperty("database.drivername"));
-		dataSource.setUrl(environment.getProperty("database.url"));
-		dataSource.setUsername(environment.getProperty("database.username"));
-		dataSource.setPassword(environment.getProperty("database.password"));
+		dataSource.setDriverClassName(environment.getProperty("spring.datasource.drivername"));
+		dataSource.setUrl(environment.getProperty("spring.datasource.url"));
+		dataSource.setUsername(environment.getProperty("spring.datasource.username"));
+		dataSource.setPassword(environment.getProperty("spring.datasource.password"));
 
 		return dataSource;
 	}
@@ -34,8 +34,8 @@ public class DatabaseApplication {
 		SpringLiquibase liquibase = new SpringLiquibase();
 
 		liquibase.setDataSource(dataSource());
+		liquibase.setDropFirst(Boolean.parseBoolean(environment.getProperty("database.drop")));
 		liquibase.setChangeLog("classpath:/db.changelog-master.xml");
-		liquibase.setDropFirst(Boolean.getBoolean(environment.getProperty("database.drop")));
 
 		return liquibase;
 	}

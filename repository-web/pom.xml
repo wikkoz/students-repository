@@ -48,6 +48,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com</groupId>
+            <artifactId>services</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>4.1.2.RELEASE</version>
+        </dependency>
     </dependencies>
     <profiles>
         <profile>
@@ -79,7 +89,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.Application</mainClass>
+                    <mainClass>com.web.Application</mainClass>
                 </configuration>
             </plugin>
             <plugin>

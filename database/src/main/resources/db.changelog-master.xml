@@ -6,4 +6,9 @@
     <include file="changelog/role.xml" relativeToChangelogFile="true"/>
     <include file="changelog/user.xml" relativeToChangelogFile="true"/>
     <include file="changelog/role_member.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/course.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/project.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/logged_users.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/user_project.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/topics.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
