@@ -13,10 +13,10 @@ public class LoginApi {
             GitlabSession session = GitlabAPI.connect(username, password, url);
             login.setLogin(username);
             login.setPrivateToken(session.getPrivateToken());
+            login.setCorrect(true);
         } catch (Exception e) {
-
-        } finally {
-            return login;
+            login.setCorrect(false);
         }
+        return login;
     }
 }

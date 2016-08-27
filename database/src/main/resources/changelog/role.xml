@@ -7,11 +7,21 @@
     <changeSet id="role.1" author="wiktor" context="db-init">
         <createTable tableName="role">
             <column name="id" type="number"/>
-            <column name="role" type="varchar(100 )" />
+            <column name="role" type="varchar(100)" />
         </createTable>
     </changeSet>
     <changeSet id="role.2" author="wiktor">
         <addPrimaryKey tableName="role" columnNames="id"/>
         <createSequence sequenceName="role_seq" startValue="1" cycle="false"/>
+    </changeSet>
+    <changeSet id="role.3" author="wiktor">
+        <insert tableName="role">
+            <column name="id" valueSequenceNext="role_seq"/>
+            <column name="role" value="ADMIN"/>
+        </insert>
+        <insert tableName="role">
+            <column name="id" valueSequenceNext="role_seq"/>
+            <column name="role" value="STUDENT"/>
+        </insert>
     </changeSet>
 </databaseChangeLog>

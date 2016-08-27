@@ -1,25 +1,23 @@
-package com.database.table;
+package com.database.entity;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-public class Project {
+public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     private String topic;
-    private LocalDate nextDate;
     private String name;
-    private boolean state;
+    private boolean confirmed;
     private String gitlabPage;
     private int points;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_tutor")
     private User tutor;
     @ManyToMany
-    @JoinTable(name = "user_project", joinColumns = @JoinColumn(name = "id_project", referencedColumnName = "id"),
+    @JoinTable(name = "user_team", joinColumns = @JoinColumn(name = "id_project", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id"))
     private List<User> students;
 
@@ -39,14 +37,6 @@ public class Project {
         this.topic = topic;
     }
 
-    public LocalDate getNextDate() {
-        return nextDate;
-    }
-
-    public void setNextDate(LocalDate nextDate) {
-        this.nextDate = nextDate;
-    }
-
     public String getName() {
         return name;
     }
@@ -56,11 +46,11 @@ public class Project {
     }
 
     public boolean isState() {
-        return state;
+        return confirmed;
     }
 
-    public void setState(boolean state) {
-        this.state = state;
+    public void setState(boolean confirmed) {
+        this.confirmed = confirmed;
     }
 
     public String getGitlabPage() {

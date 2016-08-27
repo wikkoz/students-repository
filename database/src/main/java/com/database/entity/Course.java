@@ -1,6 +1,7 @@
-package com.database.table;
+package com.database.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Course {
@@ -12,6 +13,9 @@ public class Course {
     private String abbreviation;
     @OneToOne
     private User lecturer;
+    @OneToMany(mappedBy = "course")
+    private List<Project> projects;
+
 
     public long getId() {
         return id;
@@ -43,5 +47,13 @@ public class Course {
 
     public void setLecturer(User lecturer) {
         this.lecturer = lecturer;
+    }
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
 }

@@ -1,9 +1,10 @@
-package com.database.table;
+package com.database.entity;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "APP_USER")
 public class User {
 
     @Id
@@ -11,17 +12,17 @@ public class User {
     private long id;
     private String mail;
     private String login;
-    private boolean studnet;
     @ManyToMany
-    @JoinTable(name = "user_project", joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "id_project", referencedColumnName = "id"))
-    private List<Project> projects;
-    @OneToMany(mappedBy = "user")
-    private List<Topic> topics;
+    @JoinTable(name = "user_team", joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "id_team", referencedColumnName = "id"))
+    private List<Team> teamsAsStundent;
     @ManyToMany
     @JoinTable(name = "role_member", joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "id"))
     private List<Role> roles;
+    @OneToMany(mappedBy = "tutor")
+    private List<Team> teamsAsTutor;
+
 
     public long getId() {
         return id;
@@ -47,28 +48,20 @@ public class User {
         this.login = login;
     }
 
-    public boolean isStudnet() {
-        return studnet;
+    public List<Team> getTeamsAsStundent() {
+        return teamsAsStundent;
     }
 
-    public void setStudnet(boolean studnet) {
-        this.studnet = studnet;
+    public void setTeamsAsStundent(List<Team> teamsAsStundent) {
+        this.teamsAsStundent = teamsAsStundent;
     }
 
-    public List<Project> getProjects() {
-        return projects;
+    public List<Team> getTeamsAsTutor() {
+        return teamsAsTutor;
     }
 
-    public void setProjects(List<Project> projects) {
-        this.projects = projects;
-    }
-
-    public List<Topic> getTopics() {
-        return topics;
-    }
-
-    public void setTopics(List<Topic> topics) {
-        this.topics = topics;
+    public void setTeamsAsTutor(List<Team> teamsAsTutor) {
+        this.teamsAsTutor = teamsAsTutor;
     }
 
     public List<Role> getRoles() {

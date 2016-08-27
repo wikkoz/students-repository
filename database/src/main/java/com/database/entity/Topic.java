@@ -1,4 +1,4 @@
-package com.database.table;
+package com.database.entity;
 
 import javax.persistence.*;
 
@@ -9,9 +9,6 @@ public class Topic {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     private String topic;
-    @ManyToOne
-    @JoinColumn(name = "id_column")
-    private User user;
 
     public long getId() {
         return id;
@@ -27,13 +24,5 @@ public class Topic {
 
     public void setTopic(String topic) {
         this.topic = topic;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

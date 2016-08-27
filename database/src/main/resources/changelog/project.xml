@@ -8,12 +8,8 @@
         <createTable tableName="project">
             <column name="id" type="number"/>
             <column name="id_course" type="number" />
-            <column name="topic" type="varchar(100)" />
             <column name="next_date" type="date" />
-            <column name="name" type="varchar(100)" />
-            <column name="points" type="number" />
-            <column name="state" type="boolean" />
-            <column name="id_tutor" type="numeric" />
+            <column name="max_points" type="number" />
             <column name="gitlab_page" type="varchar(100)" />
         </createTable>
     </changeSet>
@@ -21,8 +17,6 @@
         <addPrimaryKey tableName="project" columnNames="id"/>
         <addForeignKeyConstraint baseTableName="project" baseColumnNames="id_course"
                                  constraintName="id_course_foreign" referencedTableName="course" referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableName="project" baseColumnNames="id_tutor"
-                                 constraintName="id_tutor_foreign" referencedTableName="user" referencedColumnNames="id"/>
         <createSequence sequenceName="project_seq" startValue="1" cycle="false"/>
     </changeSet>
 </databaseChangeLog>

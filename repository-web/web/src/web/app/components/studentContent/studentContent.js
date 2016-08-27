@@ -1,5 +1,5 @@
 (function () {
-  'use strict'
+  'use strict';
 
   angular.module('projekt').directive('studentContent', studentContent);
   function studentContent(){
@@ -9,7 +9,7 @@
         bindToController: true,
         scope: {},
         controllerAs: 'ctrl',
-        controller: studentContentCtrl,
+        controller: studentContentCtrl
       };
   }
 

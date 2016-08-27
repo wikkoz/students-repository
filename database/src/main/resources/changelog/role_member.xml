@@ -15,8 +15,8 @@
         <addPrimaryKey tableName="role_member" columnNames="id"/>
         <createSequence sequenceName="role_member_seq" startValue="1" cycle="false"/>
         <addForeignKeyConstraint baseTableName="role_member" baseColumnNames="id_user"
-                                 constraintName="id_user_foreign" referencedTableName="user" referencedColumnNames="id"/>
+                                 constraintName="id_user_foreign" referencedTableName="app_user" referencedColumnNames="id"/>
         <addForeignKeyConstraint baseTableName="role_member" baseColumnNames="id_role"
-                                 constraintName="id_role_foreign" referencedTableName="role" referencedColumnNames="id"/>
+                                 constraintName="id_role_foreign" referencedTableName="app_user" referencedColumnNames="id"/>
     </changeSet>
 </databaseChangeLog>

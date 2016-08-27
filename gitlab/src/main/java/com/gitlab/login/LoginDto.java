@@ -5,6 +5,15 @@ import com.google.common.base.MoreObjects;
 public class LoginDto {
     private String privateToken;
     private String login;
+    private boolean correct;
+
+    public boolean isCorrect() {
+        return correct;
+    }
+
+    public void setCorrect(boolean correct) {
+        this.correct = correct;
+    }
 
     public String getLogin() {
         return login;
@@ -27,6 +36,7 @@ public class LoginDto {
         return MoreObjects.toStringHelper(this)
                 .add("privateToken", privateToken)
                 .add("login", login)
+                .add("correct", correct)
                 .toString();
     }
 }

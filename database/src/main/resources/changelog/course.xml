@@ -16,6 +16,6 @@
         <addPrimaryKey tableName="course" columnNames="id"/>
         <createSequence sequenceName="course_seq" startValue="1" cycle="false"/>
         <addForeignKeyConstraint baseTableName="course" baseColumnNames="id_lecturer"
-                                 constraintName="id_lecturer_foreign" referencedTableName="user" referencedColumnNames="id"/>
+                                 constraintName="id_lecturer_foreign" referencedTableName="app_user" referencedColumnNames="id"/>
     </changeSet>
 </databaseChangeLog>

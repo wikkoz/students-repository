@@ -12,6 +12,7 @@
 		<module>services</module>
 		<module>resources</module>
 		<module>repository-web</module>
+		<module>security</module>
 	</modules>
 	<packaging>pom</packaging>
 
@@ -53,6 +54,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
 		</dependency>
 	</dependencies>
 </project>
