@@ -10,19 +10,30 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
+    private String name;
     private String mail;
     private String login;
+
     @ManyToMany
-    @JoinTable(name = "user_team", joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "id_team", referencedColumnName = "id"))
-    private List<Team> teamsAsStundent;
+    @JoinTable(name = "user_team", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id"))
+    private List<Team> teamsAsStudent;
+
     @ManyToMany
-    @JoinTable(name = "role_member", joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "id"))
+    @JoinTable(name = "role_member", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
+
     @OneToMany(mappedBy = "tutor")
     private List<Team> teamsAsTutor;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public long getId() {
         return id;
@@ -48,12 +59,12 @@ public class User {
         this.login = login;
     }
 
-    public List<Team> getTeamsAsStundent() {
-        return teamsAsStundent;
+    public List<Team> getTeamsAsStudent() {
+        return teamsAsStudent;
     }
 
-    public void setTeamsAsStundent(List<Team> teamsAsStundent) {
-        this.teamsAsStundent = teamsAsStundent;
+    public void setTeamsAsStundent(List<Team> teamsAsStudent) {
+        this.teamsAsStudent = teamsAsStudent;
     }
 
     public List<Team> getTeamsAsTutor() {

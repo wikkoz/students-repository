@@ -1,15 +1,15 @@
-package com.web.rest.student;
+package com.services.student;
 
 import com.google.common.base.MoreObjects;
 
 import java.time.LocalDate;
 
-public class StudentProjectRestDto {
+public class StudentsProjectDto {
     private String courseName;
     private String projectName;
     private String tutor;
     private LocalDate nextDate;
-    private boolean state;
+    private String state;
 
     public String getCourseName() {
         return courseName;
@@ -43,11 +43,11 @@ public class StudentProjectRestDto {
         this.nextDate = nextDate;
     }
 
-    public boolean isState() {
+    public String isState() {
         return state;
     }
 
-    public void setState(boolean state) {
+    public void setState(String state) {
         this.state = state;
     }
 

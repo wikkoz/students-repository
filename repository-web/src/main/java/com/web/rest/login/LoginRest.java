@@ -3,6 +3,7 @@ package com.web.rest.login;
 import com.services.login.LoginRequest;
 import com.services.login.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,7 @@ public class LoginRest {
         return loginService.login(request);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping("/user")
     public Map<String, Object> user(Principal user) {
         Map<String, Object> map = new LinkedHashMap<>();

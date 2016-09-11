@@ -7,16 +7,16 @@
     <changeSet id="role.member.1" author="wiktor" context="db-init">
         <createTable tableName="role_member">
             <column name="id" type="number"/>
-            <column name="id_user" type="number"/>
-            <column name="id_role" type="number" />
+            <column name="user_id" type="number"/>
+            <column name="role_id" type="number" />
         </createTable>
     </changeSet>
     <changeSet id="role.member.2" author="wiktor">
         <addPrimaryKey tableName="role_member" columnNames="id"/>
         <createSequence sequenceName="role_member_seq" startValue="1" cycle="false"/>
-        <addForeignKeyConstraint baseTableName="role_member" baseColumnNames="id_user"
+        <addForeignKeyConstraint baseTableName="role_member" baseColumnNames="user_id"
                                  constraintName="id_user_foreign" referencedTableName="app_user" referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableName="role_member" baseColumnNames="id_role"
+        <addForeignKeyConstraint baseTableName="role_member" baseColumnNames="role_id"
                                  constraintName="id_role_foreign" referencedTableName="app_user" referencedColumnNames="id"/>
     </changeSet>
 </databaseChangeLog>

@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LoggedUserRepository extends CrudRepository<LoggedUser, Long>{
     Long countByLogin(String login);
+    LoggedUser findFirstByLoginOrderByDateDesc(String login);
 }

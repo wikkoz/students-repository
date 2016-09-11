@@ -28,6 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private Environment environment;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     private UserRepository userRepository;
 
@@ -51,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(new AuthenticationProvider() {
             @Override
             public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-                return new UsernamePasswordAuthenticationToken(userRepository.findOne(1L).getLogin(), "admin", Lists.newArrayList(()->"ADMIN"));
+                return new UsernamePasswordAuthenticationToken(userRepository.findOne(1L).getLogin(), "admin", Lists.newArrayList(()->"ROLE_ADMIN"));
             }
 
             @Override

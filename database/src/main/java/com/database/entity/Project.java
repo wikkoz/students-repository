@@ -2,6 +2,7 @@ package com.database.entity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Project {
@@ -10,11 +11,14 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     private LocalDate nextDate;
+    private LocalDate startDate;
     private int maxPoints;
-    private String gitlabPage;
     @ManyToOne
-    @JoinColumn(name = "id_course")
+    @JoinColumn(name = "course_id")
     private Course course;
+
+    @OneToMany(mappedBy = "project")
+    private List<Team> teams;
 
     public long getId() {
         return id;
@@ -32,6 +36,14 @@ public class Project {
         this.nextDate = nextDate;
     }
 
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
     public int getMaxPoints() {
         return maxPoints;
     }
@@ -40,19 +52,19 @@ public class Project {
         this.maxPoints = maxPoints;
     }
 
-    public String getGitlabPage() {
-        return gitlabPage;
-    }
-
-    public void setGitlabPage(String gitlabPage) {
-        this.gitlabPage = gitlabPage;
-    }
-
     public Course getCourse() {
         return course;
     }
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+    public List<Team> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(List<Team> teams) {
+        this.teams = teams;
     }
 }

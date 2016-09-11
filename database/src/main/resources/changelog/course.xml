@@ -9,13 +9,13 @@
             <column name="id" type="number"/>
             <column name="course_name" type="varchar(32)" />
             <column name="abbreviation" type="varchar(8)" />
-            <column name="id_lecturer" type="number" />
+            <column name="lecturer_id" type="number" />
         </createTable>
     </changeSet>
     <changeSet id="course.2" author="wiktor">
         <addPrimaryKey tableName="course" columnNames="id"/>
         <createSequence sequenceName="course_seq" startValue="1" cycle="false"/>
-        <addForeignKeyConstraint baseTableName="course" baseColumnNames="id_lecturer"
+        <addForeignKeyConstraint baseTableName="course" baseColumnNames="lecturer_id"
                                  constraintName="id_lecturer_foreign" referencedTableName="app_user" referencedColumnNames="id"/>
     </changeSet>
 </databaseChangeLog>

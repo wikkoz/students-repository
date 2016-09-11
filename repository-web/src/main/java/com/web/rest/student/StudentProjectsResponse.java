@@ -1,17 +1,25 @@
 package com.web.rest.student;
 
 import com.google.common.base.MoreObjects;
+import com.services.student.StudentsProjectDto;
 
 import java.util.List;
 
 public class StudentProjectsResponse {
-    private List<StudentProjectRestDto> projects;
+    private List<StudentsProjectDto> projects;
 
-    public List<StudentProjectRestDto> getProjects() {
+    public StudentProjectsResponse() {
+    }
+
+    public StudentProjectsResponse(List<StudentsProjectDto> projects) {
+        this.projects = projects;
+    }
+
+    public List<StudentsProjectDto> getProjects() {
         return projects;
     }
 
-    public void setProjects(List<StudentProjectRestDto> projects) {
+    public void setProjects(List<StudentsProjectDto> projects) {
         this.projects = projects;
     }
 

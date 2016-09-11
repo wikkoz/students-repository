@@ -10,16 +10,23 @@ public class Team {
     private long id;
     private String topic;
     private String name;
-    private boolean confirmed;
+    @Enumerated(EnumType.STRING)
+    private TeamState confirmed;
     private String gitlabPage;
     private int points;
+
     @ManyToOne
-    @JoinColumn(name = "id_tutor")
+    @JoinColumn(name = "tutor_id")
     private User tutor;
+
     @ManyToMany
-    @JoinTable(name = "user_team", joinColumns = @JoinColumn(name = "id_project", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id"))
+    @JoinTable(name = "user_team", joinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<User> students;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
 
     public long getId() {
         return id;
@@ -45,14 +52,6 @@ public class Team {
         this.name = name;
     }
 
-    public boolean isState() {
-        return confirmed;
-    }
-
-    public void setState(boolean confirmed) {
-        this.confirmed = confirmed;
-    }
-
     public String getGitlabPage() {
         return gitlabPage;
     }
@@ -75,5 +74,29 @@ public class Team {
 
     public void setTutor(User tutor) {
         this.tutor = tutor;
+    }
+
+    public TeamState getConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(TeamState confirmed) {
+        this.confirmed = confirmed;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public List<User> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<User> students) {
+        this.students = students;
     }
 }

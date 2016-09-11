@@ -21,14 +21,21 @@ public class LoginService {
 
     public boolean login(LoginRequest loginRequest) {
         LoginDto login = gitLabApi.login(loginRequest.getLogin(), loginRequest.getPassword(), "lol");
-        if (login.isCorrect() && isNotLogged(login))
+        if (login.isCorrect() && !isLogged(login.getLogin()))
             saveCorrectLogin(login);
         return login.isCorrect();
     }
 
     @Transactional
-    private boolean isNotLogged(LoginDto loginDto) {
-        return loggedUserRepository.countByLogin(loginDto.getLogin()) == 0;
+    public boolean isLogged(String login) {
+        return loggedUserRepository.countByLogin(login) > 0;
+    }
+
+    @Transactional
+    public String getPrivateToken(String login){
+        if(isLogged(login))
+            return loggedUserRepository.findFirstByLoginOrderByDateDesc(login).getPrivateToken();
+        return null;
     }
 
     @Transactional

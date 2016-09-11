@@ -11,8 +11,10 @@ public class Course {
     private long id;
     private String courseName;
     private String abbreviation;
+
     @OneToOne
     private User lecturer;
+
     @OneToMany(mappedBy = "course")
     private List<Project> projects;
 

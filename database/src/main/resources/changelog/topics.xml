@@ -7,16 +7,16 @@
     <changeSet id="topic.1" author="wiktor" context="db-init">
         <createTable tableName="topic">
             <column name="id" type="number"/>
-            <column name="id_user" type="number" />
-            <column name="id_course" type="number" />
+            <column name="user_id" type="number" />
+            <column name="course_id" type="number" />
             <column name="topic" type="varchar(100)" />
         </createTable>
     </changeSet>
     <changeSet id="topic.2" author="wiktor">
         <addPrimaryKey tableName="topic" columnNames="id"/>
-        <addForeignKeyConstraint baseTableName="topic" baseColumnNames="id_user"
+        <addForeignKeyConstraint baseTableName="topic" baseColumnNames="user_id"
                                  constraintName="id_user_topics_foreign" referencedTableName="app_user" referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableName="topic" baseColumnNames="id_course"
+        <addForeignKeyConstraint baseTableName="topic" baseColumnNames="course_id"
                                  constraintName="id_course_topics_fk" referencedTableName="course" referencedColumnNames="id"/>
         <createSequence sequenceName="topic_seq" startValue="1" cycle="false"/>
     </changeSet>
