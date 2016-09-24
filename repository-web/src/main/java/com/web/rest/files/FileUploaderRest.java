@@ -21,7 +21,7 @@ public class FileUploaderRest {
     private static final Logger logger = LoggerFactory.getLogger(FileUploaderRest.class);
 
     @Autowired
-    private FileService fileService;
+    private FileService fileParserService;
 
     @RequestMapping(value = "/createUsers", headers = "'Content-Type': 'multipart/form-data'", method = RequestMethod.POST)
     public boolean createUsers(@RequestParam(value = "file") MultipartFile file) {

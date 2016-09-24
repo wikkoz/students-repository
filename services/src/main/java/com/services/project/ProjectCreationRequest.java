@@ -12,8 +12,9 @@ public class ProjectCreationRequest {
     private LocalDate startDate;
     private LocalDate endDate;
     private String filename;
-    private InputStream fileData;
-    private String login;
+    private InputStream fileStudentData;
+    private InputStream fileTutorData;
+    private String privateToken;
 
     public int getStudentsNumber() {
         return studentsNumber;
@@ -55,20 +56,12 @@ public class ProjectCreationRequest {
         this.filename = filename;
     }
 
-    public InputStream getFileData() {
-        return fileData;
+    public String getPrivateToken() {
+        return privateToken;
     }
 
-    public void setFileData(InputStream fileData) {
-        this.fileData = fileData;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
+    public void setPrivateToken(String privateToken) {
+        this.privateToken = privateToken;
     }
 
     public String getCourseName() {
@@ -77,6 +70,22 @@ public class ProjectCreationRequest {
 
     public void setCourseName(String courseName) {
         this.courseName = courseName;
+    }
+
+    public InputStream getFileStudentData() {
+        return fileStudentData;
+    }
+
+    public void setFileStudentData(InputStream fileStudentData) {
+        this.fileStudentData = fileStudentData;
+    }
+
+    public InputStream getFileTutorData() {
+        return fileTutorData;
+    }
+
+    public void setFileTutorData(InputStream fileTutorData) {
+        this.fileTutorData = fileTutorData;
     }
 
     @Override
@@ -88,8 +97,9 @@ public class ProjectCreationRequest {
                 .add("startDate", startDate)
                 .add("endDate", endDate)
                 .add("filename", filename)
-                .add("fileData", fileData)
-                .add("login", login)
+                .add("fileStudentData", fileStudentData)
+                .add("fileTutorData", fileTutorData)
+                .add("privateToken", privateToken)
                 .toString();
     }
 }

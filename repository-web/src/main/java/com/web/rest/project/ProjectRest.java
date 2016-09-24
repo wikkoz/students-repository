@@ -1,5 +1,6 @@
 package com.web.rest.project;
 
+import com.services.login.LoginService;
 import com.services.project.ProjectCreationRequest;
 import com.services.project.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/project")
 public class ProjectRest {
+
+    @Autowired
+    private LoginService loginService;
 
     @Autowired
     private ProjectService projectService;
@@ -33,10 +37,11 @@ public class ProjectRest {
     public void createProject(Principal user, @RequestParam(value = "file") MultipartFile file, @RequestParam("projectDto") ProjectDataDto projectdto,
             @PathVariable("courseName") String courseName) {
         ProjectCreationRequest request = new ProjectCreationRequest();
-        request.setLogin(user.getName());
+        String privateToken = loginService.getPrivateToken(user.getName());
+        request.setPrivateToken(privateToken);
         request.setEndDate(projectdto.getEndDate());
         try {
-            request.setFileData(file.getInputStream());
+            request.setFileStudentData(file.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }

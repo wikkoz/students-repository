@@ -1,7 +1,9 @@
 package com.services.login;
 
 import com.database.entity.LoggedUser;
+import com.database.entity.User;
 import com.database.repository.LoggedUserRepository;
+import com.database.repository.UserRepository;
 import com.gitlab.GitLabApi;
 import com.gitlab.login.LoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +19,18 @@ public class LoginService {
     private GitLabApi gitLabApi;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private LoggedUserRepository loggedUserRepository;
 
+    public String getNameLoggedUser(String login) {
+        User logged = userRepository.findUserByLogin(login);
+        return logged.getName();
+    }
+
     public boolean login(LoginRequest loginRequest) {
-        LoginDto login = gitLabApi.login(loginRequest.getLogin(), loginRequest.getPassword(), "lol");
+        LoginDto login = gitLabApi.login(loginRequest.getLogin(), loginRequest.getPassword());
         if (login.isCorrect() && !isLogged(login.getLogin()))
             saveCorrectLogin(login);
         return login.isCorrect();

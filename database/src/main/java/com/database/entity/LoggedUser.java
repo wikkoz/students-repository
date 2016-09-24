@@ -1,15 +1,13 @@
 package com.database.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 public class LoggedUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "logged_user_seq", sequenceName = "logged_user_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "logged_user_seq")
     private long id;
     private String privateToken;
     private LocalDate date;

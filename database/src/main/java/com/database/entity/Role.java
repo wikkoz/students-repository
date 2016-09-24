@@ -1,14 +1,12 @@
 package com.database.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "role_seq", sequenceName = "role_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq")
     private long id;
     private String role;
 

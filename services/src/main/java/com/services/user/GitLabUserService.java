@@ -29,7 +29,7 @@ public class GitLabUserService {
         if(Strings.isNullOrEmpty(privateToken)){
             return false;
         }
-        gitlabApi.createUser("url", privateToken, dto);
+        gitlabApi.createUser(privateToken, dto);
         return true;
     }
 

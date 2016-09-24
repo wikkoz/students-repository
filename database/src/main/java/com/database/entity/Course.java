@@ -7,17 +7,19 @@ import java.util.List;
 public class Course {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "course_seq", sequenceName = "course_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_seq")
     private long id;
+    private int groupId;
     private String courseName;
     private String abbreviation;
+    private String semester;
 
     @OneToOne
     private User lecturer;
 
     @OneToMany(mappedBy = "course")
     private List<Project> projects;
-
 
     public long getId() {
         return id;
@@ -57,5 +59,21 @@ public class Course {
 
     public void setProjects(List<Project> projects) {
         this.projects = projects;
+    }
+
+    public String getSemester() {
+        return semester;
+    }
+
+    public void setSemester(String semester) {
+        this.semester = semester;
+    }
+
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
     }
 }

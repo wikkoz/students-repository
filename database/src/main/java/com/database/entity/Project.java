@@ -8,7 +8,8 @@ import java.util.List;
 public class Project {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "project_seq", sequenceName = "project_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "project_seq")
     private long id;
     private LocalDate nextDate;
     private LocalDate startDate;
@@ -19,6 +20,11 @@ public class Project {
 
     @OneToMany(mappedBy = "project")
     private List<Team> teams;
+
+    @ManyToMany
+    @JoinTable(name = "student_project", joinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    private List<User> students;
 
     public long getId() {
         return id;
@@ -66,5 +72,13 @@ public class Project {
 
     public void setTeams(List<Team> teams) {
         this.teams = teams;
+    }
+
+    public List<User> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<User> students) {
+        this.students = students;
     }
 }

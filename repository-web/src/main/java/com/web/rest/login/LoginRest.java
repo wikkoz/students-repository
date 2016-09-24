@@ -22,7 +22,7 @@ public class LoginRest {
     @Autowired
     private LoginService loginService;
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "login",method = RequestMethod.POST)
     public boolean loginToGitlab(@RequestBody LoginRestDto login){
         LoginRequest request = new LoginRequest();
         request.setLogin(login.getLogin());

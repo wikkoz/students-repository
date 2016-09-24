@@ -18,10 +18,10 @@ public class LoginApi {
         return GitlabAPI.connect(URL, privateToken);
     }
 
-    public LoginDto login(String username, String password, String url) {
+    public LoginDto login(String username, String password) {
         LoginDto login = new LoginDto();
         try {
-            GitlabSession session = GitlabAPI.connect(username, password, URL);
+            GitlabSession session = GitlabAPI.connect(URL, username, password);
             login.setLogin(username);
             login.setPrivateToken(session.getPrivateToken());
             login.setCorrect(true);

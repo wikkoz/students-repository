@@ -17,6 +17,6 @@
         <addForeignKeyConstraint baseTableName="role_member" baseColumnNames="user_id"
                                  constraintName="id_user_foreign" referencedTableName="app_user" referencedColumnNames="id"/>
         <addForeignKeyConstraint baseTableName="role_member" baseColumnNames="role_id"
-                                 constraintName="id_role_foreign" referencedTableName="app_user" referencedColumnNames="id"/>
+                                 constraintName="id_role_foreign" referencedTableName="role" referencedColumnNames="id"/>
     </changeSet>
 </databaseChangeLog>

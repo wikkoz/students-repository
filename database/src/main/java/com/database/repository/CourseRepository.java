@@ -1,6 +1,7 @@
 package com.database.repository;
 
 import com.database.entity.Course;
+import com.database.entity.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -8,11 +8,13 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "app_user_seq", sequenceName = "app_user_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "app_user_seq")
     private long id;
     private String name;
     private String mail;
     private String login;
+    private String eres;
 
     @ManyToMany
     @JoinTable(name = "user_team", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -23,6 +25,11 @@ public class User {
     @JoinTable(name = "role_member", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
+
+    @ManyToMany
+    @JoinTable(name = "student_project", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id"))
+    private List<Project> projectsAsStudent;
 
     @OneToMany(mappedBy = "tutor")
     private List<Team> teamsAsTutor;
@@ -81,5 +88,9 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public void setTeamsAsStudent(List<Team> teamsAsStudent) {
+        this.teamsAsStudent = teamsAsStudent;
     }
 }

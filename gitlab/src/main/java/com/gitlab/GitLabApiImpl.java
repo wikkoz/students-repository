@@ -28,13 +28,19 @@ public class GitLabApiImpl implements GitLabApi {
     private ProjectApi projectApi;
 
     @Override
-    public LoginDto login(String username, String password, String url) {
-        return loginApi.login(username, password, url);
+    public LoginDto login(String username, String password) {
+        return loginApi.login(username, password);
     }
 
     @Override
-    public void createUser(String url, String private_token, UserDto user) {
+    public void createUser(String private_token, UserDto user) {
         GitlabAPI gitlab = loginApi.connect(private_token);
         userApi.createUser(gitlab, user);
+    }
+
+    @Override
+    public void createProject(String private_token, String name, int groupId) {
+        GitlabAPI gitlab = loginApi.connect(private_token);
+        projectApi.createProject(gitlab, name, groupId);
     }
 }

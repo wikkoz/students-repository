@@ -14,6 +14,6 @@ public interface TeamRepository extends CrudRepository<Team, Long> {
     Team findById(long id);
 
     @Modifying
-    @Query("select t FROM Team t left join fetch t.project p left join fetch p.course c where c.id = :id")
+    @Query("select t FROM Team t left join t.project p left join  p.course c where c.id = :id")
     List<Team> findAllTeamsFromCourse(@Param("id") long id);
 }

@@ -6,12 +6,14 @@ import java.util.List;
 @Entity
 public class Team {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "team_seq", sequenceName = "team_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "team_seq")
     private long id;
     private String topic;
     private String name;
     @Enumerated(EnumType.STRING)
     private TeamState confirmed;
+    private long gitlabId;
     private String gitlabPage;
     private int points;
 
@@ -52,14 +54,6 @@ public class Team {
         this.name = name;
     }
 
-    public String getGitlabPage() {
-        return gitlabPage;
-    }
-
-    public void setGitlabPage(String gitlabPage) {
-        this.gitlabPage = gitlabPage;
-    }
-
     public int getPoints() {
         return points;
     }
@@ -98,5 +92,21 @@ public class Team {
 
     public void setStudents(List<User> students) {
         this.students = students;
+    }
+
+    public long getGitlabId() {
+        return gitlabId;
+    }
+
+    public void setGitlabId(long gitlabId) {
+        this.gitlabId = gitlabId;
+    }
+
+    public void setGitlabPage(String gitlabPage) {
+        this.gitlabPage = gitlabPage;
+    }
+
+    public String getGitlabPage() {
+        return gitlabPage;
     }
 }
