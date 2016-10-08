@@ -16,10 +16,8 @@ public class User {
     private String login;
     private String eres;
 
-    @ManyToMany
-    @JoinTable(name = "user_team", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id"))
-    private List<Team> teamsAsStudent;
+    @OneToMany(mappedBy = "student")
+    private List<UserTeam> teamsAsStudent;
 
     @ManyToMany
     @JoinTable(name = "role_member", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -66,11 +64,11 @@ public class User {
         this.login = login;
     }
 
-    public List<Team> getTeamsAsStudent() {
+    public List<UserTeam> getTeamsAsStudent() {
         return teamsAsStudent;
     }
 
-    public void setTeamsAsStundent(List<Team> teamsAsStudent) {
+    public void setTeamsAsStundent(List<UserTeam> teamsAsStudent) {
         this.teamsAsStudent = teamsAsStudent;
     }
 
@@ -88,9 +86,5 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
-    }
-
-    public void setTeamsAsStudent(List<Team> teamsAsStudent) {
-        this.teamsAsStudent = teamsAsStudent;
     }
 }

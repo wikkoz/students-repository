@@ -11,6 +11,12 @@ public class Topic {
     private long id;
     private String topic;
 
+    @OneToOne
+    private Course course;
+
+    @OneToOne
+    private User user;
+
     public long getId() {
         return id;
     }
@@ -25,5 +31,21 @@ public class Topic {
 
     public void setTopic(String topic) {
         this.topic = topic;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

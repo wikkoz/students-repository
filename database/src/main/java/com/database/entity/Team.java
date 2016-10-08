@@ -21,10 +21,8 @@ public class Team {
     @JoinColumn(name = "tutor_id")
     private User tutor;
 
-    @ManyToMany
-    @JoinTable(name = "user_team", joinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    private List<User> students;
+    @OneToMany(mappedBy = "team")
+    private List<UserTeam> students;
 
     @ManyToOne
     @JoinColumn(name = "project_id")
@@ -86,11 +84,11 @@ public class Team {
         this.project = project;
     }
 
-    public List<User> getStudents() {
+    public List<UserTeam> getStudents() {
         return students;
     }
 
-    public void setStudents(List<User> students) {
+    public void setStudents(List<UserTeam> students) {
         this.students = students;
     }
 
@@ -108,5 +106,21 @@ public class Team {
 
     public String getGitlabPage() {
         return gitlabPage;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Team team = (Team) o;
+
+        return id == team.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
     }
 }
