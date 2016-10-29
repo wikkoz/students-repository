@@ -9,14 +9,18 @@
                     <input type="text">
                 </div>
             </div>
+        </div>
+        <div class="row">
             <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                 <div class="col-md-5 col-xs-5">
-					Liczba punktów
+                    Liczba punktów
                 </div>
                 <div class="col-md-6 col-xs-6">
                     <input type="text">
                 </div>
             </div>
+        </div>
+        <div class="row">
             <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                 <div class="col-md-5 col-xs-5">
                     Termin zgłoszeń zespołów
@@ -25,6 +29,8 @@
                     <input type="text">
                 </div>
             </div>
+        </div>
+        <div class="row">
             <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                 <div class="col-md-5 col-xs-5">
                     Termin zakończenia projektu
@@ -33,8 +39,10 @@
                     <input type="text">
                 </div>
             </div>
-            <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
-                <span>Lista studnetów z prowadzącymi</span>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-1 col-xs-4 col-xs-offset-1">
+                <span>Lista studnetów</span>
                 <input type="file" nv-file-select uploader="ctrl.uploader">
                 <ul>
                     <li ng-repeat="item in ctrl.uploader.queue">
@@ -45,7 +53,23 @@
                     </li>
                 </ul>
             </div>
-			<button type="button" class="btn btn-pro">Potwierdź</button>
+            <div class="col-md-4 col-md-offset-1 col-xs-4 col-xs-offset-1">
+                <span>Lista prowadzacych</span>
+                <input type="file" nv-file-select uploader="ctrl.uploader">
+                <ul>
+                    <li ng-repeat="item in ctrl.uploader.queue">
+                        Nazwa: <span ng-bind="item.file.name"></span>
+                        <br/>
+                        <button ng-click="item.upload()">upload</button>
+                        <button ng-click="item.remove()">remove</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4 col-xs-4 col-xs-offset-4">
+                <button type="button" class="btn btn-pro">Potwierdź</button>
+            </div>
         </div>
     </div>
 </div>

@@ -38,7 +38,7 @@
     }
 
     function newTeam(){
-      $state.go('newteam');
+      $state.go('newteam', {teamId: 1});
     }
   }
 })();

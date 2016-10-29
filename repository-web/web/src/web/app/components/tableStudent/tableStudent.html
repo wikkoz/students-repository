@@ -8,7 +8,7 @@
 		<th>Status</th>
 	</thead>
 	<tbody ng-repeat="row in ctrl.model">
-		<tr ng-click = 'ctrl.click()' class="pointer">
+		<tr ng-click = 'ctrl.click(row.id)' class="pointer">
 			<th>{{$index+1}}</th>
 			<td>{{row.course}}</td>
 			<td>{{row.name}}</td>

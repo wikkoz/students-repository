@@ -16,5 +16,6 @@
 
     function newProjectCtrl() {
         var ctrl = this;
+        ctrl.uploader = new FileUploader()
     }
 })();

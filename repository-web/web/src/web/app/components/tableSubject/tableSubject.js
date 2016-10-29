@@ -36,7 +36,7 @@
     ];
 
     function click(){
-      $state.go('newproject');
+      $state.go('newproject', {courseId:1});
     }
   }
 })();

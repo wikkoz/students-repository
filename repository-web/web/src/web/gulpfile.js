@@ -28,7 +28,8 @@ var lib = {
 		'bower_components/angular-touch/angular-touch.js',
 		'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
 		'bower_components/angular-file-upload/dist/angular-file-upload.js',
-		'bower_components/lodash/lodash.js'
+		'bower_components/lodash/lodash.js',
+		'bower_components/angular-resource/angular-resource.js'
 	],
 	styles: [
 		'bower_components/angular-ui-select/dist/select.css',
@@ -45,7 +46,8 @@ var app = {
 	script_tests: ['app/**/*.spec.js'],
 	templates: ['app/components/**/*.html'],
 	index_dev: ['app/index.html'],
-	dst: '../../../src/main/resources/static'
+	dst: '../../../src/main/resources/static',
+	dst2: '../../../target/classes/static'
 };
 
 var assets = {
@@ -85,13 +87,17 @@ gulp.task('copy-fonts', function () {
 		}))
 		.pipe(gulp.dest(app.dst + '/css/'))
 		.pipe(gulp.dest(app.dst + '/lib/'))
-		.pipe(gulp.dest(app.dst));
+		.pipe(gulp.dest(app.dst))
+		.pipe(gulp.dest(app.dst2 + '/css/'))
+		.pipe(gulp.dest(app.dst2 + '/lib/'))
+		.pipe(gulp.dest(app.dst2));
 });
 
 gulp.task('copy-lib-styles', function() {
 	return gulp.src(lib.styles)
 		.pipe(concat('lib.css'))
-		.pipe(gulp.dest(app.dst + '/lib/css'));
+		.pipe(gulp.dest(app.dst + '/lib/css'))
+		.pipe(gulp.dest(app.dst2 + '/lib/css'));
 });
 
 gulp.task('combine-js-html', function() {
@@ -105,7 +111,8 @@ gulp.task('combine-js-html', function() {
 		.pipe(concat('scripts.js'))
 		.pipe(ngAnnotate())
 		.pipe(uglify())
-		.pipe(gulp.dest(app.dst));
+		.pipe(gulp.dest(app.dst))
+		.pipe(gulp.dest(app.dst2));
 });
 
 gulp.task('copy-compile-less', function () {
@@ -125,7 +132,8 @@ gulp.task('copy-compile-less', function () {
 			cascade: false
 		}))
 		.pipe(production(cssmin()))
-		.pipe(gulp.dest(app.dst + '/css'));
+		.pipe(gulp.dest(app.dst + '/css'))
+		.pipe(gulp.dest(app.dst2 + '/css'));
 });
 
 gulp.task('copy-dev-index', function () {
@@ -139,14 +147,16 @@ gulp.task('copy-dev-index', function () {
 		.pipe(production(removeCode({
 			production: true
 			})))
-		.pipe(gulp.dest(app.dst));
+		.pipe(gulp.dest(app.dst))
+		.pipe(gulp.dest(app.dst2));
 });
 
 gulp.task('copy-pages', function () {
 	return gulp.src(app.templates, {
 			base: 'app'
 		})
-		.pipe(gulp.dest(app.dst));
+		.pipe(gulp.dest(app.dst))
+		.pipe(gulp.dest(app.dst2));
 });
 
 gulp.task('copy-scripts', function () {
@@ -154,7 +164,8 @@ gulp.task('copy-scripts', function () {
 			base: 'app'
 		})
 		.pipe(ngAnnotate())
-		.pipe(gulp.dest(app.dst));
+		.pipe(gulp.dest(app.dst))
+		.pipe(gulp.dest(app.dst2));
 });
 
 gulp.task('build', function () {

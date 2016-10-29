@@ -19,6 +19,7 @@ public class UserTeam {
     private Team team;
 
     private boolean confirmed;
+    private boolean leader;
 
     public User getStudent() {
         return student;
@@ -42,5 +43,13 @@ public class UserTeam {
 
     public void setConfirmed(boolean confirmed) {
         this.confirmed = confirmed;
+    }
+
+    public boolean isLeader() {
+        return leader;
+    }
+
+    public void setLeader(boolean leader) {
+        this.leader = leader;
     }
 }

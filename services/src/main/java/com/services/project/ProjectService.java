@@ -3,6 +3,7 @@ package com.services.project;
 import com.database.entity.*;
 import com.database.repository.CourseRepository;
 import com.database.repository.ProjectRepository;
+import com.database.repository.TeamRepository;
 import com.database.repository.UserRepository;
 import com.gitlab.GitLabApi;
 import com.google.common.collect.Lists;
@@ -31,6 +32,9 @@ public class ProjectService {
     private CourseRepository courseRepository;
 
     @Autowired
+    private TeamRepository teamRepository;
+
+    @Autowired
     private ProjectRepository projectRepository;
 
     @Autowired
@@ -46,7 +50,7 @@ public class ProjectService {
 
     public void createProject(ProjectCreationRequest request) {
         File fileOfStudents = fileService.getFile(request.getFileStudentData(), ADD_STUDENT_TEMPLATE);
-        File fileOfTeams = fileService.getFile(request.getFileStudentData(), ADD_TUTOR_TEMPLATE);
+        File fileOfTeams = fileService.getFile(request.getFileTutorData(), ADD_TUTOR_TEMPLATE);
         int groupId = findCourseWithName(request.getCourseName()).getGroupId();
         String privateToken = request.getPrivateToken();
         List<User> students = fileService.getObjectsFromFile(fileOfStudents, usersForProject());
@@ -73,7 +77,7 @@ public class ProjectService {
     private Team createTeam(int groupId, User tutor, String privateToken) {
         gitLabApi.createProject(privateToken, tutor.getName(), groupId);
         Team team = new Team();
-        team.setConfirmed(TeamState.PENDING);
+        team.setConfirmed(TeamState.EMPTY);
         team.setTutor(tutor);
         team.setName(tutor.getName());
         return team;
@@ -96,4 +100,9 @@ public class ProjectService {
         return courseRepository.findCourseByAbbreviation(name);
     }
 
+    @Transactional
+    public void acceptTeam(long teamId) {
+        Team team = teamRepository.findById(teamId);
+        team.setConfirmed(TeamState.ACCEPTED);
+    }
 }

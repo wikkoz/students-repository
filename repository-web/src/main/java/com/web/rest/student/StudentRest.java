@@ -28,7 +28,7 @@ public class StudentRest {
 
     @RequestMapping(value = "/team/{id}", method = RequestMethod.GET)
     public TeamResponse getTeam(Principal user, @PathVariable("id") long id) {
-        return studentService.getTeamForStudentsId(id);
+        return studentService.getTeamForStudentsId(id, user.getName());
     }
 
 
@@ -69,7 +69,12 @@ public class StudentRest {
 
     @RequestMapping(value = "/team/{id}/accept", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public void acceptTeam(@PathVariable("id") long id) {
+        studentService.acceptTeam(id);
+    }
 
+    @RequestMapping(value = "/team/{id}/acceptRequest", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public void acceptRequest(@PathVariable("id") long id, Principal user) {
+        studentService.acceptRequest(id, user.getName());
     }
 
     private StudentsForProjectResponse toDto(User user) {

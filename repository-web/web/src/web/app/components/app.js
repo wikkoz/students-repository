@@ -5,7 +5,8 @@
 		'ngAnimate',
 		'ui.bootstrap',
 		'ui.router',
-		'angularFileUpload'
+		'angularFileUpload',
+		'ngResource'
 	]);
 	angular.module('projekt')
 		.config(config)
@@ -25,20 +26,20 @@
 				url: '/',
 				templateUrl: 'components/view/tabView.html'
 			})
-			.state('student', {
-				url: '/student',
+			.state('team', {
+				url: '/team/:teamId',
 				templateUrl: 'components/view/studentView.html'
 			})
 			.state('newteam', {
-				url: '/newteam',
+				url: '/newteam/',
 				templateUrl: 'components/view/newTeamView.html'
 			})
 			.state('project', {
-				url: '/project',
+				url: '/project/:teamId',
 				templateUrl: 'components/view/projectView.html'
 			})
 			.state('newproject', {
-				url: '/newproject',
+				url: '/newproject/:courseId',
 				templateUrl: 'components/view/newProjectView.html'
 			});
 		$urlRouterProvider.otherwise('/');

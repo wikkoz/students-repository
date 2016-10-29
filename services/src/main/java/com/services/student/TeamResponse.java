@@ -6,18 +6,19 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class TeamResponse {
-    private String confirmed;
+    private String confirmedTeam;
     private String gitlabPage;
     private List<String> students;
     private String topic;
     private LocalDate date;
+    private boolean confirmedUser;
 
-    public String getConfirmed() {
-        return confirmed;
+    public String getConfirmedTeam() {
+        return confirmedTeam;
     }
 
-    public void setConfirmed(String confirmed) {
-        this.confirmed = confirmed;
+    public void setConfirmedTeam(String confirmedTeam) {
+        this.confirmedTeam = confirmedTeam;
     }
 
     public String getGitlabPage() {
@@ -52,14 +53,23 @@ public class TeamResponse {
         this.date = date;
     }
 
+    public boolean isConfirmedUser() {
+        return confirmedUser;
+    }
+
+    public void setConfirmedUser(boolean confirmedUser) {
+        this.confirmedUser = confirmedUser;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("confirmed", confirmed)
+                .add("confirmedTeam", confirmedTeam)
                 .add("gitlabPage", gitlabPage)
                 .add("students", students)
                 .add("topic", topic)
                 .add("date", date)
+                .add("confirmedUser", confirmedUser)
                 .toString();
     }
 }

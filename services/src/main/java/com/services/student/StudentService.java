@@ -41,10 +41,12 @@ public class StudentService {
                 .collect(Collectors.toList());
     }
 
-    public TeamResponse getTeamForStudentsId(long id) {
+    public TeamResponse getTeamForStudentsId(long id, String login) {
+        User student = userRepository.findUserByLogin(login);
         Team team = getTeam(id);
+        UserTeam userTeam = userTeamRepository.findUserTeamByStudentAndTeam(team, student);
         TeamResponse teamResponse = new TeamResponse();
-        teamResponse.setConfirmed(team.getConfirmed().name());
+        teamResponse.setConfirmedTeam(team.getConfirmed().name());
         teamResponse.setGitlabPage(team.getGitlabPage());
         teamResponse.setTopic(team.getTopic());
         List<String> studentNames = team.getStudents()
@@ -53,6 +55,7 @@ public class StudentService {
                 .map(User::getName)
                 .collect(Collectors.toList());
         teamResponse.setStudents(studentNames);
+        teamResponse.setConfirmedUser(userTeam.isConfirmed());
         return teamResponse;
     }
 
@@ -90,14 +93,16 @@ public class StudentService {
     @Transactional
     private User getUserWithTeams(String login) {
         User student = userRepository.findUserByLogin(login);
-        student.getTeamsAsStudent().size();
+        if(student != null)
+            student.getTeamsAsStudent().size();
         return student;
     }
 
     @Transactional
     private Team getTeam(long id) {
         Team team = teamRepository.findById(id);
-        team.getStudents().size();
+        if(team != null)
+            team.getStudents().size();
         return team;
     }
 
@@ -155,6 +160,26 @@ public class StudentService {
 
     @Transactional
     public void acceptTeam(long teamId) {
+        Team team = teamRepository.findById(teamId);
+        team.setConfirmed(TeamState.PENDING);
+    }
 
+    @Transactional
+    public void acceptRequest(long teamId, String login) {
+        Team team = teamRepository.findById(teamId);
+        User student = userRepository.findUserByLogin(login);
+        UserTeam userTeam = userTeamRepository.findUserTeamByStudentAndTeam(team, student);
+        userTeam.setConfirmed(true);
+
+        Set<UserTeam> userTeamsForProject = userTeamRepository.findAllUserTeamsForProject(team.getProject().getId());
+        Set<UserTeam> toRemove = userTeamsForProject.stream()
+                .filter(u -> u.getStudent().equals(student))
+                .collect(Collectors.toSet());
+
+        toRemove.forEach(u -> {
+            u.getStudent().getTeamsAsStudent().remove(u);
+            u.getTeam().getStudents().remove(u);
+            userTeamRepository.delete(u);
+        });
     }
 }

@@ -16,7 +16,7 @@
   }
 
   /*@ngInject*/
-  function tableStudentCtrl($state){
+  function tableStudentCtrl($state, $resource){
     var ctrl = this;
     ctrl.click = click;
     ctrl.model = [
@@ -24,18 +24,20 @@
       'course': 'PIK',
       'name': "Projekt",
       'supervisor': "Jan Kowalski",
-      'date': '11-11-2016'
+      'date': '11-11-2016',
+      'id': 1
     },
     {
       'course': 'PIK',
       'name': "Projekt",
       'supervisor': "Jan Kowalski",
-      'date': '11-11-2016'
+      'date': '11-11-2016',
+      'id': 1
     }
     ];
 
-    function click(){
-      $state.go('student');
+    function click(id){
+      $state.go('team', {teamId: id});
     }
   }
 })();

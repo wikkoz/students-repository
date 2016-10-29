@@ -7,7 +7,7 @@
         restrict: 'E',
         templateUrl: 'components/sideSubject/sideSubject.html',
         scope: {
-          model: '=',
+          model: '='
         },
         controllerAs: 'ctrl',
         controller: sideSubjectCtrl

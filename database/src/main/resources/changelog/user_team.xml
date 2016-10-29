@@ -10,6 +10,7 @@
             <column name="team_id" type="number"/>
             <column name="user_id" type="number" />
             <column name="confirmed" type="boolean" />
+            <column name="leader" type="boolean" />
         </createTable>
     </changeSet>
     <changeSet id="user.team.2" author="wiktor">

@@ -87,4 +87,25 @@ public class User {
     public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (!mail.equals(user.mail)) return false;
+        if (!login.equals(user.login)) return false;
+        return eres != null ? eres.equals(user.eres) : user.eres == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = mail.hashCode();
+        result = 31 * result + login.hashCode();
+        result = 31 * result + (eres != null ? eres.hashCode() : 0);
+        return result;
+    }
 }
