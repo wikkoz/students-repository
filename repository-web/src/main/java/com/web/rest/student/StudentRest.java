@@ -79,7 +79,7 @@ public class StudentRest {
 
     private StudentsForProjectResponse toDto(User user) {
         StudentsForProjectResponse dto = new StudentsForProjectResponse();
-        dto.setName(user.getName());
+        dto.setName(user.name());
         dto.setId(user.getId());
         return dto;
     }

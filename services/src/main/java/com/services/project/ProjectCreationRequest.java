@@ -11,7 +11,6 @@ public class ProjectCreationRequest {
     private int points;
     private LocalDate startDate;
     private LocalDate endDate;
-    private String filename;
     private InputStream fileStudentData;
     private InputStream fileTutorData;
     private String privateToken;
@@ -46,14 +45,6 @@ public class ProjectCreationRequest {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
     }
 
     public String getPrivateToken() {
@@ -96,7 +87,6 @@ public class ProjectCreationRequest {
                 .add("points", points)
                 .add("startDate", startDate)
                 .add("endDate", endDate)
-                .add("filename", filename)
                 .add("fileStudentData", fileStudentData)
                 .add("fileTutorData", fileTutorData)
                 .add("privateToken", privateToken)

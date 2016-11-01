@@ -12,4 +12,5 @@
     <include file="changelog/topics.xml" relativeToChangelogFile="true"/>
     <include file="changelog/team.xml" relativeToChangelogFile="true"/>
     <include file="changelog/user_team.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/student_project.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

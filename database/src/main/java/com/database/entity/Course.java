@@ -9,7 +9,7 @@ public class Course {
     @Id
     @SequenceGenerator(name = "course_seq", sequenceName = "course_seq")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_seq")
-    private long id;
+    private Long id;
     private int groupId;
     private String courseName;
     private String abbreviation;
@@ -21,11 +21,11 @@ public class Course {
     @OneToMany(mappedBy = "course")
     private List<Project> projects;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -8,13 +8,18 @@
         <createTable tableName="app_user">
             <column name="id" type="number"/>
             <column name="mail" type="varchar(100)" />
-            <column name="name" type="varchar(100)" />
+            <column name="first_name" type="varchar(100)" />
+            <column name="last_name" type="varchar(100)" />
             <column name="login" type="varchar(100)" />
+            <column name="gitlab_login" type="varchar(100)" />
             <column name="eres" type="varchar(20)" />
         </createTable>
     </changeSet>
     <changeSet id="app_user.2" author="wiktor">
         <addPrimaryKey tableName="app_user" columnNames="id"/>
+        <addUniqueConstraint tableName="app_user" columnNames="mail"/>
+        <addUniqueConstraint tableName="app_user" columnNames="login"/>
+        <addUniqueConstraint tableName="app_user" columnNames="eres"/>
         <createSequence sequenceName="app_user_seq" startValue="1" cycle="false"/>
     </changeSet>
     <changeSet id="app_user.3" author="wiktor">
@@ -22,6 +27,7 @@
             <column name="id" valueSequenceNext="app_user_seq"/>
             <column name="login" value="ADMIN"/>
             <column name="mail" value="ADMIN"/>
+            <column name="eres" value="ADMIN"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

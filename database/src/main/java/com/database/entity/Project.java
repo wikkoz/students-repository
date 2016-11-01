@@ -10,7 +10,7 @@ public class Project {
     @Id
     @SequenceGenerator(name = "project_seq", sequenceName = "project_seq")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "project_seq")
-    private long id;
+    private Long id;
     private LocalDate nextDate;
     private LocalDate startDate;
     private int maxPoints;
@@ -26,11 +26,11 @@ public class Project {
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<User> students;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

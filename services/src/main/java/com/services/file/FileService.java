@@ -3,11 +3,9 @@ package com.services.file;
 import com.google.common.collect.Sets;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -18,9 +16,13 @@ public class FileService {
 
     private static String SPLITTER = ",";
 
+    public InputStream decodeBase64(FileDto encoded) {
+        return new ByteArrayInputStream(Base64.getDecoder().decode(encoded.getBase64()));
+    }
+
     public File getFile(InputStream inputStream, List<String> headers) {
         File file = new File();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))){
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"))){
             compareHeaders(headers, reader.readLine());
             String line;
             while ((line = reader.readLine()) != null) {
@@ -44,6 +46,12 @@ public class FileService {
         return file.stream()
                 .map(fun)
                 .flatMap(List::stream)
+                .collect(Collectors.toList());
+    }
+
+    public <T> List<T> getObjectFromFile(File file, Function<List<String>, T> fun) {
+        return file.stream()
+                .map(fun)
                 .collect(Collectors.toList());
     }
 }

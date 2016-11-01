@@ -8,16 +8,16 @@ public class LoggedUser {
     @Id
     @SequenceGenerator(name = "logged_user_seq", sequenceName = "logged_user_seq")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "logged_user_seq")
-    private long id;
+    private Long id;
     private String privateToken;
     private LocalDate date;
     private String login;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

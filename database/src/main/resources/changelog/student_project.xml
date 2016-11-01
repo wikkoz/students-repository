@@ -6,13 +6,11 @@
 
     <changeSet id="student.project.1" author="wiktor" context="db-init">
         <createTable tableName="student_project">
-            <column name="id" type="number"/>
             <column name="user_id" type="number"/>
             <column name="project_id" type="number" />
         </createTable>
     </changeSet>
     <changeSet id="student.project.2" author="wiktor">
-        <addPrimaryKey tableName="student_project" columnNames="id"/>
         <createSequence sequenceName="student_project_seq" startValue="1" cycle="false"/>
         <addForeignKeyConstraint baseTableName="student_project" baseColumnNames="user_id"
                                  constraintName="id_stupro_foreign" referencedTableName="app_user" referencedColumnNames="id"/>

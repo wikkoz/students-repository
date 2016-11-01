@@ -10,6 +10,19 @@ public class StudentsProjectDto {
     private String tutor;
     private LocalDate nextDate;
     private String state;
+    private long id;
+
+    public String getState() {
+        return state;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getCourseName() {
         return courseName;
@@ -59,6 +72,7 @@ public class StudentsProjectDto {
                 .add("tutor", tutor)
                 .add("nextDate", nextDate)
                 .add("state", state)
+                .add("id", id)
                 .toString();
     }
 }

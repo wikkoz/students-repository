@@ -8,34 +8,33 @@
             restrict: 'E',
             templateUrl: 'components/admin/admin.html',
             bindToController: true,
-            scope: {
-                model: '=',
-            },
+            scope: {},
             controllerAs: 'ctrl',
             controller: adminCtrl
         };
     }
 
     /*@ngInject*/
-    function adminCtrl(FileUploader) {
+    function adminCtrl($resource) {
         var ctrl = this;
-        ctrl.add = add;
-        ctrl.selectedFile = selectedFile;
-        ctrl.uploader = new FileUploader();
 
-        function add() {
-            var f = document.getElementById('file').files[0],
-                r = new FileReader();
-            r.onloadend = function(e) {
-                var data = e.target.result;
-                //addfile
-            }
-            r.readAsBinaryString(f);
+        var resource = $resource('', {}, {
+            createUsers: {method: 'POST', url: '/admin/users'},
+            createCourses: {method: 'POST', url: '/admin/courses'}
+        });
+
+        ctrl.model = {};
+        ctrl.uploadUsers = uploadUsers;
+        ctrl.uploadCourses = uploadCourses;
+
+        function uploadUsers() {
+            console.log(ctrl);
+            resource.createUsers(ctrl.model.userFile);
         }
 
-        function selectedFile(value) {
-            ctrl.file = document.getElementById('file').files[0].name;
-            console.log (ctrl.file);
+        function uploadCourses() {
+            console.log(ctrl);
+            resource.createCourses(ctrl.model.courseFile);
         }
     }
 })();

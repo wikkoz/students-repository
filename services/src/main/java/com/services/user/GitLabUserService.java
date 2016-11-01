@@ -1,7 +1,6 @@
 package com.services.user;
 
 import com.database.entity.User;
-import com.database.repository.UserRepository;
 import com.gitlab.GitLabApi;
 import com.gitlab.user.UserDto;
 import com.google.common.base.Strings;
@@ -14,30 +13,29 @@ import org.springframework.stereotype.Service;
 public class GitLabUserService {
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private LoginService loginService;
 
     @Autowired
     private GitLabApi gitlabApi;
 
-    public boolean createUser(String login){
-        User user = userRepository.findUserByLogin(login);
+    public UserCreateResponse createUser(User user, String loggedUserLogin){
         UserDto dto = toDto(user);
-        String privateToken = loginService.getPrivateToken(login);
+        UserCreateResponse response = new UserCreateResponse();
+        String privateToken = loginService.getPrivateToken(loggedUserLogin);
         if(Strings.isNullOrEmpty(privateToken)){
-            return false;
+            response.setSuccess(false);
         }
         gitlabApi.createUser(privateToken, dto);
-        return true;
+        response.setSuccess(true);
+        response.setPassword(dto.getPassword());
+        return response;
     }
 
     private UserDto toDto(User user) {
         UserDto dto = new UserDto();
         String password = RandomStringUtils.randomAlphabetic(8);
         dto.setPassword(password);
-        dto.setName(user.getName());
+        dto.setName(user.getLogin());
         dto.setEmail(user.getMail());
         dto.setUsername(user.getLogin());
         return dto;

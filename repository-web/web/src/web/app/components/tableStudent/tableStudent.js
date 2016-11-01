@@ -37,6 +37,7 @@
     ];
 
     function click(id){
+      console.log(id);
       $state.go('team', {teamId: id});
     }
   }

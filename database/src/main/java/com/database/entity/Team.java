@@ -8,12 +8,12 @@ public class Team {
     @Id
     @SequenceGenerator(name = "team_seq", sequenceName = "team_seq")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "team_seq")
-    private long id;
+    private Long id;
     private String topic;
     private String name;
     @Enumerated(EnumType.STRING)
     private TeamState confirmed;
-    private long gitlabId;
+    private Long gitlabId;
     private String gitlabPage;
     private int points;
 
@@ -28,11 +28,11 @@ public class Team {
     @JoinColumn(name = "project_id")
     private Project project;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -92,11 +92,11 @@ public class Team {
         this.students = students;
     }
 
-    public long getGitlabId() {
+    public Long getGitlabId() {
         return gitlabId;
     }
 
-    public void setGitlabId(long gitlabId) {
+    public void setGitlabId(Long gitlabId) {
         this.gitlabId = gitlabId;
     }
 

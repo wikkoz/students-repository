@@ -23,5 +23,9 @@
             <column name="id" valueSequenceNext="role_seq"/>
             <column name="role" value="STUDENT"/>
         </insert>
+        <insert tableName="role">
+            <column name="id" valueSequenceNext="role_seq"/>
+            <column name="role" value="LECTURER"/>
+        </insert>
     </changeSet>
 </databaseChangeLog>

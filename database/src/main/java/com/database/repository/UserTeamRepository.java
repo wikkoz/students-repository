@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Repository
 public interface UserTeamRepository extends JpaRepository<UserTeam, Long>{
-    UserTeam findUserTeamByStudentAndTeam(Team team, User student);
+    UserTeam findUserTeamByTeamAndStudent(Team team, User student);
 
     @Query("select u from Project p left join p.teams t left join t.students u where p.id = :id")
     Set<UserTeam> findAllUserTeamsForProject(@Param("id") long id);

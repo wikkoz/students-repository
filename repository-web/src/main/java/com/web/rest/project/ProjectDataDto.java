@@ -1,6 +1,7 @@
 package com.web.rest.project;
 
 import com.google.common.base.MoreObjects;
+import com.services.file.FileDto;
 
 import java.time.LocalDate;
 
@@ -9,6 +10,23 @@ public class ProjectDataDto {
     private int points;
     private LocalDate startDate;
     private LocalDate endDate;
+    private FileDto tutorFile;
+    private FileDto studentFile;
+    public FileDto getTutorFile() {
+        return tutorFile;
+    }
+
+    public void setTutorFile(FileDto tutorFile) {
+        this.tutorFile = tutorFile;
+    }
+
+    public FileDto getStudentFile() {
+        return studentFile;
+    }
+
+    public void setStudentFile(FileDto studentFile) {
+        this.studentFile = studentFile;
+    }
 
     public int getStudentsNumber() {
         return studentsNumber;
@@ -49,6 +67,8 @@ public class ProjectDataDto {
                 .add("points", points)
                 .add("startDate", startDate)
                 .add("endDate", endDate)
+                .add("tutorFile", tutorFile)
+                .add("studentFile", studentFile)
                 .toString();
     }
 }

@@ -34,17 +34,33 @@ public class StudentService {
     private TopicRepository topicRepository;
 
     public List<StudentsProjectDto> getProjectsOfStudent(String login) {
-        User student = getUserWithTeams(login);
-        return student.getTeamsAsStudent().stream()
+        User student = getUserWithTeamsAndProjects(login);
+        List<Team> teamsOfStudent =  student.getTeamsAsStudent().stream()
                 .map(UserTeam::getTeam)
+                .collect(Collectors.toList());
+        List<Team> emptyTeams = student.getProjectsAsStudent().stream()
+                .filter(p -> !isStudentHasAcceptedTeamForProject(teamsOfStudent, p))
+                .flatMap(p -> p.getTeams().stream())
+                .filter(t -> t.getConfirmed() == TeamState.EMPTY)
+                .collect(Collectors.toList());
+        teamsOfStudent.addAll(emptyTeams);
+        return teamsOfStudent.stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
+    }
+
+    private boolean isStudentHasAcceptedTeamForProject(List<Team> teams, Project project) {
+        return teams.stream()
+                .filter(t -> t.getConfirmed() != TeamState.FORMING)
+                .map(Team::getProject)
+                .filter(project::equals)
+                .findAny().isPresent();
     }
 
     public TeamResponse getTeamForStudentsId(long id, String login) {
         User student = userRepository.findUserByLogin(login);
         Team team = getTeam(id);
-        UserTeam userTeam = userTeamRepository.findUserTeamByStudentAndTeam(team, student);
+        UserTeam userTeam = userTeamRepository.findUserTeamByTeamAndStudent(team, student);
         TeamResponse teamResponse = new TeamResponse();
         teamResponse.setConfirmedTeam(team.getConfirmed().name());
         teamResponse.setGitlabPage(team.getGitlabPage());
@@ -52,7 +68,7 @@ public class StudentService {
         List<String> studentNames = team.getStudents()
                 .stream()
                 .map(UserTeam::getStudent)
-                .map(User::getName)
+                .map(User::name)
                 .collect(Collectors.toList());
         teamResponse.setStudents(studentNames);
         teamResponse.setConfirmedUser(userTeam.isConfirmed());
@@ -86,15 +102,20 @@ public class StudentService {
         dto.setNextDate(project.getNextDate());
         dto.setProjectName(team.getTopic());
         dto.setState(team.getConfirmed().name());
-        dto.setTutor(team.getTutor().getName());
+        dto.setTutor(team.getTutor().name());
+        dto.setId(team.getId());
         return dto;
     }
 
     @Transactional
-    private User getUserWithTeams(String login) {
+    private User getUserWithTeamsAndProjects(String login) {
         User student = userRepository.findUserByLogin(login);
-        if(student != null)
+        if(student != null) {
             student.getTeamsAsStudent().size();
+            student.getProjectsAsStudent().size();
+            for(Project p: student.getProjectsAsStudent())
+                p.getTeams().size();
+        }
         return student;
     }
 
@@ -128,17 +149,21 @@ public class StudentService {
         userTeam.setTeam(team);
         team.getStudents().add(userTeam);
         student.getTeamsAsStudent().add(userTeam);
-
+        userTeamRepository.save(userTeam);
+        teamRepository.save(team);
+        userRepository.save(student);
     }
 
     @Transactional
     public void deleteStudent(long teamId, long studentId) {
         User student = userRepository.findUsersWithTeam(studentId);
         Team team = teamRepository.findTeamWithStudents(teamId);
-        UserTeam userTeam = userTeamRepository.findUserTeamByStudentAndTeam(team, student);
+        UserTeam userTeam = userTeamRepository.findUserTeamByTeamAndStudent(team, student);
         student.getTeamsAsStudent().remove(userTeam);
         team.getStudents().remove(userTeam);
         userTeamRepository.delete(userTeam);
+        teamRepository.save(team);
+        userRepository.save(student);
     }
 
     @Transactional
@@ -168,7 +193,7 @@ public class StudentService {
     public void acceptRequest(long teamId, String login) {
         Team team = teamRepository.findById(teamId);
         User student = userRepository.findUserByLogin(login);
-        UserTeam userTeam = userTeamRepository.findUserTeamByStudentAndTeam(team, student);
+        UserTeam userTeam = userTeamRepository.findUserTeamByTeamAndStudent(team, student);
         userTeam.setConfirmed(true);
 
         Set<UserTeam> userTeamsForProject = userTeamRepository.findAllUserTeamsForProject(team.getProject().getId());

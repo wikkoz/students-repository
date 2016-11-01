@@ -8,11 +8,14 @@ import java.util.List;
 public class User {
 
     @Id
-    @SequenceGenerator(name = "app_user_seq", sequenceName = "app_user_seq")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "app_user_seq")
-    private long id;
-    private String name;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "app_user_sequence")
+    @SequenceGenerator(name = "app_user_sequence", sequenceName = "app_user_seq")
+    @Column(name = "id")
+    private Long id;
+    private String firstName;
+    private String lastName;
     private String mail;
+    private String gitlabLogin;
     private String login;
     private String eres;
 
@@ -32,20 +35,28 @@ public class User {
     @OneToMany(mappedBy = "tutor")
     private List<Team> teamsAsTutor;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getMail() {
@@ -56,6 +67,14 @@ public class User {
         this.mail = mail;
     }
 
+    public String getGitlabLogin() {
+        return gitlabLogin;
+    }
+
+    public void setGitlabLogin(String gitlabLogin) {
+        this.gitlabLogin = gitlabLogin;
+    }
+
     public String getLogin() {
         return login;
     }
@@ -64,12 +83,36 @@ public class User {
         this.login = login;
     }
 
+    public String getEres() {
+        return eres;
+    }
+
+    public void setEres(String eres) {
+        this.eres = eres;
+    }
+
     public List<UserTeam> getTeamsAsStudent() {
         return teamsAsStudent;
     }
 
-    public void setTeamsAsStundent(List<UserTeam> teamsAsStudent) {
+    public void setTeamsAsStudent(List<UserTeam> teamsAsStudent) {
         this.teamsAsStudent = teamsAsStudent;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public List<Project> getProjectsAsStudent() {
+        return projectsAsStudent;
+    }
+
+    public void setProjectsAsStudent(List<Project> projectsAsStudent) {
+        this.projectsAsStudent = projectsAsStudent;
     }
 
     public List<Team> getTeamsAsTutor() {
@@ -80,12 +123,8 @@ public class User {
         this.teamsAsTutor = teamsAsTutor;
     }
 
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+    public String name() {
+        return firstName + " " + lastName;
     }
 
     @Override

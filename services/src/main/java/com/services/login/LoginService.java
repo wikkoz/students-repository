@@ -26,7 +26,7 @@ public class LoginService {
 
     public String getNameLoggedUser(String login) {
         User logged = userRepository.findUserByLogin(login);
-        return logged.getName();
+        return logged.name();
     }
 
     public boolean login(LoginRequest loginRequest) {

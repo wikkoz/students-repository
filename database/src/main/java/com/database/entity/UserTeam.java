@@ -8,7 +8,7 @@ public class UserTeam {
     @Id
     @SequenceGenerator(name = "user_team_seq", sequenceName = "user_team_seq")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_team_seq")
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

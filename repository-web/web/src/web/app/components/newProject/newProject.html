@@ -6,7 +6,8 @@
                     Liczba studnetow
                 </div>
                 <div class="col-md-6 col-xs-6">
-                    <input type="text">
+                    <input type="text"
+                           ng-model="ctrl.model.studentsNumber">
                 </div>
             </div>
         </div>
@@ -16,7 +17,8 @@
                     Liczba punktów
                 </div>
                 <div class="col-md-6 col-xs-6">
-                    <input type="text">
+                    <input type="text"
+                           ng-model="ctrl.model.points">
                 </div>
             </div>
         </div>
@@ -26,7 +28,8 @@
                     Termin zgłoszeń zespołów
                 </div>
                 <div class="col-md-6 col-xs-6">
-                    <input type="text">
+                    <input type="text"
+                           ng-model="ctrl.model.startDate">
                 </div>
             </div>
         </div>
@@ -36,39 +39,29 @@
                     Termin zakończenia projektu
                 </div>
                 <div class="col-md-6 col-xs-6">
-                    <input type="text">
+                    <input type="text"
+                           ng-model="ctrl.model.endDate">
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-4 col-md-offset-1 col-xs-4 col-xs-offset-1">
                 <span>Lista studnetów</span>
-                <input type="file" nv-file-select uploader="ctrl.uploader">
-                <ul>
-                    <li ng-repeat="item in ctrl.uploader.queue">
-                        Nazwa: <span ng-bind="item.file.name"></span>
-                        <br/>
-                        <button ng-click="item.upload()">upload</button>
-                        <button ng-click="item.remove()">remove</button>
-                    </li>
-                </ul>
+                <form>
+                    <input type='file' ng-model='ctrl.model.studentFile' base-sixty-four-input>
+                </form>
             </div>
             <div class="col-md-4 col-md-offset-1 col-xs-4 col-xs-offset-1">
                 <span>Lista prowadzacych</span>
-                <input type="file" nv-file-select uploader="ctrl.uploader">
-                <ul>
-                    <li ng-repeat="item in ctrl.uploader.queue">
-                        Nazwa: <span ng-bind="item.file.name"></span>
-                        <br/>
-                        <button ng-click="item.upload()">upload</button>
-                        <button ng-click="item.remove()">remove</button>
-                    </li>
-                </ul>
+                <form>
+                    <input type='file' ng-model='ctrl.model.tutorFile' base-sixty-four-input>
+                </form>
             </div>
         </div>
         <div class="row">
             <div class="col-md-4 col-md-offset-4 col-xs-4 col-xs-offset-4">
-                <button type="button" class="btn btn-pro">Potwierdź</button>
+                <button type="button" class="btn btn-pro"
+                    ng-click="ctrl.upload()">Potwierdź</button>
             </div>
         </div>
     </div>

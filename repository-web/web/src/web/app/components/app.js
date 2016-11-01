@@ -6,7 +6,8 @@
 		'ui.bootstrap',
 		'ui.router',
 		'angularFileUpload',
-		'ngResource'
+		'ngResource',
+		'naif.base64'
 	]);
 	angular.module('projekt')
 		.config(config)
@@ -27,7 +28,7 @@
 				templateUrl: 'components/view/tabView.html'
 			})
 			.state('team', {
-				url: '/team/:teamId',
+				url: '/team/{teamId:int}',
 				templateUrl: 'components/view/studentView.html'
 			})
 			.state('newteam', {
@@ -35,11 +36,11 @@
 				templateUrl: 'components/view/newTeamView.html'
 			})
 			.state('project', {
-				url: '/project/:teamId',
+				url: '/project/{teamId:int}',
 				templateUrl: 'components/view/projectView.html'
 			})
 			.state('newproject', {
-				url: '/newproject/:courseId',
+				url: '/newproject/{courseId:int}',
 				templateUrl: 'components/view/newProjectView.html'
 			});
 		$urlRouterProvider.otherwise('/');

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Set;
 
-@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     User findUserByLogin(String login);
 
@@ -19,11 +18,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<Role> getRolesByLogin(String login);
 
-    @Modifying
     @Query("SELECT s from User s left join fetch s.projectsAsStudent p where p.id =:id")
     Set<User> findUsersForProject(@Param("id") long id);
 
-    @Modifying
+    @Query("SELECT s from User s left join fetch s.projectsAsStudent p where s.eres =:eres")
+    User findUserByEresWithProjects(@Param("eres") String eres);
+
     @Query("SELECT u from User u left join fetch u.teamsAsStudent where u.id =:id")
     User findUsersWithTeam(@Param("id") long id);
 }

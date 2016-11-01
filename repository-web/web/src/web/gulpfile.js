@@ -29,7 +29,8 @@ var lib = {
 		'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
 		'bower_components/angular-file-upload/dist/angular-file-upload.js',
 		'bower_components/lodash/lodash.js',
-		'bower_components/angular-resource/angular-resource.js'
+		'bower_components/angular-resource/angular-resource.js',
+		'bower_components/angular-base64-upload/dist/angular-base64-upload.js'
 	],
 	styles: [
 		'bower_components/angular-ui-select/dist/select.css',

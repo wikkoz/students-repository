@@ -15,15 +15,27 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ProjectService {
 
-    public static final List<String> ADD_STUDENT_TEMPLATE = Lists.newArrayList("IMIE, NAZWISKO, NR_ERES, NR_STUDENTA");
-    public static final List<String> ADD_TUTOR_TEMPLATE = Lists.newArrayList("IMIE, NAZWISKO, NR_ERES, ILOSC_ZESPOŁÓW");
+    private enum StudentsFile {
+        IMIE, NAZWISKO, NR_ERES, NR_STUDENTA;
 
-    private static final int ERES_NR_POSITION = 2;
-    private static final int TEAMS_NUMBER_POSITION = 3;
+        public static List<String> getAllNames() {
+            return Stream.of(values()).map(u -> u.name()).collect(Collectors.toList());
+        }
+    }
+
+    private enum CoursesFile {
+        IMIE, NAZWISKO, NR_ERES, ILOSC_ZESPOLOW;
+
+        public static List<String> getAllNames() {
+            return Stream.of(values()).map(u -> u.name()).collect(Collectors.toList());
+        }
+    }
 
     @Autowired
     private UserRepository userRepository;
@@ -49,23 +61,24 @@ public class ProjectService {
     }
 
     public void createProject(ProjectCreationRequest request) {
-        File fileOfStudents = fileService.getFile(request.getFileStudentData(), ADD_STUDENT_TEMPLATE);
-        File fileOfTeams = fileService.getFile(request.getFileTutorData(), ADD_TUTOR_TEMPLATE);
+        File fileOfStudents = fileService.getFile(request.getFileStudentData(), StudentsFile.getAllNames());
+        File fileOfTeams = fileService.getFile(request.getFileTutorData(), CoursesFile.getAllNames());
         int groupId = findCourseWithName(request.getCourseName()).getGroupId();
         String privateToken = request.getPrivateToken();
-        List<User> students = fileService.getObjectsFromFile(fileOfStudents, usersForProject());
+        List<User> students = fileService.getObjectFromFile(fileOfStudents, usersForProject());
         List<Team> teams = fileService.getObjectsFromFile(fileOfTeams, createTeamsForProject(groupId, privateToken));
-        saveProject(request, teams, students);
+        Project project = saveProject(request, teams, students);
+ //       addProjectToStudents(project, students);
     }
 
-    private Function<List<String>, List<User>> usersForProject() {
-        return l -> Lists.newArrayList(userRepository.findUserByEres(l.get(ERES_NR_POSITION)));
+    private Function<List<String>, User> usersForProject() {
+        return l -> userRepository.findUserByEresWithProjects(l.get(StudentsFile.NR_ERES.ordinal()));
     }
 
     private Function<List<String>, List<Team>> createTeamsForProject(int groupId, String privateToken) {
         return l -> {
-            User tutor = userRepository.findUserByEres(l.get(ERES_NR_POSITION));
-            int numberOfTeams = Integer.parseInt(l.get(TEAMS_NUMBER_POSITION));
+            User tutor = userRepository.findUserByEres(l.get(CoursesFile.NR_ERES.ordinal()));
+            int numberOfTeams = Integer.parseInt(l.get(CoursesFile.ILOSC_ZESPOLOW.ordinal()));
             List<Team> teams = Lists.newArrayList();
             for (int i = 0; i < numberOfTeams; ++i) {
                 teams.add(createTeam(groupId, tutor, privateToken));
@@ -75,16 +88,17 @@ public class ProjectService {
     }
 
     private Team createTeam(int groupId, User tutor, String privateToken) {
-        gitLabApi.createProject(privateToken, tutor.getName(), groupId);
+        //gitLabApi.createProject(privateToken, tutor.name(), groupId);
         Team team = new Team();
         team.setConfirmed(TeamState.EMPTY);
         team.setTutor(tutor);
-        team.setName(tutor.getName());
+        team.setName(tutor.name());
         return team;
     }
 
     @Transactional
-    private void saveProject(ProjectCreationRequest request, List<Team> teams, List<User> students) {
+    private Project saveProject(ProjectCreationRequest request, List<Team> teams, List<User> students) {
+
         Project project = new Project();
         project.setStartDate(request.getStartDate());
         project.setCourse(findCourseWithName(request.getCourseName()));
@@ -92,7 +106,20 @@ public class ProjectService {
         project.setMaxPoints(request.getPoints());
         project.setNextDate(request.getEndDate());
         project.setStudents(students);
-        projectRepository.save(project);
+        project = projectRepository.save(project);
+        for(Team team : teams){
+            team.setProject(project);
+        }
+        teamRepository.save(teams);
+        return project;
+    }
+
+    @Transactional
+    private void addProjectToStudents(Project project, List<User> students) {
+        students.forEach(u-> {
+            u.getProjectsAsStudent().add(project);
+            userRepository.save(u);
+        });
     }
 
     @Transactional
