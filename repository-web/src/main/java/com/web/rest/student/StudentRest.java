@@ -77,6 +77,11 @@ public class StudentRest {
         studentService.acceptRequest(id, user.getName());
     }
 
+    @RequestMapping(value = "/team/{id}/takeTeam", method = RequestMethod.POST)
+    public void takeTeam(@PathVariable("id") long id, Principal user) {
+        studentService.takeTeam(id, user.getName());
+    }
+
     private StudentsForProjectResponse toDto(User user) {
         StudentsForProjectResponse dto = new StudentsForProjectResponse();
         dto.setName(user.name());

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -39,22 +40,21 @@ public class StudentService {
                 .map(UserTeam::getTeam)
                 .collect(Collectors.toList());
         List<Team> emptyTeams = student.getProjectsAsStudent().stream()
-                .filter(p -> !isStudentHasAcceptedTeamForProject(teamsOfStudent, p))
+                .filter(p -> !isStudentHasAcceptedTeamForProject(student.getTeamsAsStudent(), p))
                 .flatMap(p -> p.getTeams().stream())
                 .filter(t -> t.getConfirmed() == TeamState.EMPTY)
                 .collect(Collectors.toList());
         teamsOfStudent.addAll(emptyTeams);
         return teamsOfStudent.stream()
+                .sorted((a, b) -> Integer.compare(a.getConfirmed().ordinal(), b.getConfirmed().ordinal()))
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
 
-    private boolean isStudentHasAcceptedTeamForProject(List<Team> teams, Project project) {
+    private boolean isStudentHasAcceptedTeamForProject(List<UserTeam> teams, Project project) {
         return teams.stream()
-                .filter(t -> t.getConfirmed() != TeamState.FORMING)
-                .map(Team::getProject)
-                .filter(project::equals)
-                .findAny().isPresent();
+                .filter(ut -> ut.getTeam().getProject().equals(project))
+                .anyMatch(UserTeam::isConfirmed);
     }
 
     public TeamResponse getTeamForStudentsId(long id, String login) {
@@ -147,11 +147,7 @@ public class StudentService {
         userTeam.setConfirmed(false);
         userTeam.setStudent(student);
         userTeam.setTeam(team);
-        team.getStudents().add(userTeam);
-        student.getTeamsAsStudent().add(userTeam);
         userTeamRepository.save(userTeam);
-        teamRepository.save(team);
-        userRepository.save(student);
     }
 
     @Transactional
@@ -159,11 +155,7 @@ public class StudentService {
         User student = userRepository.findUsersWithTeam(studentId);
         Team team = teamRepository.findTeamWithStudents(teamId);
         UserTeam userTeam = userTeamRepository.findUserTeamByTeamAndStudent(team, student);
-        student.getTeamsAsStudent().remove(userTeam);
-        team.getStudents().remove(userTeam);
         userTeamRepository.delete(userTeam);
-        teamRepository.save(team);
-        userRepository.save(student);
     }
 
     @Transactional
@@ -196,8 +188,10 @@ public class StudentService {
         UserTeam userTeam = userTeamRepository.findUserTeamByTeamAndStudent(team, student);
         userTeam.setConfirmed(true);
 
-        Set<UserTeam> userTeamsForProject = userTeamRepository.findAllUserTeamsForProject(team.getProject().getId());
+        List<UserTeam> userTeamsForProject = userTeamRepository.findAllUserTeamsForProject(team.getProject().getId());
         Set<UserTeam> toRemove = userTeamsForProject.stream()
+                .filter(Objects::nonNull)
+                .filter(u -> !u.equals(userTeam))
                 .filter(u -> u.getStudent().equals(student))
                 .collect(Collectors.toSet());
 
@@ -206,5 +200,19 @@ public class StudentService {
             u.getTeam().getStudents().remove(u);
             userTeamRepository.delete(u);
         });
+    }
+
+    @Transactional
+    public void takeTeam(long teamId, String login) {
+        User student = userRepository.findUserByLogin(login);
+        long studentId = student.getId();
+        addStudent(teamId, studentId);
+        acceptRequest(teamId, login);
+        Team team = teamRepository.findById(teamId);
+        team.setConfirmed(TeamState.FORMING);
+        UserTeam userTeam = userTeamRepository.findUserTeamByTeamAndStudent(team, student);
+        userTeam.setLeader(true);
+        teamRepository.save(team);
+        userTeamRepository.save(userTeam);
     }
 }

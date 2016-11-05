@@ -14,11 +14,9 @@ import java.util.List;
 public interface TeamRepository extends CrudRepository<Team, Long> {
     Team findById(long id);
 
-    @Modifying
     @Query("select t FROM Team t left join t.project p left join  p.course c where c.id = :id")
     List<Team> findAllTeamsFromCourse(@Param("id") long id);
 
-    @Modifying
     @Query("SELECT t from Team t left join fetch t.students where t.id =:id")
     Team findTeamWithStudents(@Param("id") long id);
 }

@@ -20,7 +20,7 @@
         var BASE_URL = '/student';
         var resource = $resource('', {}, {
             data: {method: 'GET', url: BASE_URL + '/team/:id'},
-            availableStudents: {method: 'GET', url: BASE_URL + '/team/:id/students'}
+            availableStudents: {method: 'GET', url: BASE_URL + '/team/:id/students', isArray: true}
         });
 
         ctrl.show = show;
@@ -37,9 +37,6 @@
         }
         
         function getParams(){
-            console.log({
-                id: $stateParams.teamId
-            });
             return {
                 id: $stateParams.teamId
             }

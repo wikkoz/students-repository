@@ -7,14 +7,14 @@
 		<th>Data oddania nastepnej częsci</th>
 		<th>Status</th>
 	</thead>
-	<tbody ng-repeat="row in ctrl.model">
-		<tr ng-click = 'ctrl.click(row.id)' class="pointer">
+	<tbody ng-repeat="row in ctrl.model.projects">
+		<tr ng-click = 'ctrl.click(row)' class="pointer">
 			<th>{{$index+1}}</th>
-			<td>{{row.course}}</td>
-			<td>{{row.name}}</td>
-			<td>{{row.supervisor}}</td>
+			<td>{{row.courseName}}</td>
+			<td>{{row.projectName}}</td>
+			<td>{{row.tutor}}</td>
 			<td>{{row.date}}</td>
-			<td>Zapisany</td>
+			<td>{{ctrl.translate(row.state)}}</td>
 		</tr>
 	</tbody>
 </table>

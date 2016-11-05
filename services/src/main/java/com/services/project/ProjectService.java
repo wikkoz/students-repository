@@ -98,7 +98,6 @@ public class ProjectService {
 
     @Transactional
     private Project saveProject(ProjectCreationRequest request, List<Team> teams, List<User> students) {
-
         Project project = new Project();
         project.setStartDate(request.getStartDate());
         project.setCourse(findCourseWithName(request.getCourseName()));

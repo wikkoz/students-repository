@@ -19,6 +19,6 @@
         <addForeignKeyConstraint baseTableName="user_team" baseColumnNames="user_id"
                                  constraintName="id_user_foreign_2" referencedTableName="app_user" referencedColumnNames="id"/>
         <addForeignKeyConstraint baseTableName="user_team" baseColumnNames="team_id"
-                                 constraintName="id_team_foreign" referencedTableName="app_user" referencedColumnNames="id"/>
+                                 constraintName="id_team_foreign" referencedTableName="team" referencedColumnNames="id"/>
     </changeSet>
 </databaseChangeLog>

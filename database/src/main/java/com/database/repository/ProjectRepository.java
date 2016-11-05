@@ -13,7 +13,6 @@ import java.util.List;
 @Repository
 public interface ProjectRepository extends CrudRepository<Project, Long> {
 
-    @Modifying
     @Query("SELECT p from Project p left join fetch p.teams where p.id =:id")
     Project findProjectWithTeams(@Param("id") long id);
 }
