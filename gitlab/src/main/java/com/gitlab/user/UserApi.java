@@ -13,6 +13,7 @@ public class UserApi {
             gitlab.createUser(user.getEmail(), user.getPassword(), user.getUsername(), user.getName(),
                     null, null, null, null, null, null, null, null, null, null, null);
         } catch (IOException e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 }

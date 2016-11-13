@@ -1,9 +1,7 @@
 package com.gitlab.project;
 
-import com.gitlab.login.LoginApi;
 import org.gitlab.api.GitlabAPI;
 import org.gitlab.api.models.GitlabProject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -11,15 +9,16 @@ import java.io.IOException;
 @Component
 public class ProjectApi {
 
-    @Autowired
-    private LoginApi loginApi;
-
     public ProjectDto createProject(GitlabAPI gitlab, String projectName, int namespace) {
+        ProjectDto dto = new ProjectDto();
         try {
             GitlabProject project = gitlab.createProject(projectName, namespace, null, null, null, null, null, null, null, null, null);
+            dto.setId(project.getId());
+            dto.setPath(project.getWebUrl());
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new IllegalStateException(String.format("Cannot create team with name %s and namespace %d with message %s",
+                    projectName, namespace, e.getMessage()));
         }
-        return new ProjectDto();
+        return dto;
     }
 }

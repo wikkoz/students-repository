@@ -29,11 +29,13 @@ public class LoginService {
         return logged.name();
     }
 
-    public boolean login(LoginRequest loginRequest) {
-        LoginDto login = gitLabApi.login(loginRequest.getLogin(), loginRequest.getPassword());
-        if (login.isCorrect() && !isLogged(login.getLogin()))
-            saveCorrectLogin(login);
-        return login.isCorrect();
+    public boolean login(LoginRequest loginRequest, String login) {
+        LoginDto dto = gitLabApi.login(loginRequest.getLogin(), loginRequest.getPassword());
+        if (dto.isCorrect() && !isLogged(dto.getLogin())) {
+            dto.setLogin(login);
+            saveCorrectLogin(dto);
+        }
+        return dto.isCorrect();
     }
 
     @Transactional

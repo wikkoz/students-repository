@@ -22,7 +22,6 @@ public class LoginApi {
         LoginDto login = new LoginDto();
         try {
             GitlabSession session = GitlabAPI.connect(URL, username, password);
-            login.setLogin(username);
             login.setPrivateToken(session.getPrivateToken());
             login.setCorrect(true);
         } catch (Exception e) {

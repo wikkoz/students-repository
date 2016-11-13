@@ -1,22 +1,21 @@
 package com.gitlab;
 
+import com.gitlab.group.GroupApi;
 import com.gitlab.login.LoginApi;
 import com.gitlab.login.LoginDto;
 import com.gitlab.project.ProjectApi;
+import com.gitlab.project.ProjectDto;
 import com.gitlab.user.UserApi;
 import com.gitlab.user.UserDto;
 import org.gitlab.api.GitlabAPI;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
-@PropertySource("classpath:/repository.properties")
 public class GitLabApiImpl implements GitLabApi {
 
     @Autowired
-    private Environment environment;
+    private GroupApi groupApi;
 
     @Autowired
     private LoginApi loginApi;
@@ -39,8 +38,14 @@ public class GitLabApiImpl implements GitLabApi {
     }
 
     @Override
-    public void createProject(String private_token, String name, int groupId) {
+    public ProjectDto createProject(String private_token, String name, int groupId) {
         GitlabAPI gitlab = loginApi.connect(private_token);
-        projectApi.createProject(gitlab, name, groupId);
+        return projectApi.createProject(gitlab, name, groupId);
+    }
+
+    @Override
+    public Integer createGroup(String private_token, String course, String semester) {
+        GitlabAPI gitlab = loginApi.connect(private_token);
+        return groupApi.createGroup(gitlab, course, semester);
     }
 }

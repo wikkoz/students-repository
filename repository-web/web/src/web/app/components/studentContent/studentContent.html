@@ -1,26 +1,58 @@
 <div class="row">
     <div class="col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1">
         <div class="page-bg">
-            <div ng-if='ctrl.show()'>
+            <div ng-if='ctrl.showFormingTeam()'>
                 <div class="row">
-                    <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
-                        Dodaj osobe do projektu:
+                    <span ng-if='ctrl.showLeaderOption()'>
+                        <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                            Zaproponuj temat:
+                        </div>
+                        <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                            <input class="form-control"
+                                   size="100%"
+                                   type="text"
+                                   ng-model="ctrl.model.topic"
+                                   placeholder="Temat">
+                        </div>
+                        <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                            Dodaj osobe do projektu:
+                        </div>
+                        <span ng-if="ctrl.showNewStudent()">
+                            <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                                <input class="form-control"
+                                       size="100%"
+                                       type="text"
+                                       ng-model="ctrl.newPerson"
+                                       uib-typeahead="student as student.name for student in ctrl.students | filter:{name:$viewValue}
+                                        | limitTo:8"
+                                       placeholder="Imie nazwisko">
+                            </div>
+                            <div class="col-md-2 character-padding glyphicon glyphicon-plus"
+                                ng-click="ctrl.addStudent();">
+                            </div>
+                        </span>
+                    </span>
+                    <div ng-if='!ctrl.showLeaderOption()' class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                        Temat projektu: {{::ctrl.model.topic}}
                     </div>
                     <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
-                        <input class="form-control" size="100%" type="text" placeholder="Imie nazwisko">
-                        </input>
+                        Do projektu należa:
                     </div>
-                    <div class="col-md-2 character-padding glyphicon glyphicon-plus"></div>
-                    <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
-                        Jan Kowalski
+                    <div ng-repeat="student in ctrl.model.students">
+                        <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                            {{::student.name}}
+                        </div>
+                        <div class="col-md-2 character-padding glyphicon glyphicon-minus"
+                             ng-if="ctrl.showLeaderOption()"
+                             ng-click="ctrl.deleteStudent(student)"></div>
                     </div>
-                    <div class="col-md-2 character-padding glyphicon glyphicon-minus"></div>
-                    <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                    <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2"
+                         ng-if='ctrl.showSendButton()'>
                         <button type="button" class="btn btn-nav">Wyślij</button>
                     </div>
                 </div>
             </div>
-            <div ng-if='ctrl.show()'>
+            <div ng-if='ctrl.showAcceptedTeam()'>
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                         <div>
@@ -42,7 +74,7 @@
                     </div>
                 </div>
             </div>
-            <div ng-if='ctrl.show()'>
+            <div ng-if='ctrl.showJoinToTeam()'>
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                         Zostałeś wybrany do zespołu przez:

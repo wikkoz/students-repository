@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<included>
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%d{HH:mm:ss.SSS} %-5level %thread %logger{0} %m%n"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <property name="PROPERTY_FILE_LOG_PATTERN"
+              value="%d{ISO8601} %-5level [%thread] [%logger{0}] [%X{}] %m%n"/>
+    <property name="WS_FILE_LOG_PATTERN"
+              value="%d{ISO8601} %-5level [%thread] [%logger{0}] %m%n"/>
+
+    <property name="PROPERTY_LOG_FILE" value="${catalina.base}/logs/property.log"/>
+
+    <appender name="PROPERTY_FILE_APPENDER"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>${PROPERTY_FILE_LOG_PATTERN}</pattern>
+        </encoder>
+        <file>${PROPERTY_LOG_FILE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- hour rollover -->
+            <fileNamePattern>${PROPERTY_LOG_FILE}.%d{yyyy-MM-dd-HH}</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="PROPERTY_FILE_APPENDER"/>
+    </root>
+
+    <logger name="org.springframework" level="info"/>
+
+    <logger name="org.hibernate" level="info"/>
+
+    <logger name="com" level="info"/>
+</included>

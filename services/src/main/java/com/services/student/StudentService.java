@@ -3,11 +3,13 @@ package com.services.student;
 import com.database.entity.*;
 import com.database.repository.*;
 import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -18,6 +20,8 @@ import static org.springframework.transaction.annotation.Propagation.REQUIRES_NE
 
 @Service
 public class StudentService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(StudentService.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -36,7 +40,7 @@ public class StudentService {
 
     public List<StudentsProjectDto> getProjectsOfStudent(String login) {
         User student = getUserWithTeamsAndProjects(login);
-        List<Team> teamsOfStudent =  student.getTeamsAsStudent().stream()
+        List<Team> teamsOfStudent = student.getTeamsAsStudent().stream()
                 .map(UserTeam::getTeam)
                 .collect(Collectors.toList());
         List<Team> emptyTeams = student.getProjectsAsStudent().stream()
@@ -59,25 +63,31 @@ public class StudentService {
 
     public TeamResponse getTeamForStudentsId(long id, String login) {
         User student = userRepository.findUserByLogin(login);
-        Team team = getTeam(id);
+        Team team = teamRepository.findTeamWithStudents(id);
         UserTeam userTeam = userTeamRepository.findUserTeamByTeamAndStudent(team, student);
         TeamResponse teamResponse = new TeamResponse();
-        teamResponse.setConfirmedTeam(team.getConfirmed().name());
+        teamResponse.setTeamState(team.getConfirmed().name());
         teamResponse.setGitlabPage(team.getGitlabPage());
         teamResponse.setTopic(team.getTopic());
-        List<String> studentNames = team.getStudents()
+        List<UserWithIdDto> studentNames = team.getStudents()
                 .stream()
                 .map(UserTeam::getStudent)
-                .map(User::name)
+                .map(UserWithIdDto::new)
                 .collect(Collectors.toList());
         teamResponse.setStudents(studentNames);
+        teamResponse.setNumberOfStudents(team.getProject().getStudentsNumber());
         teamResponse.setConfirmedUser(userTeam.isConfirmed());
+        teamResponse.setLeader(userTeam.isLeader());
+
+        LOG.info("students response for login {} and team id {}: {}", login, id, teamResponse);
+
         return teamResponse;
     }
 
     @Transactional
     public List<User> findAllStudentsForTeam(long teamId) {
-        Project project = getProjectWithTeams(teamRepository.findById(teamId).getProject().getId());
+        Long id = teamRepository.findById(teamId).getProject().getId();
+        Project project =  projectRepository.findProjectWithTeams(id);
         List<Team> teams = project.getTeams();
         return loadUserWithProjects(project.getId())
                 .stream()
@@ -89,7 +99,7 @@ public class StudentService {
     @Transactional(propagation = REQUIRES_NEW)
     private Set<User> loadUserWithProjects(long projectId) {
         Set<User> users = userRepository.findUsersForProject(projectId);
-        for(User u: users){
+        for (User u : users) {
             Hibernate.initialize(u.getTeamsAsStudent());
         }
         return users;
@@ -99,7 +109,10 @@ public class StudentService {
         StudentsProjectDto dto = new StudentsProjectDto();
         Project project = team.getProject();
         dto.setCourseName(project.getCourse().getAbbreviation());
-        dto.setNextDate(project.getNextDate());
+        dto.setNextDate(project.getDeadlines().stream()
+                .map(ProjectDeadline::getDate)
+                .filter(date -> date.isAfter(LocalDate.now()))
+                .findFirst().orElse(null));
         dto.setProjectName(team.getTopic());
         dto.setState(team.getConfirmed().name());
         dto.setTutor(team.getTutor().name());
@@ -110,26 +123,13 @@ public class StudentService {
     @Transactional
     private User getUserWithTeamsAndProjects(String login) {
         User student = userRepository.findUserByLogin(login);
-        if(student != null) {
+        if (student != null) {
             student.getTeamsAsStudent().size();
             student.getProjectsAsStudent().size();
-            for(Project p: student.getProjectsAsStudent())
+            for (Project p : student.getProjectsAsStudent())
                 p.getTeams().size();
         }
         return student;
-    }
-
-    @Transactional
-    private Team getTeam(long id) {
-        Team team = teamRepository.findById(id);
-        if(team != null)
-            team.getStudents().size();
-        return team;
-    }
-
-    @Transactional(propagation = Propagation.MANDATORY)
-    private Project getProjectWithTeams(long id) {
-        return projectRepository.findProjectWithTeams(id);
     }
 
     private Predicate<User> checkIfUserNotBelongToAnyTeam(List<Team> teams) {
@@ -168,11 +168,10 @@ public class StudentService {
     }
 
     @Transactional
-    public void saveTopic(long teamId, long topicId) {
-        Topic topic = topicRepository.findOne(topicId);
+    public void saveTopic(long teamId, String topic) {
         Team team = teamRepository.findById(teamId);
-
-        team.setTopic(topic.getTopic());
+        team.setTopic(topic);
+        teamRepository.save(team);
     }
 
     @Transactional

@@ -1,10 +1,10 @@
 <div class="row">
     <div class="col-md-12 col-xs-12">
         <ul class="nav nav-tabs">
-            <li ng-click="ctrl.student()" class="active"><a data-toggle="tab" href="#home">Student</a></li>
-            <li ng-click="ctrl.lab()"><a data-toggle="tab" href="#menu1">Laborant</a></li>
-            <li ng-click="ctrl.tutor()"><a data-toggle="tab" href="#menu2" >Prowadzacy przedmiot</a></li>
-            <li ng-click="ctrl.admin()"><a data-toggle="tab" href="#menu3">Admin</a></li>
+            <li ng-click="ctrl.reload('student')" class="active"><a data-toggle="tab" href="#home">Student</a></li>
+            <li ng-click="ctrl.reload('lab')" ><a data-toggle="tab" href="#menu1">Laborant</a></li>
+            <li ng-click="ctrl.reload('subject')" ><a data-toggle="tab" href="#menu2" >Prowadzacy przedmiot</a></li>
+            <li ng-click="ctrl.reload('admin')" ><a data-toggle="tab" href="#menu3">Admin</a></li>
         </ul>
         <div class="tab-content">
             <div id="home" class="tab-pane fade in active">
@@ -27,10 +27,14 @@
             <div id="menu2" class="tab-pane fade">
                 <div class="row row-eq-height">
                     <div class="col-md-8 table-bg">
-                        <table-subject></table-subject>
+                        <table-subject
+                            subject="ctrl.subject">
+                        </table-subject>
                     </div>
                     <div class="col-md-4 side-bg">
-                        <side-subject></side-subject>
+                        <side-subject
+                            subject="ctrl.subject">
+                        </side-subject>
                     </div>
                 </div>
                 <div class="row">

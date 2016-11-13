@@ -3,14 +3,13 @@ package com.services.project;
 import com.google.common.base.MoreObjects;
 
 import java.io.InputStream;
-import java.time.LocalDate;
+import java.util.List;
 
 public class ProjectCreationRequest {
-    private String courseName;
+    private long courseId;
     private int studentsNumber;
     private int points;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private List<ProjectDeadlineDto> deadlines;
     private InputStream fileStudentData;
     private InputStream fileTutorData;
     private String privateToken;
@@ -31,20 +30,12 @@ public class ProjectCreationRequest {
         this.points = points;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
+    public List<ProjectDeadlineDto> getDeadlines() {
+        return deadlines;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
+    public void setDeadlines(List<ProjectDeadlineDto> deadlines) {
+        this.deadlines = deadlines;
     }
 
     public String getPrivateToken() {
@@ -55,12 +46,12 @@ public class ProjectCreationRequest {
         this.privateToken = privateToken;
     }
 
-    public String getCourseName() {
-        return courseName;
+    public long getCourseId() {
+        return courseId;
     }
 
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
+    public void setCourseId(long courseId) {
+        this.courseId = courseId;
     }
 
     public InputStream getFileStudentData() {
@@ -82,11 +73,10 @@ public class ProjectCreationRequest {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("courseName", courseName)
+                .add("courseId", courseId)
                 .add("studentsNumber", studentsNumber)
                 .add("points", points)
-                .add("startDate", startDate)
-                .add("endDate", endDate)
+                .add("deadlines", deadlines)
                 .add("fileStudentData", fileStudentData)
                 .add("fileTutorData", fileTutorData)
                 .add("privateToken", privateToken)

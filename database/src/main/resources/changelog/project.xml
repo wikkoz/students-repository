@@ -8,9 +8,8 @@
         <createTable tableName="project">
             <column name="id" type="number"/>
             <column name="course_id" type="number" />
-            <column name="next_date" type="date" />
-            <column name="start_date" type="date" />
             <column name="max_points" type="number" />
+            <column name="students_number" type="number" />
         </createTable>
     </changeSet>
     <changeSet id="project.2" author="wiktor">

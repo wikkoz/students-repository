@@ -4,8 +4,10 @@ import com.database.entity.Course;
 import com.database.entity.Role;
 import com.database.entity.User;
 import com.database.repository.CourseRepository;
+import com.database.repository.LoggedUserRepository;
 import com.database.repository.RoleRepository;
 import com.database.repository.UserRepository;
+import com.gitlab.GitLabApi;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.services.file.File;
@@ -20,7 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -31,19 +35,25 @@ public class AdminService {
     private static final Logger LOG = LoggerFactory.getLogger(AdminService.class);
 
     @Autowired
+    private LoggedUserRepository loggedUserRepository;
+
+    @Autowired
     private FileService fileService;
 
     @Autowired
     private RoleRepository roleRepository;
 
     @Autowired
-    private GitLabUserService gitlabApi;
+    private GitLabUserService gitlabApiUser;
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private CourseRepository courseRepository;
+
+    @Autowired
+    private GitLabApi gitLabApi;
 
     private enum UserFile {
         IMIE, NAZWISKO, LOGIN, ERES, MAIL, GITLAB_LOGIN, ADMIN, LECTURER, STUDENT;
@@ -65,15 +75,16 @@ public class AdminService {
         File usersFile = fileService.getFile(usersData, UserFile.getAllNames());
         List<User> users = fileService.getObjectFromFile(usersFile, newUser());
         saveUsers(users);
-//        List<UserCreateResponse> responses = users.stream()
-//                .map(u -> createGitlabUser(u, login))
-//                .filter(Objects::nonNull)
-//                .collect(Collectors.toList());
+        List<UserCreateResponse> responses = users.stream()
+                .map(u -> createGitlabUser(u, login))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     public void createCourse(InputStream courseData, String login) {
         File coursesFile = fileService.getFile(courseData, CourseFile.getAllNames());
-        List<Course> courses = fileService.getObjectFromFile(coursesFile, newCourse());
+        String token = loggedUserRepository.findFirstByLoginOrderByDateDesc(login).getPrivateToken();
+        List<Course> courses = fileService.getObjectFromFile(coursesFile, newCourse(token));
         saveCourses(courses);
     }
 
@@ -91,11 +102,13 @@ public class AdminService {
         };
     }
 
-    private Function<List<String>, Course> newCourse() {
+    private Function<List<String>, Course> newCourse(String token) {
         return row -> {
             Course course = new Course();
             course.setAbbreviation(row.get(CourseFile.SKROT.ordinal()));
             course.setCourseName(row.get(CourseFile.NAZWA_PRZEDMIOTU.ordinal()));
+            course.setSemester(getSemester());
+//            course.setGroupId(gitLabApi.createGroup(token, course.getAbbreviation(), course.getSemester()));
             User lectuer = userRepository.findUserByEres(row.get(CourseFile.ERES_PROWADZACEGO.ordinal()));
             course.setLecturer(lectuer);
             return course;
@@ -103,8 +116,8 @@ public class AdminService {
     }
 
     private UserCreateResponse createGitlabUser(User user, String login) {
-        if (Strings.isNullOrEmpty(user.getGitlabLogin())) {
-            return gitlabApi.createUser(user, login);
+        if (!Strings.isNullOrEmpty(user.getGitlabLogin())) {
+            //return gitlabApiUser.createUser(user, login);
         }
         return null;
     }
@@ -119,14 +132,25 @@ public class AdminService {
         return roles;
     }
 
+    private String getSemester() {
+        LocalDate now = LocalDate.now();
+        String year = String.valueOf(now.getYear() % 100);
+        if (now.getMonthValue() > 2 && now.getMonthValue() < 10) {
+            return year + "L";
+        }
+        return year + "Z";
+
+    }
+
     @Transactional
     private void saveUsers(List<User> users) {
-        LOG.debug("saving users {}", users.toString());
-        userRepository.save(users.get(0));
+        LOG.info("saving users {}", users);
+        userRepository.save(users);
     }
 
     @Transactional
     private void saveCourses(List<Course> courses) {
+        LOG.info("saving courses {}", courses);
         courseRepository.save(courses);
     }
 }

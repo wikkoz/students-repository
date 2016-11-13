@@ -2,16 +2,16 @@ package com.web.rest.project;
 
 import com.google.common.base.MoreObjects;
 import com.services.file.FileDto;
+import com.services.project.ProjectDeadlineDto;
 
-import java.time.LocalDate;
+import java.util.List;
 
 public class ProjectDataDto {
     private int studentsNumber;
-    private int points;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private List<ProjectDeadlineDto> deadlines;
     private FileDto tutorFile;
     private FileDto studentFile;
+
     public FileDto getTutorFile() {
         return tutorFile;
     }
@@ -36,37 +36,19 @@ public class ProjectDataDto {
         this.studentsNumber = studentsNumber;
     }
 
-    public int getPoints() {
-        return points;
+    public List<ProjectDeadlineDto> getDeadlines() {
+        return deadlines;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
+    public void setDeadlines(List<ProjectDeadlineDto> deadlines) {
+        this.deadlines = deadlines;
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("studentsNumber", studentsNumber)
-                .add("points", points)
-                .add("startDate", startDate)
-                .add("endDate", endDate)
+                .add("deadlines", deadlines)
                 .add("tutorFile", tutorFile)
                 .add("studentFile", studentFile)
                 .toString();

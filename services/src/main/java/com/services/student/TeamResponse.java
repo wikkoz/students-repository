@@ -6,19 +6,21 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class TeamResponse {
-    private String confirmedTeam;
+    private String teamState;
     private String gitlabPage;
-    private List<String> students;
+    private List<UserWithIdDto> students;
     private String topic;
     private LocalDate date;
+    private int numberOfStudents;
     private boolean confirmedUser;
+    private boolean leader;
 
-    public String getConfirmedTeam() {
-        return confirmedTeam;
+    public String getTeamState() {
+        return teamState;
     }
 
-    public void setConfirmedTeam(String confirmedTeam) {
-        this.confirmedTeam = confirmedTeam;
+    public void setTeamState(String teamState) {
+        this.teamState = teamState;
     }
 
     public String getGitlabPage() {
@@ -27,14 +29,6 @@ public class TeamResponse {
 
     public void setGitlabPage(String gitlabPage) {
         this.gitlabPage = gitlabPage;
-    }
-
-    public List<String> getStudents() {
-        return students;
-    }
-
-    public void setStudents(List<String> students) {
-        this.students = students;
     }
 
     public String getTopic() {
@@ -61,15 +55,41 @@ public class TeamResponse {
         this.confirmedUser = confirmedUser;
     }
 
+    public boolean isLeader() {
+        return leader;
+    }
+
+    public void setLeader(boolean leader) {
+        this.leader = leader;
+    }
+
+    public List<UserWithIdDto> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<UserWithIdDto> students) {
+        this.students = students;
+    }
+
+    public int getNumberOfStudents() {
+        return numberOfStudents;
+    }
+
+    public void setNumberOfStudents(int numberOfStudents) {
+        this.numberOfStudents = numberOfStudents;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("confirmedTeam", confirmedTeam)
+                .add("teamState", teamState)
                 .add("gitlabPage", gitlabPage)
                 .add("students", students)
                 .add("topic", topic)
                 .add("date", date)
+                .add("numberOfStudents", numberOfStudents)
                 .add("confirmedUser", confirmedUser)
+                .add("leader", leader)
                 .toString();
     }
 }

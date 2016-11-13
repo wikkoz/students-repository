@@ -1,8 +1,6 @@
 package com.database.repository;
 
 import com.database.entity.Team;
-import com.database.entity.User;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

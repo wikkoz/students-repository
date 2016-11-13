@@ -1,7 +1,6 @@
 package com.database.entity;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -11,9 +10,9 @@ public class Project {
     @SequenceGenerator(name = "project_seq", sequenceName = "project_seq")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "project_seq")
     private Long id;
-    private LocalDate nextDate;
-    private LocalDate startDate;
     private int maxPoints;
+    private int studentsNumber;
+
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
@@ -26,6 +25,9 @@ public class Project {
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<User> students;
 
+    @OneToMany(mappedBy = "project", fetch = FetchType.EAGER)
+    private List<ProjectDeadline> deadlines;
+
     public Long getId() {
         return id;
     }
@@ -34,20 +36,12 @@ public class Project {
         this.id = id;
     }
 
-    public LocalDate getNextDate() {
-        return nextDate;
+    public List<ProjectDeadline> getDeadlines() {
+        return deadlines;
     }
 
-    public void setNextDate(LocalDate nextDate) {
-        this.nextDate = nextDate;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
+    public void setDeadlines(List<ProjectDeadline> deadlines) {
+        this.deadlines = deadlines;
     }
 
     public int getMaxPoints() {
@@ -80,5 +74,13 @@ public class Project {
 
     public void setStudents(List<User> students) {
         this.students = students;
+    }
+
+    public int getStudentsNumber() {
+        return studentsNumber;
+    }
+
+    public void setStudentsNumber(int studentsNumber) {
+        this.studentsNumber = studentsNumber;
     }
 }

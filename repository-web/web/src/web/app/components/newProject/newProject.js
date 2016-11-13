@@ -18,20 +18,38 @@
     function newProjectCtrl($resource, $stateParams) {
         var ctrl = this;
         var resource = $resource('', {}, {
-            data: {method: 'POST', url: '/project/createUsers/dupa'}
+            data: {method: 'POST', params: {courseId: '@courseId'}, url: '/project/createUsers/:courseId'}
         });
 
         ctrl.model = {};
         ctrl.upload = upload;
+        ctrl.tableChange = tableChange;
+
+        init();
+
+        function tableChange(index) {
+            var e = ctrl.model.deadlines[index];
+
+            if (ctrl.model.deadlines.length - 1 == index) {
+                ctrl.model.deadlines.push({});
+            } else if (_.isEmpty(e.date) && _.isEmpty(e.description) && _.isEmpty(e.points)) {
+                _.pullAt(ctrl.model.deadlines, index);
+            }
+        }
+
+        function init() {
+            ctrl.model.deadlines = [{}];
+        }
 
         function upload() {
             console.log(ctrl);
-            resource.data(ctrl.model)
+            _.pullAt(ctrl.model.deadlines, ctrl.model.deadlines.length - 1);
+            resource.data(getParams(), ctrl.model);
         }
 
         function getParams() {
             return {
-                id: $stateParams.id
+                courseId: $stateParams.courseId
             }
         }
     }

@@ -16,7 +16,7 @@
     }
 
     /*@ngInject*/
-    function tableStudentCtrl($state, $resource) {
+    function tableStudentCtrl($scope, $state, $resource) {
         var ctrl = this;
         var STATES = {
             'EMPTY': 'Wolny',
@@ -36,8 +36,11 @@
         init();
 
         function init() {
+            $scope.$on('student', load)
+        }
+
+        function load() {
             ctrl.model = resource.getTeams();
-            console.log(ctrl);
         }
 
         function translate(code) {
@@ -47,7 +50,9 @@
         function click(team) {
             if (team.state == 'EMPTY') {
                 resource.takeTeam({id: team.id})
-                    .$promise.then($state.go('team', {teamId: team.id}));
+                    .$promise.then(function() {
+                    $state.go('team', {teamId: team.id})
+                });
             } else {
                 $state.go('team', {teamId: team.id});
             }

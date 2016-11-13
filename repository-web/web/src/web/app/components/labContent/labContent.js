@@ -9,7 +9,7 @@
         bindToController: true,
         scope: {},
         controllerAs: 'ctrl',
-        controller: labContentCtrl,
+        controller: labContentCtrl
       };
   }
 

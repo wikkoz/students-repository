@@ -13,37 +13,13 @@
     }
 
     /*@ngInject*/
-    function tabCtrl($resource) {
+    function tabCtrl($scope) {
         var ctrl = this;
 
-        var resource = $resource('', {}, {
-            admin: {method:'GET', url:'admin'},
-            lab: {method:'GET', url:'lab'},
-            student: {method:'GET', url:'/student/projects'},
-            tutor: {method:'GET', url:'tutor'}
-        });
+        ctrl.reload = reload;
 
-        ctrl.lab = lab;
-        ctrl.student = student;
-        ctrl.tutor = tutor;
-
-        ctrl.studentModel = {};
-        ctrl.labTabModel = {};
-        ctrl.labSideModel = {};
-        ctrl.SubjectSideModel = {};
-        ctrl.SubjectTabModel = {};
-
-
-        function lab() {
-            console.log("dupa2");
-        }
-        
-        function student() {
-            ctrl.studentModel = resource.student();
-        }
-        
-        function tutor() {
-            console.log("dupa4");
+        function reload(action) {
+            $scope.$broadcast(action);
         }
     }
 })();

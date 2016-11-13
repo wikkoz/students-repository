@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="project_deadline.1" author="wiktor" context="db-init">
+        <createTable tableName="project_deadline">
+            <column name="id" type="number"/>
+            <column name="project_id" type="number"/>
+            <column name="date" type="date" />
+            <column name="points" type="number" />
+            <column name="description" type="varchar(100)" />
+        </createTable>
+    </changeSet>
+    <changeSet id="user.team.2" author="wiktor">
+        <addPrimaryKey tableName="project_deadline" columnNames="id"/>
+        <createSequence sequenceName="project_deadline_seq" startValue="1" cycle="false"/>
+        <addForeignKeyConstraint baseTableName="project_deadline" baseColumnNames="project_id"
+                                 constraintName="id_deadline_foreign_2" referencedTableName="project" referencedColumnNames="id"/>
+        <addUniqueConstraint tableName="project_deadline" columnNames="date"/>
+        <addUniqueConstraint tableName="project_deadline" columnNames="project_id"/>
+        <addUniqueConstraint tableName="project_deadline" columnNames="points"/>
+    </changeSet>
+</databaseChangeLog>

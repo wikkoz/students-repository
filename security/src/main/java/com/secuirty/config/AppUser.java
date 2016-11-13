@@ -10,10 +10,12 @@ import java.util.stream.Collectors;
 public class AppUser implements UserDetails
 {
     private String login;
+    private String password;
     private Collection<? extends GrantedAuthority> grantedAuthorities;
 
-    public AppUser(String login, Collection<Role> roles) {
+    public AppUser(String login, String password, Collection<Role> roles) {
         this.login = login;
+        this.password = password;
         this.grantedAuthorities = roles.stream()
                 .map(Role::getRole)
                 .map(this::toGrantedAuthority)
@@ -32,7 +34,7 @@ public class AppUser implements UserDetails
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override

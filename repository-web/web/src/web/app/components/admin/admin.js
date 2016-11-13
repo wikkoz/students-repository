@@ -1,5 +1,5 @@
 (function() {
-    'use strict'
+    'use strict';
 
     angular.module('projekt').directive('admin', admin);
 
@@ -15,12 +15,13 @@
     }
 
     /*@ngInject*/
-    function adminCtrl($resource) {
+    function adminCtrl($resource, $state) {
         var ctrl = this;
 
         var resource = $resource('', {}, {
             createUsers: {method: 'POST', url: '/admin/users'},
-            createCourses: {method: 'POST', url: '/admin/courses'}
+            createCourses: {method: 'POST', url: '/admin/courses'},
+            isLogged: {method: 'GET', url: '/user/logged'}
         });
 
         ctrl.model = {};
@@ -28,13 +29,23 @@
         ctrl.uploadCourses = uploadCourses;
 
         function uploadUsers() {
-            console.log(ctrl);
-            resource.createUsers(ctrl.model.userFile);
+            resource.isLogged().$promise.then(function (response) {
+                if(response.value){
+                    resource.createUsers(ctrl.model.userFile);
+                } else {
+                    $state.go('login');
+                }
+            });
         }
 
         function uploadCourses() {
-            console.log(ctrl);
-            resource.createCourses(ctrl.model.courseFile);
+            resource.isLogged().$promise.then(function (response) {
+                if(response.value){
+                    resource.createCourses(ctrl.model.courseFile);
+                } else {
+                    $state.go('login');
+                }
+            });
         }
     }
 })();
