@@ -13,9 +13,7 @@
 
     <property name="PROPERTY_FILE_LOG_PATTERN"
               value="%d{ISO8601} %-5level [%thread] [%logger{0}] [%X{}] %m%n"/>
-    <property name="WS_FILE_LOG_PATTERN"
-              value="%d{ISO8601} %-5level [%thread] [%logger{0}] %m%n"/>
-
+tai
     <property name="PROPERTY_LOG_FILE" value="${catalina.base}/logs/property.log"/>
 
     <appender name="PROPERTY_FILE_APPENDER"
