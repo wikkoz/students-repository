@@ -4,23 +4,24 @@
             <div ng-if='ctrl.showFormingTeam()'>
                 <div class="row">
                     <span ng-if='ctrl.showLeaderOption()'>
-                        <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                        <div class="label-text col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                             Zaproponuj temat:
                         </div>
                         <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                             <input class="form-control"
                                    size="100%"
                                    type="text"
+                                   ng-change="ctrl.saveTopic()"
+                                   ng-model-options="{updateOn: 'blur'}"
                                    ng-model="ctrl.model.topic"
                                    placeholder="Temat">
                         </div>
-                        <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                        <div class="label-text col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2" ng-if="ctrl.showNewStudent()">
                             Dodaj osobe do projektu:
                         </div>
                         <span ng-if="ctrl.showNewStudent()">
                             <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                                 <input class="form-control"
-                                       size="100%"
                                        type="text"
                                        ng-model="ctrl.newPerson"
                                        uib-typeahead="student as student.name for student in ctrl.students | filter:{name:$viewValue}
@@ -32,10 +33,11 @@
                             </div>
                         </span>
                     </span>
-                    <div ng-if='!ctrl.showLeaderOption()' class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                    <div ng-if='!ctrl.showLeaderOption()'
+                         class="label-text col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                         Temat projektu: {{::ctrl.model.topic}}
                     </div>
-                    <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                    <div class="label-text col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                         Do projektu należa:
                     </div>
                     <div ng-repeat="student in ctrl.model.students">
@@ -48,28 +50,62 @@
                     </div>
                     <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2"
                          ng-if='ctrl.showSendButton()'>
-                        <button type="button" class="btn btn-nav">Wyślij</button>
+                        <button type="button"
+                                class="btn btn-nav"
+                                ng-click="ctrl.acceptTeam()">Wyślij
+                        </button>
                     </div>
                 </div>
             </div>
             <div ng-if='ctrl.showAcceptedTeam()'>
-                <div class="row">
+                <div class="small-row">
                     <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                         <div>
-                            Strona projektu:
+                            <span class="label-text">Strona projektu:</span>
                             <button type="button" class="btn btn-nav">GitLab</button>
                         </div>
+                    </div>
+                </div>
+                <div class="small-row">
+                    <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                        <span class="label-text">Temat:</span>
+                        <span class="label-data">{{ctrl.model.topic}}</span>
+                    </div>
+                </div>
+                <div class="small-row">
+                    <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                        <span class="label-text">Ilosc punktów:</span>
+                        <span class="label-data">{{ctrl.model.points}}</span>
+                    </div>
+                </div>
+                <div class="small-row">
+                    <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                        <span class="label-text">Członkowie:</span>
+                        <ui ng-repeat="student in ctrl.model.students">
+                            <li class="label-data">{{student.name}}</li>
+                        </ui>
+                    </div>
+                </div>
+                <div class="small-row" ng-if="ctrl.model.dates">
+                    <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                         <div>
-                            Ilosc punktów:
-                        </div>
-                        <div>
-                            Członkowie:
-                        </div>
-                        <div>
-                            Temat
-                        </div>
-                        <div>
-                            Termin
+                            <span class="label-text">Terminy:</span>
+                            <span class="row small-row">
+                                <span class="col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1">
+                                    <table width="100%">
+                                        <thead>
+                                            <th>Data</th>
+                                            <th>Ilość punktów</th>
+                                            <th>Opis</th>
+                                        </thead>
+                                        <tbody ng-repeat="deadline in ctrl.model.dates">
+                                            <td>{{deadline.date}}</td>
+                                            <td>{{deadline.points}}</td>
+                                            <td>{{deadline.description}}</td>
+                                        </tbody>
+                                    </table>
+                                </span>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -77,7 +113,7 @@
             <div ng-if='ctrl.showJoinToTeam()'>
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
-                        Zostałeś wybrany do zespołu przez:
+                        <span class="label-text">Zostałeś wybrany do zespołu przez:</span>
                         <ui>
                             <li>Jan Kowalski</li>
                             <li>Jan Kowalski</li>

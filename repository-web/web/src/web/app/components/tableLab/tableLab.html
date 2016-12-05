@@ -6,11 +6,11 @@
 		<th>Data oddania nastepnej częsci</th>
 	</thead>
 	<tbody>
-		<tr ng-repeat="row in ctrl.model" ng-click = 'ctrl.click()' class="pointer">
+		<tr ng-repeat="row in ctrl.model" ng-click = 'ctrl.click(row.teamId)' class="pointer">
 			<th>{{$index+1}}</th>
-			<td>{{row.course}}</td>
-			<td>{{row.name}}</td>
-			<td>{{row.date}}</td>
+			<td>{{row.courseName}}</td>
+			<td>{{row.topic}}</td>
+			<td>{{row.deadlineDate}}</td>
 		</tr>
 		<tr>
 			<td colspan="6" ng-click = 'ctrl.newTeam()' class="pointer">

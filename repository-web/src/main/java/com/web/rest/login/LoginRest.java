@@ -2,6 +2,8 @@ package com.web.rest.login;
 
 import com.services.login.LoginRequest;
 import com.services.login.LoginService;
+import com.services.mail.MailRequest;
+import com.services.mail.MailService;
 import com.web.configuration.TypeWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +26,8 @@ public class LoginRest {
 
     private static final Logger LOG = LoggerFactory.getLogger(LoginRest.class);
 
+    @Autowired
+    private MailService mailService;
 
     @Autowired
     private LoginService loginService;
@@ -50,6 +54,8 @@ public class LoginRest {
         map.put("name", user.getName());
         map.put("roles", AuthorityUtils.authorityListToSet(((Authentication) user)
                 .getAuthorities()));
+
+        mailService.sendMail("asd", new MailRequest());
         return map;
     }
 

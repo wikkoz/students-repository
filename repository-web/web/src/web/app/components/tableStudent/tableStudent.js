@@ -22,7 +22,7 @@
             'EMPTY': 'Wolny',
             'PENDING': 'Oczekujący',
             'FORMING': 'Tworzacy sie',
-            'ACCPETED': 'Zaakceptowany'
+            'ACCEPTED': 'Zaakceptowany'
         };
 
         var resource = $resource('', {}, {
@@ -36,6 +36,7 @@
         init();
 
         function init() {
+            load();
             $scope.$on('student', load)
         }
 

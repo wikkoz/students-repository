@@ -10,7 +10,6 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "team_seq")
     private Long id;
     private String topic;
-    private String name;
     @Enumerated(EnumType.STRING)
     private TeamState confirmed;
     private Long gitlabId;
@@ -42,14 +41,6 @@ public class Team {
 
     public void setTopic(String topic) {
         this.topic = topic;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getPoints() {

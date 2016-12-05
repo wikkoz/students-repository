@@ -11,4 +11,5 @@ public interface ProjectRepository extends CrudRepository<Project, Long> {
 
     @Query("SELECT p from Project p left join fetch p.teams where p.id =:id")
     Project findProjectWithTeams(@Param("id") long id);
+
 }

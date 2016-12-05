@@ -1,5 +1,5 @@
 (function () {
-    'use strict'
+    'use strict';
 
     angular.module('projekt').directive('newProject', newProject);
 
@@ -8,7 +8,6 @@
             restrict: 'E',
             templateUrl: 'components/newProject/newProject.html',
             bindToController: true,
-            scope: {},
             controllerAs: 'ctrl',
             controller: newProjectCtrl
         };
@@ -23,9 +22,19 @@
 
         ctrl.model = {};
         ctrl.upload = upload;
+        ctrl.open = open;
         ctrl.tableChange = tableChange;
 
         init();
+
+        function init() {
+            ctrl.options = {
+                formatYear: 'yy',
+                startingDay: 1
+            };
+            ctrl.datepicker = [];
+            ctrl.model.deadlines = [{}];
+        }
 
         function tableChange(index) {
             var e = ctrl.model.deadlines[index];
@@ -37,14 +46,14 @@
             }
         }
 
-        function init() {
-            ctrl.model.deadlines = [{}];
-        }
-
         function upload() {
             console.log(ctrl);
             _.pullAt(ctrl.model.deadlines, ctrl.model.deadlines.length - 1);
             resource.data(getParams(), ctrl.model);
+        }
+
+        function open(index) {
+            ctrl.datepicker[index] = true;
         }
 
         function getParams() {

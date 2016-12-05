@@ -23,7 +23,7 @@
             'EMPTY': 'Wolny',
             'PENDING': 'Oczekujący',
             'FORMING': 'Tworzacy sie',
-            'ACCPETED': 'Zaakceptowany'
+            'ACCEPTED': 'Zaakceptowany'
         };
         
         var BASE_URL = '/project';
@@ -35,13 +35,14 @@
         ctrl.model = {};
 
         ctrl.click = click;
+        ctrl.gotoTeam = gotoTeam;
         ctrl.translate = translate;
 
         init();
 
         function init() {
             $scope.$watch('ctrl.subject', updateModel);
-            $scope.$on('subject', updateModel)
+            $scope.$on('subject', updateModel);
         }
 
         function updateModel() {
@@ -63,6 +64,11 @@
         function translate(code) {
             return STATES[code];
         }
-
+        
+        function gotoTeam(row) {
+            if(row.status == 'ACCEPTED') {
+                $state.go('project', {teamId: row.id});
+            }
+        }
     }
 })();

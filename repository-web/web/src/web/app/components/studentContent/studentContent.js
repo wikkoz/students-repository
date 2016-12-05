@@ -16,14 +16,16 @@
     /*ngInject*/
     function studentContentCtrl($stateParams, $resource) {
         var ctrl = this;
-        console.log($stateParams);
+
         var BASE_URL = '/student';
         var resource = $resource('', {}, {
             data: {method: 'GET', url: BASE_URL + '/team/:id'},
             availableStudents: {method: 'GET', url: BASE_URL + '/team/:id/students', isArray: true},
             topics: {method: 'GET', url: BASE_URL + '/team/:id/topics', isArray: true},
             addStudent: {method: 'POST', params: {id: '@id'}, url: BASE_URL + '/team/:id/add'},
-            deleteStudent: {method: 'POST', params: {id: '@id'}, url: BASE_URL + '/team/:id/delete'}
+            deleteStudent: {method: 'POST', params: {id: '@id'}, url: BASE_URL + '/team/:id/delete'},
+            saveTopic: {method: 'POST', params: {id: '@id'}, url: BASE_URL + '/team/:id/chooseTopic'},
+            acceptTeam: {method: 'POST', params: {id: '@id'}, url: BASE_URL + '/team/:id/accept'}
         });
 
         ctrl.model = {};
@@ -31,7 +33,9 @@
         ctrl.topics = {};
 
         ctrl.addStudent = addStudent;
+        ctrl.acceptTeam = acceptTeam;
         ctrl.deleteStudent = deleteStudent;
+        ctrl.saveTopic = saveTopic;
         ctrl.showAcceptedTeam = showAcceptedTeam;
         ctrl.showLeaderOption = showLeaderOption;
         ctrl.showJoinToTeam = showJoinToTeam;
@@ -50,6 +54,12 @@
             });
             resource.topics(getParams()).$promise.then(function (response) {
                 ctrl.students = response;
+            });
+        }
+
+        function acceptTeam() {
+            resource.acceptTeam(getParams()).$promise.then(function() {
+                init();
             });
         }
         
@@ -85,6 +95,10 @@
 
         function showNewStudent() {
             return ctrl.model.students.length < ctrl.model.numberOfStudents;
+        }
+
+        function saveTopic() {
+            resource.saveTopic(getParams(), {value:ctrl.model.topic});
         }
 
         function showSendButton() {

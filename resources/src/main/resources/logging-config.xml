@@ -13,7 +13,7 @@
 
     <property name="PROPERTY_FILE_LOG_PATTERN"
               value="%d{ISO8601} %-5level [%thread] [%logger{0}] [%X{}] %m%n"/>
-tai
+
     <property name="PROPERTY_LOG_FILE" value="${catalina.base}/logs/property.log"/>
 
     <appender name="PROPERTY_FILE_APPENDER"
@@ -28,14 +28,14 @@ tai
         </rollingPolicy>
     </appender>
 
-    <root level="INFO">
+    <root level="debug">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="PROPERTY_FILE_APPENDER"/>
     </root>
 
-    <logger name="org.springframework" level="info"/>
+    <logger name="org.springframework" level="debug"/>
 
-    <logger name="org.hibernate" level="info"/>
+    <logger name="org.hibernate" level="debug"/>
 
-    <logger name="com" level="info"/>
+    <logger name="com" level="debug"/>
 </included>

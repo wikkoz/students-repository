@@ -1,5 +1,7 @@
 package com.database.entity;
 
+import com.google.common.base.MoreObjects;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -125,6 +127,16 @@ public class User {
 
     public String name() {
         return firstName + " " + lastName;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("firstName", firstName)
+                .add("lastName", lastName)
+                .add("login", login)
+                .add("eres", eres)
+                .toString();
     }
 
     @Override

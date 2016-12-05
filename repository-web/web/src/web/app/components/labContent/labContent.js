@@ -1,5 +1,5 @@
 (function () {
-  'use strict'
+  'use strict';
 
   angular.module('projekt').directive('labContent', labContent);
   function labContent(){
@@ -13,12 +13,26 @@
       };
   }
 
-  function labContentCtrl(){
+  function labContentCtrl($resource, $stateParams){
       var ctrl = this;
-      ctrl.show = show;
 
-      function show(){
-        return true;
+      var BASE_URL = '/tutor';
+      var resource = $resource('', {}, {
+          data: {method: 'GET', url: BASE_URL + '/team/:id'}
+      });
+
+      init();
+
+      function init() {
+          resource.data(getParams()).$promise.then(function (response) {
+              ctrl.model = response;
+          });
+      }
+
+      function getParams() {
+          return {
+              id: $stateParams.teamId
+          }
       }
   }
 

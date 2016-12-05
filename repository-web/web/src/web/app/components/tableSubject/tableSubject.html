@@ -10,14 +10,14 @@
 			<th>Status</th>
 		</thead>
 		<tbody>
-			<tr ng-repeat="row in ctrl.model" ng-click = 'ctrl.click()' class="pointer">
+			<tr ng-repeat="row in ctrl.model" class="pointer" ng-click="ctrl.gotoTeam(row)">
 				<th>{{$index+1}}</th>
 				<td>{{row.tutor}}</td>
 				<td>{{row.topic}}</td>
 				<td>{{ctrl.translate(row.status)}}</td>
 			</tr>
 			<tr>
-				<td colspan="6" class="pointer">
+				<td colspan="6" class="pointer" ng-click="ctrl.click()">
 					Dodaj nowy zespół
 				</td>
 			</tr>

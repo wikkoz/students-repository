@@ -2,9 +2,7 @@
     margin-left: 15px;
     background-color: #A8A8A1;
     border-radius: 8px;
-    border-width: 0px;
-    border-color: rgba(51, 44, 47, 0.49);
-    border-style: solid;
+    border: 0px solid rgba(51, 44, 47, 0.49);
 }
 
 .pointer {
@@ -12,20 +10,18 @@
 }
 
 .page-bg {
+    padding-top: 15px;
+    padding-bottom: 25px;
     background-color: #A8A8A1;
     border-radius: 8px;
-    border-width: 0px;
-    border-color: rgba(51, 44, 47, 0.49);
-    border-style: solid;
+    border: 0px solid rgba(51, 44, 47, 0.49);
 }
 
 .table-bg {
     margin-left: 15px;
     background-color: #A8A8A1;
     border-radius: 8px 0px 0px 8px;
-    border-width: 0px;
-    border-color: rgba(51, 44, 47, 0.49);
-    border-style: solid;
+    border: 0px solid rgba(51, 44, 47, 0.49);
 }
 
 .side-bg {
@@ -185,7 +181,7 @@ ul
 }
 
 .character-padding {
-    padding-top: 0.8rem;
+    padding-top: 0.4rem;
     margin-left: -2.1rem;
 }
 
@@ -193,4 +189,46 @@ ul
     content: "\2212";
     font-size: 19px;
     color: #8A2E2E;
+}
+
+.label-text {
+    font-size: 18px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.label-data {
+    font-size: 18px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-weight: 600;
+    color: #1c496f;
+}
+
+.right {
+    text-align: right;
+}
+
+.form-control {
+    height: 30px;
+}
+
+.small-row {
+    @extend .row;
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+.tiny-row {
+@extend .row;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.points-tutor {
+    width: 80px;
+    display: inline-block;
+    margin-left: 15px;
 }

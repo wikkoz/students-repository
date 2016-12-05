@@ -1,5 +1,5 @@
 (function () {
-    'use strict'
+    'use strict';
 
     angular.module('projekt').directive('sideSubject', sideSubject);
     function sideSubject() {
@@ -15,7 +15,7 @@
         };
     }
 
-    function sideSubjectCtrl($resource) {
+    function sideSubjectCtrl($resource, $scope) {
         var ctrl = this;
 
         var BASE_URL = '/project';
@@ -26,8 +26,16 @@
         init();
 
         function init() {
+            load();
+            $scope.$on('subject', load)
+        }
+
+        function load() {
             resource.projects().$promise.then(function (response) {
                 ctrl.projects = response;
+                if(!_.isEmpty(ctrl.projects)) {
+                    ctrl.subject = ctrl.projects[0];
+                }
             });
         }
     }

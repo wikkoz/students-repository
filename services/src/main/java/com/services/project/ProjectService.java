@@ -27,7 +27,7 @@ public class ProjectService {
         IMIE, NAZWISKO, NR_ERES, NR_STUDENTA;
 
         public static List<String> getAllNames() {
-            return Stream.of(values()).map(u -> u.name()).collect(Collectors.toList());
+            return Stream.of(values()).map(Enum::name).collect(Collectors.toList());
         }
     }
 
@@ -35,7 +35,7 @@ public class ProjectService {
         IMIE, NAZWISKO, NR_ERES, ILOSC_ZESPOLOW;
 
         public static List<String> getAllNames() {
-            return Stream.of(values()).map(u -> u.name()).collect(Collectors.toList());
+            return Stream.of(values()).map(Enum::name).collect(Collectors.toList());
         }
     }
 
@@ -123,7 +123,7 @@ public class ProjectService {
         Team team = new Team();
         team.setConfirmed(TeamState.EMPTY);
         team.setTutor(tutor);
-        team.setName(tutor.name());
+        team.setPoints(0);
 //        team.setId(Long.valueOf(dto.getId()));
 //        team.setGitlabPage(dto.getPath());
         return team;
@@ -140,8 +140,8 @@ public class ProjectService {
                 .mapToInt(ProjectDeadlineDto::getPoints)
                 .sum());
         project.setStudents(students);
-        project = projectRepository.save(project);
-        request.getDeadlines().forEach(this::saveProjectDeadline);
+        projectRepository.save(project);
+        request.getDeadlines().forEach(d -> saveProjectDeadline(d, project));
         for (Team team : teams) {
             team.setProject(project);
         }
@@ -157,11 +157,12 @@ public class ProjectService {
     }
 
     @Transactional
-    private void saveProjectDeadline(ProjectDeadlineDto dto) {
+    private void saveProjectDeadline(ProjectDeadlineDto dto, Project project) {
         ProjectDeadline deadline = new ProjectDeadline();
         deadline.setDate(dto.getDate());
         deadline.setDescription(dto.getDescription());
         deadline.setPoints(dto.getPoints());
+        deadline.setProject(project);
         projectDeadlineRepository.save(deadline);
     }
 }

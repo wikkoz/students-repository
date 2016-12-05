@@ -1,30 +1,78 @@
 <div class="row">
     <div class="col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1">
         <div class="page-bg">
-            <div class="row">
+            <div class="row small-row">
                 <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                     <div>
-                        Strona projektu:
+                        <span class="label-text">Strona projektu:</span>
                         <button type="button" class="btn btn-nav">GitLab</button>
                     </div>
+                </div>
+            </div>
+            <div class="row small-row">
+                <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                     <div>
-                        Ilosc punktów:
+                        <span class="label-text">Temat:</span>
+                        <span class="label-data">{{ctrl.model.topic}}</span>
                     </div>
-                    <div>
-                        Członkowie:
-                        <ui>
-                            <li>Jan Kowalski (zamien) (usun)</li>
-                            <li>Jan Kowalski (zamien) (usun)</li>
-                            <li>dodaj</li>
+                </div>
+            </div>
+            <div class="row small-row">
+                <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                    <span class="label-text">Ilosc punktów:</span>
+                    <input class="form-control points-tutor"
+                           ng-model="ctrl.model.points">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                        <span class="label-text">Członkowie:</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2" ng-repeat="student in ctrl.model.students">
+                    <span class="label-data">{{student.name}}</span>
+                </div>
+                <span class="col-md-2 character-padding glyphicon glyphicon-minus"
+                      ng-click="ctrl.deleteStudent(student)">
+                </span>
+            </div>
+            <div class="row small-row">
+                <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                    <input class="form-control"
+                           ng-model="ctrl.newStudent"
+                           placeholder="Dodaj studenta">
+                </div>
+                <div class="col-md-2 character-padding glyphicon glyphicon-plus"
+                     ng-click="ctrl.addStudent();">
+                </div>
+            </div>
 
-                        </ui>
-                    </div>
+            <div class="row small-row">
+                <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                     <div>
-                        Temat
+                        <span class="label-text">Terminy:</span>
+                        <span class="row small-row">
+                            <span class="col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1">
+                                <table width="100%">
+                                    <thead>
+                                        <th>Data</th>
+                                        <th>Ilość punktów</th>
+                                        <th>Opis</th>
+                                    </thead>
+                                    <tbody ng-repeat="deadline in ctrl.model.deadlines">
+                                        <td>{{deadline.date}}</td>
+                                        <td>{{deadline.points}}</td>
+                                        <td>{{deadline.description}}</td>
+                                    </tbody>
+                                </table>
+                            </span>
+                        </span>
                     </div>
-                    <div>
-                        Termin
-                    </div>
+                </div>
+            </div>
+            <div class="small-row">
+                <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                 </div>
             </div>
             <div class="row">

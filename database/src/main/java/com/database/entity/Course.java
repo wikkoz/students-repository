@@ -1,5 +1,7 @@
 package com.database.entity;
 
+import com.google.common.base.MoreObjects;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -75,5 +77,14 @@ public class Course {
 
     public void setGroupId(int groupId) {
         this.groupId = groupId;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("courseName", courseName)
+                .add("abbreviation", abbreviation)
+                .add("semester", semester)
+                .toString();
     }
 }

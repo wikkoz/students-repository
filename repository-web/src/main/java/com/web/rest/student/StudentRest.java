@@ -75,15 +75,15 @@ public class StudentRest {
                 .collect(Collectors.toList());
     }
 
-    @RequestMapping(value = "/team/{id}/chooseTopic", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void chooseTopic(@PathVariable("id") long id, TypeWrapper<String> topic) {
+    @RequestMapping(value = "/team/{id}/chooseTopic", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void chooseTopic(@PathVariable("id") long id, @RequestBody TypeWrapper<String> topic) {
         LOG.info("saving topic {} for team with id {}", topic.getValue(), id);
         studentService.saveTopic(id, topic.getValue());
     }
 
     @RequestMapping(value = "/team/{id}/accept", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public void acceptTeam(@PathVariable("id") long id) {
-        LOG.info("accepting team {} by tutor", id);
+        LOG.info("changing state of team for PENDING", id);
         studentService.acceptTeam(id);
     }
 

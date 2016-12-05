@@ -18,8 +18,5 @@
         <createSequence sequenceName="project_deadline_seq" startValue="1" cycle="false"/>
         <addForeignKeyConstraint baseTableName="project_deadline" baseColumnNames="project_id"
                                  constraintName="id_deadline_foreign_2" referencedTableName="project" referencedColumnNames="id"/>
-        <addUniqueConstraint tableName="project_deadline" columnNames="date"/>
-        <addUniqueConstraint tableName="project_deadline" columnNames="project_id"/>
-        <addUniqueConstraint tableName="project_deadline" columnNames="points"/>
     </changeSet>
 </databaseChangeLog>

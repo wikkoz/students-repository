@@ -2,6 +2,7 @@ package com.services.student;
 
 import com.database.entity.*;
 import com.database.repository.*;
+import com.services.project.ProjectDeadlineDto;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -50,7 +52,7 @@ public class StudentService {
                 .collect(Collectors.toList());
         teamsOfStudent.addAll(emptyTeams);
         return teamsOfStudent.stream()
-                .sorted((a, b) -> Integer.compare(a.getConfirmed().ordinal(), b.getConfirmed().ordinal()))
+                .sorted(Comparator.comparingInt(a -> a.getConfirmed().ordinal()))
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
@@ -68,7 +70,12 @@ public class StudentService {
         TeamResponse teamResponse = new TeamResponse();
         teamResponse.setTeamState(team.getConfirmed().name());
         teamResponse.setGitlabPage(team.getGitlabPage());
+        teamResponse.setPoints(team.getPoints());
         teamResponse.setTopic(team.getTopic());
+        teamResponse.setDates(team.getProject().getDeadlines().stream()
+                .filter(p -> p.getDate().isAfter(LocalDate.now()))
+                .map(this::toDeadlineDto)
+                .collect(Collectors.toList()));
         List<UserWithIdDto> studentNames = team.getStudents()
                 .stream()
                 .map(UserTeam::getStudent)
@@ -82,6 +89,14 @@ public class StudentService {
         LOG.info("students response for login {} and team id {}: {}", login, id, teamResponse);
 
         return teamResponse;
+    }
+
+    private ProjectDeadlineDto toDeadlineDto(ProjectDeadline projectDeadline) {
+        ProjectDeadlineDto dto = new ProjectDeadlineDto();
+        dto.setDate(projectDeadline.getDate());
+        dto.setDescription(projectDeadline.getDescription());
+        dto.setPoints(projectDeadline.getPoints());
+        return dto;
     }
 
     @Transactional

@@ -1,5 +1,5 @@
 (function () {
-    'use strict'
+    'use strict';
 
     angular.module('projekt').directive('tableLab', tableLab);
     function tableLab() {
@@ -19,42 +19,33 @@
     function tableLabCtrl($scope, $state, $resource) {
         var ctrl = this;
 
-        var BASE_URL = '/project';
+        var BASE_URL = '/tutor';
         var resource = $resource('', {}, {
-            projects: {method: 'GET', url: BASE_URL + '/', isArray: true}
+            projects: {method: 'GET', url: BASE_URL + '/project', isArray: true}
         });
         
         ctrl.click = click;
         ctrl.newTeam = newTeam;
-        ctrl.model = [
-            {
-                'course': 'PIK',
-                'name': "Projekt",
-                'date': '11-11-2016'
-            },
-            {
-                'course': 'PIK',
-                'name': "Projekt",
-                'date': '11-11-2016'
-            }
-        ];
-        
+
         init();
         
         function init() {
+            load();
             $scope.$on('lab', load)
         }
 
         function load() {
-
+            resource.projects().$promise.then(function (data) {
+                ctrl.model = data;
+            })
         }
 
-        function click() {
-            $state.go('project', {teamId: 1});
+        function click(id) {
+            $state.go('project', {teamId: id});
         }
 
         function newTeam() {
-            $state.go('newteam', {teamId: 1});
+            $state.go('newteam');
         }
     }
 })();

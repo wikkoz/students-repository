@@ -1,8 +1,8 @@
 package com.services.student;
 
 import com.google.common.base.MoreObjects;
+import com.services.project.ProjectDeadlineDto;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class TeamResponse {
@@ -10,7 +10,8 @@ public class TeamResponse {
     private String gitlabPage;
     private List<UserWithIdDto> students;
     private String topic;
-    private LocalDate date;
+    private int points;
+    private List<ProjectDeadlineDto> dates;
     private int numberOfStudents;
     private boolean confirmedUser;
     private boolean leader;
@@ -39,12 +40,12 @@ public class TeamResponse {
         this.topic = topic;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public List<ProjectDeadlineDto> getDates() {
+        return dates;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setDates(List<ProjectDeadlineDto> dates) {
+        this.dates = dates;
     }
 
     public boolean isConfirmedUser() {
@@ -79,6 +80,14 @@ public class TeamResponse {
         this.numberOfStudents = numberOfStudents;
     }
 
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
@@ -86,7 +95,8 @@ public class TeamResponse {
                 .add("gitlabPage", gitlabPage)
                 .add("students", students)
                 .add("topic", topic)
-                .add("date", date)
+                .add("points", points)
+                .add("dates", dates)
                 .add("numberOfStudents", numberOfStudents)
                 .add("confirmedUser", confirmedUser)
                 .add("leader", leader)
