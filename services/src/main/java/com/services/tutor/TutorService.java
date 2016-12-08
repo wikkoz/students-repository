@@ -90,16 +90,13 @@ public class TutorService {
 
     private SignedRecordsResponse toRecordResponse(Map.Entry<String, List<Team>> entry) {
         SignedRecordsResponse response = new SignedRecordsResponse();
-        int signed = entry.getValue().stream()
+        long signed = entry.getValue().stream()
                 .filter(t -> t.getConfirmed() == TeamState.ACCEPTED)
-                .mapToInt(t -> t.getStudents().size())
-                .sum();
+                .count();
         response.setName(entry.getKey());
-        response.setSignedStudentsNumber(signed);
-        int allStudents = entry.getValue().stream()
-                .mapToInt(t -> t.getStudents().size())
-                .sum();
-        response.setStudentsNumber(allStudents);
+        response.setSignedTeams(signed);
+        long allTeams = entry.getValue().size();
+        response.setAllTeams(allTeams);
         return response;
     }
 

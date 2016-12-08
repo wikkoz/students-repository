@@ -35,14 +35,14 @@
                     </span>
                     <div ng-if='!ctrl.showLeaderOption()'
                          class="label-text col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
-                        Temat projektu: {{::ctrl.model.topic}}
+                        Temat projektu: {{ctrl.model.topic}}
                     </div>
                     <div class="label-text col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                         Do projektu należa:
                     </div>
                     <div ng-repeat="student in ctrl.model.students">
                         <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
-                            {{::student.name}}
+                            {{student.name}}
                         </div>
                         <div class="col-md-2 character-padding glyphicon glyphicon-minus"
                              ng-if="ctrl.showLeaderOption()"

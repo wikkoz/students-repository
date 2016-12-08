@@ -2,7 +2,6 @@ package com.web.rest.login;
 
 import com.services.login.LoginRequest;
 import com.services.login.LoginService;
-import com.services.mail.MailRequest;
 import com.services.mail.MailService;
 import com.web.configuration.TypeWrapper;
 import org.slf4j.Logger;
@@ -47,7 +46,7 @@ public class LoginRest {
         return TypeWrapper.of(loginService.isLogged(user.getName()));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping("/user")
     public Map<String, Object> user(Principal user) {
         Map<String, Object> map = new LinkedHashMap<>();
@@ -55,7 +54,7 @@ public class LoginRest {
         map.put("roles", AuthorityUtils.authorityListToSet(((Authentication) user)
                 .getAuthorities()));
 
-        mailService.sendMail("asd", new MailRequest());
+        //mailService.sendMail("asd", new MailRequest());
         return map;
     }
 

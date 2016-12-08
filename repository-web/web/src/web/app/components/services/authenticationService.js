@@ -7,6 +7,8 @@
         var resource = $resource('', {}, {
             user: {method: 'GET', url: '/user/user'}
         });
+        var roles = [];
+
 
         var service = {
             hasRole: hasRole

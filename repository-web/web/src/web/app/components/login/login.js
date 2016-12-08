@@ -35,7 +35,7 @@
         function login() {
             resource.login(ctrl.model).$promise.then(function (response) {
                 if (response.value) {
-                    $state.go(ctrl.previousState, ctrl.previousParmas);
+                    $state.go('/');
                 }
             });
         }

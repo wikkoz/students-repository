@@ -4,8 +4,8 @@ import com.google.common.base.MoreObjects;
 
 public class SignedRecordsResponse {
     private String name;
-    private int signedStudentsNumber;
-    private int studentsNumber;
+    private long signedTeams;
+    private long allTeams;
 
     public String getName() {
         return name;
@@ -15,28 +15,28 @@ public class SignedRecordsResponse {
         this.name = name;
     }
 
-    public int getSignedStudentsNumber() {
-        return signedStudentsNumber;
+    public long getSignedTeams() {
+        return signedTeams;
     }
 
-    public void setSignedStudentsNumber(int signedStudentsNumber) {
-        this.signedStudentsNumber = signedStudentsNumber;
+    public void setSignedTeams(long signedTeams) {
+        this.signedTeams = signedTeams;
     }
 
-    public int getStudentsNumber() {
-        return studentsNumber;
+    public long getAllTeams() {
+        return allTeams;
     }
 
-    public void setStudentsNumber(int studentsNumber) {
-        this.studentsNumber = studentsNumber;
+    public void setAllTeams(long allTeams) {
+        this.allTeams = allTeams;
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("name", name)
-                .add("signedStudentsNumber", signedStudentsNumber)
-                .add("studentsNumber", studentsNumber)
+                .add("signedTeams", signedTeams)
+                .add("allTeams", allTeams)
                 .toString();
     }
 }

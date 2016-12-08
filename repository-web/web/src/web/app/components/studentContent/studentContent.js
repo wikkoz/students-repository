@@ -14,7 +14,7 @@
     }
 
     /*ngInject*/
-    function studentContentCtrl($stateParams, $resource) {
+    function studentContentCtrl($state, $stateParams, $resource) {
         var ctrl = this;
 
         var BASE_URL = '/student';
@@ -66,14 +66,19 @@
         function addStudent() {
             if(!_.isEmpty(ctrl.newPerson)) {
                 resource.addStudent(getParams(), ctrl.newPerson).$promise.then(function() {
+                    ctrl.newPerson = null;
                     init();
                 });
             }
         }
 
         function deleteStudent(student) {
-            resource.deleteStudent(getParams(), student).$promise.then(function() {
-                init();
+            resource.deleteStudent(getParams(), student).$promise.then(function(data) {
+                if(data.selfRemove){
+                    $state.go('/')
+                } else {
+                    init();
+                }
             });
         }
         
@@ -104,7 +109,8 @@
         function showSendButton() {
             return showLeaderOption()
                 && ctrl.model.students.length === ctrl.model.numberOfStudents
-                && !_.isEmpty(ctrl.model.topic);
+                && !_.isEmpty(ctrl.model.topic)
+                && ctrl.model.canBeAccepted;
         }
         
         function getParams(){

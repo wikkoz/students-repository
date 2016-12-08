@@ -15,6 +15,7 @@ public class TeamResponse {
     private int numberOfStudents;
     private boolean confirmedUser;
     private boolean leader;
+    private boolean canBeAccepted;
 
     public String getTeamState() {
         return teamState;
@@ -88,6 +89,14 @@ public class TeamResponse {
         this.points = points;
     }
 
+    public boolean isCanBeAccepted() {
+        return canBeAccepted;
+    }
+
+    public void setCanBeAccepted(boolean canBeAccepted) {
+        this.canBeAccepted = canBeAccepted;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
@@ -100,6 +109,7 @@ public class TeamResponse {
                 .add("numberOfStudents", numberOfStudents)
                 .add("confirmedUser", confirmedUser)
                 .add("leader", leader)
+                .add("canBeAccepted", canBeAccepted)
                 .toString();
     }
 }

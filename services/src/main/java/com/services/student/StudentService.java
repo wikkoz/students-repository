@@ -2,7 +2,9 @@ package com.services.student;
 
 import com.database.entity.*;
 import com.database.repository.*;
+import com.google.common.base.Preconditions;
 import com.services.project.ProjectDeadlineDto;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,10 +87,16 @@ public class StudentService {
         teamResponse.setNumberOfStudents(team.getProject().getStudentsNumber());
         teamResponse.setConfirmedUser(userTeam.isConfirmed());
         teamResponse.setLeader(userTeam.isLeader());
+        teamResponse.setCanBeAccepted(teamCanBeAccepted(team));
 
         LOG.info("students response for login {} and team id {}: {}", login, id, teamResponse);
 
         return teamResponse;
+    }
+
+    private boolean teamCanBeAccepted(Team team) {
+        return team.getStudents().stream().allMatch(UserTeam::isConfirmed)
+                && team.getStudents().size() == team.getProject().getStudentsNumber();
     }
 
     private ProjectDeadlineDto toDeadlineDto(ProjectDeadline projectDeadline) {
@@ -166,11 +174,24 @@ public class StudentService {
     }
 
     @Transactional
-    public void deleteStudent(long teamId, long studentId) {
+    public StudentRemovalResponse deleteStudent(long teamId, long studentId, String userLogin) {
         User student = userRepository.findUsersWithTeam(studentId);
         Team team = teamRepository.findTeamWithStudents(teamId);
-        UserTeam userTeam = userTeamRepository.findUserTeamByTeamAndStudent(team, student);
-        userTeamRepository.delete(userTeam);
+
+        boolean selfRemove = StringUtils.equals(userLogin, student.getLogin());
+
+        if(team.getStudents().size() == 1 || selfRemove) {
+            team.getStudents().forEach(ut -> userTeamRepository.delete(ut));
+            team.setConfirmed(TeamState.EMPTY);
+            team.setTopic(null);
+        } else {
+            UserTeam userTeam = userTeamRepository.findUserTeamByTeamAndStudent(team, student);
+            userTeamRepository.delete(userTeam);
+        }
+
+        StudentRemovalResponse response = new StudentRemovalResponse();
+        response.setSelfRemove(selfRemove);
+        return response;
     }
 
     @Transactional
@@ -190,8 +211,16 @@ public class StudentService {
     }
 
     @Transactional
-    public void acceptTeam(long teamId) {
-        Team team = teamRepository.findById(teamId);
+    public void acceptTeam(long teamId, String login) {
+        Team team = teamRepository.findTeamWithStudents(teamId);
+        User studnet = userRepository.findUserByLogin(login);
+        UserTeam userTeam = userTeamRepository.findUserTeamByTeamAndStudent(team, studnet);
+
+        boolean allAcceptedStudents = team.getStudents().stream().allMatch(UserTeam::isConfirmed);
+
+        Preconditions.checkArgument(allAcceptedStudents, "All students must be confirmed for team {} to accept", teamId);
+        Preconditions.checkArgument(userTeam.isLeader(), "User with login {} is not leader of team {}", login, teamId);
+
         team.setConfirmed(TeamState.PENDING);
     }
 

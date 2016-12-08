@@ -13,13 +13,18 @@
     }
 
     /*@ngInject*/
-    function tabCtrl($scope) {
+    function tabCtrl($scope, AuthenticationService) {
         var ctrl = this;
 
         ctrl.reload = reload;
+        ctrl.hasRole = hasRole;
 
         function reload(action) {
             $scope.$broadcast(action);
+        }
+
+        function hasRole(role){
+            return true;
         }
     }
 })();

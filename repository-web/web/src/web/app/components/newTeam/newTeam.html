@@ -5,13 +5,14 @@
                 <div class="row">
                     <label for="sel1">Wybierz zespół o temacie</label>
                     <select class="form-control" id="sel1"
-                        ng-model="ctrl.team"
-                        ng-options="team.teamName for team in ctrl.model">
+                            ng-model="ctrl.team"
+                            ng-options="team.teamName for team in ctrl.model">
                     </select>
                     <div class="row">
                         <div class="col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1">
                             <span style="text-align:left;
-                               display:block;">
+                               display:block;"
+                                  ng-disabled="!ctrl.team">
                                 Do zespołu należa:
                             </span>
                         </div>
@@ -27,12 +28,16 @@
                            size="100%"
                            type="text"
                            placeholder="Temat projektu"
+                           ng-disabled="!ctrl.team"
                            ng-model="ctrl.team.topic">
                 </div>
                 <div class="row">
                     <button type="button"
                             class="btn btn-new"
-                            ng-click="ctrl.acceptTeam()">Dodaj zespół</button>
+                            ng-click="ctrl.acceptTeam()"
+                            ng-disabled="!ctrl.team">
+                        Dodaj zespół
+                    </button>
                 </div>
             </div>
         </div>

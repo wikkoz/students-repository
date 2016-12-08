@@ -26,6 +26,8 @@
         <insert tableName="app_user">
             <column name="id" valueSequenceNext="app_user_seq"/>
             <column name="login" value="ADMIN"/>
+            <column name="first_name" value="ADMIN"/>
+            <column name="last_name" value="ADMIN"/>
             <column name="mail" value="ADMIN"/>
             <column name="eres" value="ADMIN"/>
         </insert>

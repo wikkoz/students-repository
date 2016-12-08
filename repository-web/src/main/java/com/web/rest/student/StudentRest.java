@@ -1,6 +1,7 @@
 package com.web.rest.student;
 
 import com.database.entity.User;
+import com.services.student.StudentRemovalResponse;
 import com.services.student.StudentService;
 import com.services.student.StudentsProjectDto;
 import com.services.student.TeamResponse;
@@ -56,9 +57,9 @@ public class StudentRest {
     }
 
     @RequestMapping(value = "/team/{id}/delete", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void deleteUser(@PathVariable("id") long id, @RequestBody StudentsForProjectResponse student) {
+    public StudentRemovalResponse deleteUser(@PathVariable("id") long id, @RequestBody StudentsForProjectResponse student, Principal user) {
         LOG.info("removing student {} from team with id {}", student.getName(), id);
-        studentService.deleteStudent(id, student.getId());
+        return studentService.deleteStudent(id, student.getId(), user.getName());
     }
 
     @RequestMapping(value = "/team/{id}/topics", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -82,9 +83,9 @@ public class StudentRest {
     }
 
     @RequestMapping(value = "/team/{id}/accept", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void acceptTeam(@PathVariable("id") long id) {
+    public void acceptTeam(@PathVariable("id") long id, Principal user) {
         LOG.info("changing state of team for PENDING", id);
-        studentService.acceptTeam(id);
+        studentService.acceptTeam(id, user.getName());
     }
 
     @RequestMapping(value = "/team/{id}/acceptRequest", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)

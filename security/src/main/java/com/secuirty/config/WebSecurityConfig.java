@@ -52,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(new AuthenticationProvider() {
             @Override
             public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-                return new UsernamePasswordAuthenticationToken("ADMIN", "ADMIN", Lists.newArrayList(()->"ROLE_ADMIN"));
+                return new UsernamePasswordAuthenticationToken("ADMIN", "ADMIN", Lists.newArrayList(()->"ADMIN"));
             }
 
             @Override
