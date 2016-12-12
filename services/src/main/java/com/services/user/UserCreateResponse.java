@@ -3,18 +3,18 @@ package com.services.user;
 import com.google.common.base.MoreObjects;
 
 public class UserCreateResponse {
-    private boolean success;
+    private int id;
     private String password;
-    private String gitlabLogin;
     private String login;
 
-    public boolean isSuccess() {
-        return success;
+    public int getId() {
+        return id;
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
+    public void setId(int id) {
+        this.id = id;
     }
+
 
     public String getPassword() {
         return password;
@@ -22,14 +22,6 @@ public class UserCreateResponse {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getGitlabLogin() {
-        return gitlabLogin;
-    }
-
-    public void setGitlabLogin(String gitlabLogin) {
-        this.gitlabLogin = gitlabLogin;
     }
 
     public String getLogin() {
@@ -43,9 +35,8 @@ public class UserCreateResponse {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("success", success)
+                .add("id", id)
                 .add("password", password)
-                .add("gitlabLogin", gitlabLogin)
                 .add("login", login)
                 .toString();
     }

@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -74,18 +75,29 @@ public class AdminService {
     public void createUsers(InputStream usersData, String login) {
         File usersFile = fileService.getFile(usersData, UserFile.getAllNames());
         List<User> users = fileService.getObjectFromFile(usersFile, newUser());
-        saveUsers(users);
-        List<UserCreateResponse> responses = users.stream()
+        Map<String, UserCreateResponse> responses = users.stream()
                 .map(u -> createGitlabUser(u, login))
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .collect(Collectors.toMap(UserCreateResponse::getLogin, u -> u));
+        users.forEach(u -> u.setGitlabId(responses.get(u.getLogin()).getId()));
+        saveUsers(users);
+
     }
 
     public void createCourse(InputStream courseData, String login) {
         File coursesFile = fileService.getFile(courseData, CourseFile.getAllNames());
         String token = loggedUserRepository.findFirstByLoginOrderByDateDesc(login).getPrivateToken();
         List<Course> courses = fileService.getObjectFromFile(coursesFile, newCourse(token));
+        User admin = userRepository.findUserByLogin(login);
+        courses.forEach(c -> addLecturerToGroup(c, admin, token));
         saveCourses(courses);
+    }
+
+    private void addLecturerToGroup(Course c, User admin, String privateToken) {
+        User lecturer = c.getLecturer();
+        if(!Objects.equals(c.getLecturer(), admin)) {
+            gitLabApi.addUsersToGroup(Lists.newArrayList(lecturer.getGitlabId()), privateToken, c.getGroupId());
+        }
     }
 
     private Function<List<String>, User> newUser() {
@@ -108,7 +120,7 @@ public class AdminService {
             course.setAbbreviation(row.get(CourseFile.SKROT.ordinal()));
             course.setCourseName(row.get(CourseFile.NAZWA_PRZEDMIOTU.ordinal()));
             course.setSemester(getSemester());
-//            course.setGroupId(gitLabApi.createGroup(token, course.getAbbreviation(), course.getSemester()));
+            course.setGroupId(gitLabApi.createGroup(token, course.getAbbreviation(), course.getSemester()));
             User lectuer = userRepository.findUserByEres(row.get(CourseFile.ERES_PROWADZACEGO.ordinal()));
             course.setLecturer(lectuer);
             return course;
@@ -117,7 +129,7 @@ public class AdminService {
 
     private UserCreateResponse createGitlabUser(User user, String login) {
         if (!Strings.isNullOrEmpty(user.getGitlabLogin())) {
-            //return gitlabApiUser.createUser(user, login);
+            return gitlabApiUser.createUser(user, login);
         }
         return null;
     }

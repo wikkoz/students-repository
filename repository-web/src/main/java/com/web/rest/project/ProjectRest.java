@@ -43,19 +43,18 @@ public class ProjectRest {
         return projectService.findAllTeamsForCourse(course.getValue());
     }
 
-    @RequestMapping(value = "/createUsers/{courseId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/createProject/{courseId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public void createProject(Principal user, @RequestBody ProjectDataDto projectDto,
                               @PathVariable("courseId") long courseId) {
         LOG.info("creating project for course with id {} and request", courseId, projectDto.toString());
 
         ProjectCreationRequest request = new ProjectCreationRequest();
-        String privateToken = loginService.getPrivateToken(user.getName());
-        request.setPrivateToken(privateToken);
         request.setFileStudentData(fileService.decodeBase64(projectDto.getStudentFile()));
         request.setFileTutorData(fileService.decodeBase64(projectDto.getTutorFile()));
         request.setStudentsNumber(projectDto.getStudentsNumber());
         request.setDeadlines(projectDto.getDeadlines());
         request.setCourseId(courseId);
+        request.setPrivateToken(loginService.getPrivateToken(user.getName()));
         projectService.createProject(request);
     }
 }

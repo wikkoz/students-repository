@@ -15,13 +15,12 @@
     }
 
     /*@ngInject*/
-    function adminCtrl($resource, $state) {
+    function adminCtrl($resource, $state, Notification, GitlabService) {
         var ctrl = this;
 
         var resource = $resource('', {}, {
             createUsers: {method: 'POST', url: '/admin/users'},
-            createCourses: {method: 'POST', url: '/admin/courses'},
-            isLogged: {method: 'GET', url: '/user/logged'}
+            createCourses: {method: 'POST', url: '/admin/courses'}
         });
 
         ctrl.model = {};
@@ -29,23 +28,27 @@
         ctrl.uploadCourses = uploadCourses;
 
         function uploadUsers() {
-            resource.isLogged().$promise.then(function (response) {
-                if(response.value){
-                    resource.createUsers(ctrl.model.userFile);
-                } else {
-                    $state.go('login');
-                }
-            });
+            var success = function () {
+                resource.createUsers(ctrl.model.userFile).$promise.then(function () {
+                    Notification.info({message: "Dodano nowych użytkowników"})
+                });
+            };
+
+            GitlabService.login(success, failure);
         }
 
         function uploadCourses() {
-            resource.isLogged().$promise.then(function (response) {
-                if(response.value){
-                    resource.createCourses(ctrl.model.courseFile);
-                } else {
-                    $state.go('login');
-                }
-            });
+            var success = function () {
+                resource.createCourses(ctrl.model.courseFile).$promise.then(function () {
+                    Notification.info({message: "Dodano nowe przedmioty"})
+                });
+            };
+
+            GitlabService.login(success, failure);
+        }
+
+        function failure() {
+            $state.go('login');
         }
     }
 })();

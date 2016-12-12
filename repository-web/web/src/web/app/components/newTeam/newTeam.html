@@ -29,7 +29,9 @@
                            type="text"
                            placeholder="Temat projektu"
                            ng-disabled="!ctrl.team"
-                           ng-model="ctrl.team.topic">
+                           ng-model-options="{updateOn: 'blur'}"
+                           ng-model="ctrl.team.topic"
+                           ng-change="ctrl.changeTopic()">
                 </div>
                 <div class="row">
                     <button type="button"

@@ -17,6 +17,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String mail;
+    private Integer gitlabId;
     private String gitlabLogin;
     private String login;
     private String eres;
@@ -69,12 +70,12 @@ public class User {
         this.mail = mail;
     }
 
-    public String getGitlabLogin() {
-        return gitlabLogin;
+    public Integer getGitlabId() {
+        return gitlabId;
     }
 
-    public void setGitlabLogin(String gitlabLogin) {
-        this.gitlabLogin = gitlabLogin;
+    public void setGitlabId(Integer gitlabId) {
+        this.gitlabId = gitlabId;
     }
 
     public String getLogin() {
@@ -127,6 +128,14 @@ public class User {
 
     public String name() {
         return firstName + " " + lastName;
+    }
+
+    public String getGitlabLogin() {
+        return gitlabLogin;
+    }
+
+    public void setGitlabLogin(String gitlabLogin) {
+        this.gitlabLogin = gitlabLogin;
     }
 
     @Override

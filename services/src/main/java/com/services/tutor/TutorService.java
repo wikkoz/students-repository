@@ -1,19 +1,23 @@
 package com.services.tutor;
 
 import com.database.entity.*;
-import com.database.repository.TeamRepository;
-import com.database.repository.UserRepository;
+import com.database.repository.*;
+import com.gitlab.GitLabApi;
+import com.gitlab.project.ProjectDto;
 import com.services.project.ProjectDeadlineDto;
 import com.services.student.UserWithIdDto;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.springframework.transaction.annotation.Propagation.REQUIRES_NEW;
 
 @Service
 public class TutorService {
@@ -25,6 +29,18 @@ public class TutorService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CourseRepository courseRepository;
+
+    @Autowired
+    private UserTeamRepository userTeamRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
+
+    @Autowired
+    private GitLabApi gitLabApi;
 
     public List<SignedRecordsResponse> getAllRecords(String login) {
         User tutor = userRepository.findUserByLogin(login);
@@ -124,10 +140,92 @@ public class TutorService {
     }
 
     @Transactional
-    public void acceptTeam(long id) {
-        Team team = teamRepository.findById(id);
+    public void acceptTeam(long id, String privateToken) {
+        Team team = teamRepository.findTeamWithStudents(id);
         team.setConfirmed(TeamState.ACCEPTED);
 
+        createGitlabProject(team, privateToken);
+
         LOG.info("Accepting team with id {}", team.getId());
+    }
+
+    private void createGitlabProject(Team team, String privateToken) {
+        LOG.info("Creating gitlab project for team with id {}", team.getId());
+
+        long courseId = team.getProject().getCourse().getId();
+        int groupId = courseRepository.findOne(courseId).getGroupId();
+        ProjectDto dto = gitLabApi.createProject(privateToken, team.getTopic(), groupId, team.getTutor().getGitlabId());
+        team.setGitlabId(dto.getId());
+        team.setGitlabPage(dto.getPath());
+        setUsersForProject(team, privateToken);
+    }
+
+    private void setUsersForProject(Team team, String privateToken) {
+        LOG.info("Adding users to gitlab from team {}", team.getId());
+
+        List<Integer> usersId = team.getStudents().stream().map(UserTeam::getStudent)
+                .map(User::getGitlabId)
+                .collect(Collectors.toList());
+        gitLabApi.addUsersToProject(usersId, privateToken, team.getGitlabId());
+    }
+
+    @Transactional
+    public void removeStudent(long teamId, long userId, String privateToken) {
+        LOG.info("Removing student {} from team {}", userId, teamId);
+
+        Team team = teamRepository.findById(teamId);
+        User student = userRepository.findOne(userId);
+        UserTeam userTeam = userTeamRepository.findUserTeamByTeamAndStudent(team, student);
+        //gitlabremove
+        userTeamRepository.delete(userTeam);
+    }
+
+    @Transactional
+    public void changeTopic(long teamId, String topic) {
+        Team team = teamRepository.findById(teamId);
+        team.setTopic(topic);
+    }
+
+    @Transactional
+    public List<UserWithIdDto> findFreeStudents(long teamId) {
+        Long id = teamRepository.findById(teamId).getProject().getId();
+        Project project =  projectRepository.findProjectWithTeams(id);
+
+        LOG.info("Loading free students for project {}", project.getId());
+        List<Team> teams = project.getTeams();
+        return loadUserWithProjects(project.getId())
+                .stream()
+                .filter(u ->
+                        u.getTeamsAsStudent().stream()
+                                .map(UserTeam::getTeam)
+                                .noneMatch(teams::contains))
+                .map(UserWithIdDto::new)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(propagation = REQUIRES_NEW)
+    private Set<User> loadUserWithProjects(long projectId) {
+        Set<User> users = userRepository.findUsersForProject(projectId);
+        for (User u : users) {
+            Hibernate.initialize(u.getTeamsAsStudent());
+        }
+        return users;
+    }
+
+    @Transactional
+    public void addStudent(UserWithIdDto studentDto, long teamId, String privateToken) {
+        LOG.info("Adding student {} to team {}", studentDto, teamId);
+
+        Team team = teamRepository.findById(teamId);
+        User student = userRepository.findOne(studentDto.getId());
+
+        //gitlab
+
+        UserTeam userTeam = new UserTeam();
+        userTeam.setStudent(student);
+        userTeam.setTeam(team);
+        userTeam.setConfirmed(true);
+
+        userTeamRepository.save(userTeam);
     }
 }

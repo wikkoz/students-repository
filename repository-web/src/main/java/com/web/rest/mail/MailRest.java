@@ -19,11 +19,11 @@ public class MailRest {
 
     @RequestMapping(value = "/send", method = RequestMethod.POST)
     public void sendMail(Principal user, @RequestParam(value = "mailDto") MailRequest mailDto) {
-        mailService.sendMail(user.getName(), mailDto);
+        mailService.sendMail(mailDto);
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     public void get(Principal user, @RequestParam(value = "mailDto") MailRequest mailDto) {
-        mailService.sendMail(user.getName(), mailDto);
+        mailService.sendMail(mailDto);
     }
 }

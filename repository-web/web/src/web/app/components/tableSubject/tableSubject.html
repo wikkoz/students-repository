@@ -1,5 +1,9 @@
 <div ng-show="ctrl.newProject">
-	<button type="button" class="btn btn-pro" ng-click = 'ctrl.click()'>Załóż projekt</button>
+	<button type="button"
+			class="btn btn-pro"
+			ng-click = "ctrl.click()"
+			ng-if="ctrl.subject">Załóż projekt
+	</button>
 </div>
 <div ng-hide="ctrl.newProject">
 	<table class="table table-hover">

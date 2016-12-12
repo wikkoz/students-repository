@@ -1,6 +1,7 @@
 package com.gitlab.project;
 
 import org.gitlab.api.GitlabAPI;
+import org.gitlab.api.models.GitlabAccessLevel;
 import org.gitlab.api.models.GitlabProject;
 import org.springframework.stereotype.Component;
 
@@ -17,8 +18,17 @@ public class ProjectApi {
             dto.setPath(project.getWebUrl());
         } catch (IOException e) {
             throw new IllegalStateException(String.format("Cannot create team with name %s and namespace %d with message %s",
-                    projectName, namespace, e.getMessage()));
+                    projectName, namespace, e.getMessage()), e);
         }
         return dto;
+    }
+
+    public void addUserToProject(GitlabAPI gitlab, int userId, int projectId) {
+        try {
+            gitlab.addProjectMember(projectId, userId, GitlabAccessLevel.Developer);
+        } catch (IOException e) {
+            throw new IllegalStateException(String.format("Cannot add user  %d to project %d with message %s",
+                    userId, projectId, e.getMessage()), e);
+        }
     }
 }

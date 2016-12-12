@@ -3,7 +3,7 @@
         <div class="email-margin">
             <table cellspacing="0" cellpadding="0" border="0" width="100%">
                 <tr>
-                    <td class="navbar navbar-inverse" align="center"%>
+                    <td class="navbar navbar-inverse" align="center">
                         <table cellspacing="0" cellpadding="3" width="100%">
                             <tr>
                                 <td colspan="4" class="title">{{ctrl.title}}</td>
@@ -16,7 +16,10 @@
                         <table cellspacing="0" cellpadding="3" width="100%">
                             <tr>
                                 <td>
-                                    <input class="form-control" size="100%" type="text" placeholder="Tytuł maila">
+                                    <input class="form-control"
+                                           size="100%" type="text"
+                                           placeholder="Tytuł maila"
+                                           ng-model="ctrl.mailTitle">
                                     </input>
                                 </td>
                             </tr>
@@ -28,7 +31,9 @@
                         <table cellspacing="0" cellpadding="3" width="100%">
                             <tr>
                                 <td>
-                                    <textarea class="form-control" rows="10" cols="100" ng-model="ctrl.mail" style="resize:none" placeholder="Tresc maila">
+                                    <textarea class="form-control" rows="10" cols="100"
+                                              ng-model="ctrl.mailBody"
+                                              style="resize:none" placeholder="Tresc maila">
                                     </textarea>
                                 </td>
                             </tr>

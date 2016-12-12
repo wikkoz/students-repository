@@ -5,9 +5,9 @@
         'ngAnimate',
         'ui.bootstrap',
         'ui.router',
-        'angularFileUpload',
         'ngResource',
-        'naif.base64'
+        'naif.base64',
+        'ui-notification'
     ]);
     angular.module('projekt')
         .config(config)
@@ -20,8 +20,20 @@
         $rootScope.$stateParams = $stateParams;
     }
 
+    function notificationConfig(NotificationProvider) {
+        NotificationProvider.setOptions({
+            delay: 2000,
+            startTop: 20,
+            startRight: 10,
+            verticalSpacing: 20,
+            horizontalSpacing: 20,
+            positionX: 'right',
+            positionY: 'bottom'
+        });
+    }
+
     /*@ngInject*/
-    function config($stateProvider, $httpProvider, $urlRouterProvider) {
+    function config($stateProvider, $httpProvider, $urlRouterProvider, NotificationProvider) {
         $stateProvider
             .state('/', {
                 url: '/',
@@ -48,5 +60,7 @@
                 templateUrl: 'components/view/loginPageView.html'
             });
         $urlRouterProvider.otherwise('/');
+        notificationConfig(NotificationProvider);
+        $httpProvider.interceptors.push('ErrorHandlingInterceptor');
     }
 }());

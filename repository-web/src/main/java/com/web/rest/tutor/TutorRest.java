@@ -1,11 +1,10 @@
 package com.web.rest.tutor;
 
+import com.services.login.LoginService;
+import com.services.student.UserWithIdDto;
 import com.services.tutor.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -16,6 +15,9 @@ public class TutorRest {
 
     @Autowired
     private TutorService tutorService;
+
+    @Autowired
+    private LoginService loginService;
 
     @RequestMapping(value = "/project", method = RequestMethod.GET)
     public List<TutorProjectResponse> getProject(Principal principal) {
@@ -34,11 +36,34 @@ public class TutorRest {
 
     @RequestMapping(value = "/acceptTeam/{id}", method = RequestMethod.POST)
     public void acceptTeam(Principal principal, @PathVariable("id") long id) {
-        tutorService.acceptTeam(id);
+        String privateToken = loginService.getPrivateToken(principal.getName());
+        tutorService.acceptTeam(id, privateToken);
     }
 
     @RequestMapping(value = "/team/{id}", method = RequestMethod.GET)
-    public TutorTeamResponse teamData(Principal principal, @PathVariable("id") long id) {
+    public TutorTeamResponse teamData(@PathVariable("id") long id) {
         return tutorService.getTeamResponse(id);
+    }
+
+    @RequestMapping(value = "/team/{id}/remove/{userId}", method = RequestMethod.POST)
+    public void removeStudent(Principal principal, @PathVariable("id") long id, @PathVariable("userId") long userId) {
+        String privateToken = loginService.getPrivateToken(principal.getName());
+        tutorService.removeStudent(id, userId, privateToken);
+    }
+
+    @RequestMapping(value = "/team/{id}/changeTopic", method = RequestMethod.POST)
+    public void changeTopic(Principal principal, @RequestBody String topic, @PathVariable("id") long id) {
+        tutorService.changeTopic(id, topic);
+    }
+
+    @RequestMapping(value = "/team/{id}/students", method = RequestMethod.GET)
+    public List<UserWithIdDto> freeStudents(@PathVariable("id") long id) {
+       return tutorService.findFreeStudents(id);
+    }
+
+    @RequestMapping(value = "/team/{id}/addStudent", method = RequestMethod.POST)
+    public void addStudent(Principal user, @PathVariable("id") long id, @RequestBody UserWithIdDto student){
+        String privateToken = loginService.getPrivateToken(user.getName());
+        tutorService.addStudent(student, id, privateToken);
     }
 }

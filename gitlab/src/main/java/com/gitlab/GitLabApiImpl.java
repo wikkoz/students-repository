@@ -11,6 +11,8 @@ import org.gitlab.api.GitlabAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class GitLabApiImpl implements GitLabApi {
 
@@ -32,13 +34,13 @@ public class GitLabApiImpl implements GitLabApi {
     }
 
     @Override
-    public void createUser(String private_token, UserDto user) {
+    public int createUser(String private_token, UserDto user) {
         GitlabAPI gitlab = loginApi.connect(private_token);
-        userApi.createUser(gitlab, user);
+        return userApi.createUser(gitlab, user);
     }
 
     @Override
-    public ProjectDto createProject(String private_token, String name, int groupId) {
+    public ProjectDto createProject(String private_token, String name, int groupId, int userId) {
         GitlabAPI gitlab = loginApi.connect(private_token);
         return projectApi.createProject(gitlab, name, groupId);
     }
@@ -47,5 +49,17 @@ public class GitLabApiImpl implements GitLabApi {
     public Integer createGroup(String private_token, String course, String semester) {
         GitlabAPI gitlab = loginApi.connect(private_token);
         return groupApi.createGroup(gitlab, course, semester);
+    }
+
+    @Override
+    public void addUsersToProject(List<Integer> userIds, String privateToken, int projectId) {
+        GitlabAPI gitlab = loginApi.connect(privateToken);
+        userIds.forEach(i -> projectApi.addUserToProject(gitlab, i, projectId));
+    }
+
+    @Override
+    public void addUsersToGroup(List<Integer> userIds, String privateToken, int groupId) {
+        GitlabAPI gitlab = loginApi.connect(privateToken);
+        userIds.forEach(i -> groupApi.addUserToGroup(gitlab, i, groupId));
     }
 }

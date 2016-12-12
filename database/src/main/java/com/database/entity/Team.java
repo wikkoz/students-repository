@@ -2,6 +2,7 @@ package com.database.entity;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Team {
@@ -12,7 +13,7 @@ public class Team {
     private String topic;
     @Enumerated(EnumType.STRING)
     private TeamState confirmed;
-    private Long gitlabId;
+    private int gitlabId;
     private String gitlabPage;
     private int points;
 
@@ -83,11 +84,11 @@ public class Team {
         this.students = students;
     }
 
-    public Long getGitlabId() {
+    public int getGitlabId() {
         return gitlabId;
     }
 
-    public void setGitlabId(Long gitlabId) {
+    public void setGitlabId(int gitlabId) {
         this.gitlabId = gitlabId;
     }
 
@@ -106,7 +107,7 @@ public class Team {
 
         Team team = (Team) o;
 
-        return id == team.id;
+        return Objects.equals(id, team.id);
 
     }
 

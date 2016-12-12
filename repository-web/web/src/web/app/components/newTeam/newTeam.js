@@ -13,17 +13,21 @@
         };
     }
 
-    function newTeamCtrl($resource) {
+    function newTeamCtrl($resource, $state, Notification, GitlabService) {
 
         var BASE_URL = '/tutor';
         var resource = $resource('', {}, {
             teams: {method: 'GET', url: BASE_URL + '/newTeams', isArray: true},
-            accept: {method: 'POST', params: {id: '@id'}, url: BASE_URL + '/acceptTeam/:id'}
+            accept: {method: 'POST', params: {id: '@id'}, url: BASE_URL + '/acceptTeam/:id'},
+            isLogged: {method: 'GET', url: '/user/logged'},
+            changeTopic: {method: 'POST', params: {id: '@id'}, url: BASE_URL + '/team/:id/changeTopic'}
+
         });
 
         var ctrl = this;
 
         ctrl.acceptTeam = acceptTeam;
+        ctrl.changeTopic = changeTopic;
 
         init();
 
@@ -34,8 +38,22 @@
             });
         }
 
+        function changeTopic() {
+            resource.changeTopic({id: ctrl.team.id}, ctrl.team.topic);
+        }
+
         function acceptTeam() {
-            resource.accept({id: ctrl.team.id});
+            var success = function () {
+                resource.accept({id: ctrl.team.id}).$promise.then(function () {
+                    Notification.info({message: "Pomyślnie dodano stworzono zespół"});
+                    $state.go('/')
+                });
+            };
+            var failure = function () {
+                $state.go('login');
+            };
+
+            GitlabService.login(success, failure);
         }
     }
 })(); 

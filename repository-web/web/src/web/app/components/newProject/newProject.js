@@ -14,11 +14,11 @@
     }
 
     /*ngInject*/
-    function newProjectCtrl($resource, $stateParams) {
+    function newProjectCtrl($resource, $stateParams, $state, Notification) {
         var ctrl = this;
         var resource = $resource('', {}, {
-            data: {method: 'POST', params: {courseId: '@courseId'}, url: '/project/createUsers/:courseId'}
-        });
+            data: {method: 'POST', params: {courseId: '@courseId'}, url: '/project/createProject/:courseId'}
+    });
 
         ctrl.model = {};
         ctrl.upload = upload;
@@ -33,23 +33,27 @@
                 startingDay: 1
             };
             ctrl.datepicker = [];
-            ctrl.model.deadlines = [{}];
+            ctrl.deadlines = [{}];
         }
 
         function tableChange(index) {
-            var e = ctrl.model.deadlines[index];
+            var e = ctrl.deadlines[index];
 
-            if (ctrl.model.deadlines.length - 1 == index) {
-                ctrl.model.deadlines.push({});
+            if (ctrl.deadlines.length - 1 == index) {
+                ctrl.deadlines.push({});
             } else if (_.isEmpty(e.date) && _.isEmpty(e.description) && _.isEmpty(e.points)) {
-                _.pullAt(ctrl.model.deadlines, index);
+                _.pullAt(ctrl.deadlines, index);
             }
         }
 
         function upload() {
+            ctrl.model.deadlines = _.cloneDeep(ctrl.deadlines);
             console.log(ctrl);
             _.pullAt(ctrl.model.deadlines, ctrl.model.deadlines.length - 1);
-            resource.data(getParams(), ctrl.model);
+            resource.data(getParams(), ctrl.model).$promise.then(function () {
+                Notification.info("Stworzono projekt");
+                $state.go('/');
+            });
         }
 
         function open(index) {

@@ -29,8 +29,8 @@
                         <span class="label-text">Członkowie:</span>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2" ng-repeat="student in ctrl.model.students">
+            <div class="row" ng-repeat="student in ctrl.model.students">
+                <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                     <span class="label-data">{{student.name}}</span>
                 </div>
                 <span class="col-md-2 character-padding glyphicon glyphicon-minus"
@@ -40,11 +40,14 @@
             <div class="row small-row">
                 <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                     <input class="form-control"
+                           type="text"
                            ng-model="ctrl.newStudent"
+                           uib-typeahead="student as student.name for student in ctrl.students | filter:{name:$viewValue}
+                                        | limitTo:8"
                            placeholder="Dodaj studenta">
                 </div>
                 <div class="col-md-2 character-padding glyphicon glyphicon-plus"
-                     ng-click="ctrl.addStudent();">
+                     ng-click="ctrl.addStudent()">
                 </div>
             </div>
 

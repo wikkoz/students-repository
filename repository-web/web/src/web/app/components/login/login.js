@@ -13,7 +13,7 @@
     }
 
     /*@ngInject*/
-    function loginCtrl($resource, $rootScope, $state) {
+    function loginCtrl($resource, $rootScope, $state, Notification) {
         var ctrl = this;
         var resource = $resource('', {}, {
             login: {method: 'POST', url: '/user/login'}
@@ -36,6 +36,7 @@
             resource.login(ctrl.model).$promise.then(function (response) {
                 if (response.value) {
                     $state.go('/');
+                    Notification.primary({message:"Pomyślnie zalogowano się do GitLab-a", positionY: 'bottom', positionX: 'right'});
                 }
             });
         }

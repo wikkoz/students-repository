@@ -3,7 +3,9 @@ package com.services.project;
 import com.database.entity.*;
 import com.database.repository.*;
 import com.gitlab.GitLabApi;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.services.file.File;
 import com.services.file.FileService;
 import org.slf4j.Logger;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -94,11 +97,8 @@ public class ProjectService {
     public void createProject(ProjectCreationRequest request) {
         File fileOfStudents = fileService.getFile(request.getFileStudentData(), StudentsFile.getAllNames());
         File fileOfTeams = fileService.getFile(request.getFileTutorData(), CoursesFile.getAllNames());
-        //int groupId = courseRepository.findOne(request.getCourseId()).getGroupId();
-        int groupId = 0;
-        String privateToken = request.getPrivateToken();
         List<User> students = fileService.getObjectFromFile(fileOfStudents, usersForProject());
-        List<Team> teams = fileService.getObjectsFromFile(fileOfTeams, createTeamsForProject(groupId, privateToken));
+        List<Team> teams = fileService.getObjectsFromFile(fileOfTeams, createTeamsForProject());
         saveProject(request, teams, students);
     }
 
@@ -106,26 +106,25 @@ public class ProjectService {
         return l -> userRepository.findUserByEresWithProjects(l.get(StudentsFile.NR_ERES.ordinal()));
     }
 
-    private Function<List<String>, List<Team>> createTeamsForProject(int groupId, String privateToken) {
+    private Function<List<String>, List<Team>> createTeamsForProject() {
         return l -> {
             User tutor = userRepository.findUserByEres(l.get(CoursesFile.NR_ERES.ordinal()));
+            Preconditions.checkNotNull(tutor, String.format("Cannot find user with eres number %s", l.get(CoursesFile.NR_ERES.ordinal())));
+
             int numberOfTeams = Integer.parseInt(l.get(CoursesFile.ILOSC_ZESPOLOW.ordinal()));
             List<Team> teams = Lists.newArrayList();
             for (int i = 0; i < numberOfTeams; ++i) {
-                teams.add(createTeam(groupId, tutor, privateToken));
+                teams.add(createTeam(tutor));
             }
             return teams;
         };
     }
 
-    private Team createTeam(int groupId, User tutor, String privateToken) {
-        //ProjectDto dto = gitLabApi.createProject(privateToken, tutor.name(), groupId);
+    private Team createTeam(User tutor) {
         Team team = new Team();
         team.setConfirmed(TeamState.EMPTY);
         team.setTutor(tutor);
         team.setPoints(0);
-//        team.setId(Long.valueOf(dto.getId()));
-//        team.setGitlabPage(dto.getPath());
         return team;
     }
 
@@ -140,6 +139,7 @@ public class ProjectService {
                 .mapToInt(ProjectDeadlineDto::getPoints)
                 .sum());
         project.setStudents(students);
+        addUsersToGroup(project, request.getPrivateToken());
         projectRepository.save(project);
         request.getDeadlines().forEach(d -> saveProjectDeadline(d, project));
         for (Team team : teams) {
@@ -147,13 +147,6 @@ public class ProjectService {
         }
         teamRepository.save(teams);
         return project;
-    }
-
-
-    @Transactional
-    public void acceptTeam(long teamId) {
-        Team team = teamRepository.findById(teamId);
-        team.setConfirmed(TeamState.ACCEPTED);
     }
 
     @Transactional
@@ -164,5 +157,13 @@ public class ProjectService {
         deadline.setPoints(dto.getPoints());
         deadline.setProject(project);
         projectDeadlineRepository.save(deadline);
+    }
+
+    private void addUsersToGroup(Project project, String privateToken) {
+        Set<User> users = Sets.newHashSet(project.getStudents());
+        users.addAll(project.getTeams().stream().map(Team::getTutor).collect(Collectors.toList()));
+        users.remove(project.getCourse().getLecturer());
+        List<Integer> usersId = users.stream().map(User::getGitlabId).collect(Collectors.toList());
+        gitLabApi.addUsersToGroup(usersId, privateToken, project.getCourse().getGroupId());
     }
 }

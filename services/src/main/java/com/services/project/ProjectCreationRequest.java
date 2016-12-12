@@ -38,14 +38,6 @@ public class ProjectCreationRequest {
         this.deadlines = deadlines;
     }
 
-    public String getPrivateToken() {
-        return privateToken;
-    }
-
-    public void setPrivateToken(String privateToken) {
-        this.privateToken = privateToken;
-    }
-
     public long getCourseId() {
         return courseId;
     }
@@ -70,6 +62,14 @@ public class ProjectCreationRequest {
         this.fileTutorData = fileTutorData;
     }
 
+    public String getPrivateToken() {
+        return privateToken;
+    }
+
+    public void setPrivateToken(String privateToken) {
+        this.privateToken = privateToken;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
@@ -79,7 +79,6 @@ public class ProjectCreationRequest {
                 .add("deadlines", deadlines)
                 .add("fileStudentData", fileStudentData)
                 .add("fileTutorData", fileTutorData)
-                .add("privateToken", privateToken)
                 .toString();
     }
 }
