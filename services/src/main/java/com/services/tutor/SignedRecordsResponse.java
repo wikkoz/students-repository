@@ -5,6 +5,7 @@ import com.google.common.base.MoreObjects;
 public class SignedRecordsResponse {
     private String name;
     private long signedTeams;
+    private long waitingTeams;
     private long allTeams;
 
     public String getName() {
@@ -31,11 +32,20 @@ public class SignedRecordsResponse {
         this.allTeams = allTeams;
     }
 
+    public long getWaitingTeams() {
+        return waitingTeams;
+    }
+
+    public void setWaitingTeams(long waitingTeams) {
+        this.waitingTeams = waitingTeams;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("name", name)
                 .add("signedTeams", signedTeams)
+                .add("waitingTeams", waitingTeams)
                 .add("allTeams", allTeams)
                 .toString();
     }

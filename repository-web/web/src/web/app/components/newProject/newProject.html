@@ -1,25 +1,39 @@
 <div class="row">
     <div class="col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1 page-bg">
         <div class="row">
-            <div class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3">
-                <div class="col-md-5 col-xs-5">
-                    <span class="label-text right">Liczba studnetow</span>
+            <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                <div class="col-md-6 col-xs-6">
+                    <span class="label-text right">Liczba studnetów na grupe</span>
                 </div>
-                <div class="col-md-7 col-xs-7">
-                    <input type="text"
+                <div class="col-md-1 col-xs-1">
+                    <span class="label-text right"> od </span>
+                </div>
+                <div class="col-md-2 col-xs-2">
+                    <input type="number"
                            class="form-control"
-                           ng-model="ctrl.model.studentsNumber">
+                           ng-model="ctrl.model.minStudentsNumber">
+                </div>
+                <div class="col-md-1 col-xs-1">
+                    <span class="label-text right"> do </span>
+                </div>
+                <div class="col-md-2 col-xs-2">
+                    <input type="number"
+                           class="form-control"
+                           ng-model="ctrl.model.maxStudentsNumber">
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                <div class="row">
+                    <span class="label-text center">Dodaj kolejne terminy do projektu</span>
+                </div>
                 <table>
                     <thead>
                     <tr>
-                        <th class="col-md-4 col-xs-4">Data</th>
-                        <th class="col-md-4 col-xs-4">Liczba punktów</th>
-                        <th class="col-md-4 col-xs-4">Opis</th>
+                        <th class="col-md-4 col-xs-4">Data oddania</th>
+                        <th class="col-md-4 col-xs-4">Liczba punktów za część</th>
+                        <th class="col-md-4 col-xs-4">Opis części</th>
                     </tr>
                     </thead>
                     <tbody ng-repeat="deadline in ctrl.deadlines">
@@ -37,14 +51,14 @@
                                    ng-click="ctrl.open($index)">
                         </td>
                         <td class="col-md-4 col-xs-4">
-                            <input type="text"
+                            <input type="number"
                                    class="form-control"
                                    ng-model="deadline.points"
                                    ng-change="ctrl.tableChange($index)"
                                    ng-model-options="{updateOn: 'blur'}">
                         </td>
                         <td class="col-md-4 col-xs-4">
-                             <input type="text"
+                            <input type="text"
                                    class="form-control"
                                    ng-model="deadline.description"
                                    ng-change="ctrl.tableChange($index)"
@@ -56,15 +70,13 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4 col-md-offset-4 col-xs-4 col-xs-offset-4">
+            <div class="col-md-4 col-md-offset-2 col-xs-4 col-xs-offset-2">
                 <span class="label-text">Lista studnetów</span>
                 <form>
                     <input type='file' ng-model='ctrl.model.studentFile' base-sixty-four-input>
                 </form>
             </div>
-        </div>
-        <div class="row">
-             <div class="col-md-4 col-md-offset-4 col-xs-4 col-xs-offset-4">
+            <div class="col-md-4 col-xs-4">
                 <span class="label-text">Lista prowadzacych</span>
                 <form>
                     <input type='file' ng-model='ctrl.model.tutorFile' base-sixty-four-input>
@@ -73,7 +85,7 @@
         </div>
         <div class="row">
             <div class="col-md-4 col-md-offset-4 col-xs-4 col-xs-offset-4">
-                <button type="button" class="btn btn-pro"
+                <button type="button" class="btn btn-width"
                         ng-click="ctrl.upload()">Potwierdź
                 </button>
             </div>

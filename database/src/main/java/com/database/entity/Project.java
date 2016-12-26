@@ -11,7 +11,8 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "project_seq")
     private Long id;
     private int maxPoints;
-    private int studentsNumber;
+    private int minStudentsNumber;
+    private int maxStudentsNumber;
 
     @ManyToOne
     @JoinColumn(name = "course_id")
@@ -76,11 +77,19 @@ public class Project {
         this.students = students;
     }
 
-    public int getStudentsNumber() {
-        return studentsNumber;
+    public int getMinStudentsNumber() {
+        return minStudentsNumber;
     }
 
-    public void setStudentsNumber(int studentsNumber) {
-        this.studentsNumber = studentsNumber;
+    public void setMinStudentsNumber(int minStudentsNumber) {
+        this.minStudentsNumber = minStudentsNumber;
+    }
+
+    public int getMaxStudentsNumber() {
+        return maxStudentsNumber;
+    }
+
+    public void setMaxStudentsNumber(int maxStudentsNumber) {
+        this.maxStudentsNumber = maxStudentsNumber;
     }
 }

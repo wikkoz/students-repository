@@ -7,18 +7,21 @@
         var resource = $resource('', {}, {
             user: {method: 'GET', url: '/user/user'}
         });
-        var roles = [];
-
 
         var service = {
-            hasRole: hasRole
+            getRoles: getRoles,
+            getName: getName
         };
 
         return service;
 
-        function hasRole(role) {
-            return resource.user().$promise.then(function (data) {
-                _.contains(data.roles, role);
+        function getRoles() {
+            return resource.user();
+        }
+
+        function getName() {
+            resource.user().$promise.then(function (data) {
+                return data.name;
             });
         }
     }

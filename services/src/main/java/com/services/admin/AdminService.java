@@ -34,6 +34,7 @@ import java.util.stream.Stream;
 public class AdminService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AdminService.class);
+    private static final String ROLE_PREFIX = "ROLE_";
 
     @Autowired
     private LoggedUserRepository loggedUserRepository;
@@ -57,7 +58,7 @@ public class AdminService {
     private GitLabApi gitLabApi;
 
     private enum UserFile {
-        IMIE, NAZWISKO, LOGIN, ERES, MAIL, GITLAB_LOGIN, ADMIN, LECTURER, STUDENT;
+        IMIE, NAZWISKO, LOGIN, ERES, MAIL, GITLAB_LOGIN, ADMIN, LECTURER, TUTOR, STUDENT;
 
         public static List<String> getAllNames() {
             return Stream.of(values()).map(u -> u.name()).collect(Collectors.toList());
@@ -95,7 +96,7 @@ public class AdminService {
 
     private void addLecturerToGroup(Course c, User admin, String privateToken) {
         User lecturer = c.getLecturer();
-        if(!Objects.equals(c.getLecturer(), admin)) {
+        if (!Objects.equals(c.getLecturer(), admin)) {
             gitLabApi.addUsersToGroup(Lists.newArrayList(lecturer.getGitlabId()), privateToken, c.getGroupId());
         }
     }
@@ -138,7 +139,8 @@ public class AdminService {
         List<Role> roles = Lists.newArrayList();
         for (int i = UserFile.ADMIN.ordinal(); i < UserFile.values().length; ++i) {
             if (BooleanUtils.toBoolean(row.get(i))) {
-                roles.add(roleRepository.findRoleByRole(UserFile.values()[i].name()));
+
+                roles.add(roleRepository.findRoleByRole(ROLE_PREFIX + UserFile.values()[i].name()));
             }
         }
         return roles;

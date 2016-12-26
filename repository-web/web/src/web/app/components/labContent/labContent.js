@@ -13,17 +13,20 @@
         };
     }
 
-    function labContentCtrl($resource, $stateParams) {
+    function labContentCtrl($resource, $stateParams, $window) {
         var ctrl = this;
 
         var BASE_URL = '/tutor';
-        var resource = $resource('', {id: '@id'},  {
+        var resource = $resource('', {id: '@id'}, {
             data: {method: 'GET', url: BASE_URL + '/team/:id'},
             students: {method: 'GET', url: BASE_URL + '/team/:id/students', isArray: true},
-            addStudent: {method: 'POST', url: BASE_URL + '/team/:id/addStudent'}
+            addStudent: {method: 'POST', url: BASE_URL + '/team/:id/addStudent'},
+            changePoints: {method: 'POST', url: BASE_URL + '/team/:id/changePoints'}
         });
 
         ctrl.addStudent = addStudent;
+        ctrl.savePoints = savePoints;
+        ctrl.goGitlab = goGitlab;
 
         init();
 
@@ -38,7 +41,7 @@
         }
 
         function addStudent() {
-            resource.addStudent(getParams(), ctrl.newStudent).$promise.then(function (){
+            resource.addStudent(getParams(), ctrl.newStudent).$promise.then(function () {
                 init();
             })
         }
@@ -47,6 +50,17 @@
             return {
                 id: $stateParams.teamId
             }
+        }
+
+        function savePoints(form) {
+            resource.changePoints(getParams(), {value: ctrl.model.points}).$promise.then(function () {
+                init();
+            });
+            form.$setPristine();
+        }
+
+        function goGitlab() {
+            $window.location.href = ctrl.model.gitlabPage;
         }
     }
 

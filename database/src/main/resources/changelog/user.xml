@@ -26,14 +26,13 @@
     <changeSet id="app_user.3" author="wiktor">
         <insert tableName="app_user">
             <column name="id" valueSequenceNext="app_user_seq"/>
-            <column name="login" value="ADMIN"/>
-            <column name="first_name" value="ADMIN"/>
-            <column name="last_name" value="ADMIN"/>
+            <column name="login" value="admin"/>
+            <column name="first_name" value="admin"/>
+            <column name="last_name" value="admin"/>
             <column name="mail" value="ADMIN"/>
-            <column name="eres" value="ADMIN"/>
+            <column name="eres" value="admin"/>
             <column name="gitlab_login" value="ADMIN"/>
             <column name="gitlab_id" value="1"/>
-
         </insert>
     </changeSet>
 </databaseChangeLog>

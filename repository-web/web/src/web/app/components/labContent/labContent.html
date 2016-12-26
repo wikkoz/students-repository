@@ -5,7 +5,8 @@
                 <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                     <div>
                         <span class="label-text">Strona projektu:</span>
-                        <button type="button" class="btn btn-nav">GitLab</button>
+                        <button type="button" class="btn btn-nav"
+                            ng-click="ctrl.goGitlab()">GitLab</button>
                     </div>
                 </div>
             </div>
@@ -19,10 +20,25 @@
             </div>
             <div class="row small-row">
                 <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
-                    <span class="label-text">Ilosc punktów:</span>
-                    <input class="form-control points-tutor"
-                           ng-model="ctrl.model.points">
+                    <div>
+                        <span class="label-text">Opis tematu:</span>
+                        <span class="label-data">{{ctrl.model.description}}</span>
+                    </div>
                 </div>
+            </div>
+            <div class="row small-row">
+                <form name="labPoints">
+                    <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                        <span class="label-text">Ilosc punktów:</span>
+                        <input class="form-control points-tutor"
+                               type="number"
+                               name="points"
+                               ng-model="ctrl.model.points">
+                    </div>
+                    <div class="col-md-2 character-padding glyphicon glyphicon-ok" ng-show="labPoints.points.$dirty"
+                         ng-click="ctrl.savePoints(labPoints)">
+                    </div>
+                </form>
             </div>
             <div class="row">
                 <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
@@ -74,20 +90,10 @@
                     </div>
                 </div>
             </div>
-            <div class="small-row">
-                <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
-                </div>
-            </div>
             <div class="row">
-                <div class="form-group col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
-                    <label for="sel1">Wybierz do kogo wysłać maila</label>
-                    <select class="form-control" id="sel1">
-                        <option>Prowadzący projekt</option>
-                        <option>Prowadzący przedmiot</option>
-                    </select>
-                </div>
                 <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
-                    <email title="Napisz e-mail"></email>
+                    <email title="Napisz e-mail"
+                           addresses="ctrl.model.mailAddresses"></email>
                 </div>
             </div>
         </div>

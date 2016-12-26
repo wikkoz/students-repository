@@ -28,6 +28,10 @@
         init();
 
         function init() {
+            Notification({
+                message: 'Uzupełnij dane w celu stworzenia projektu',
+                delay: null, positionX: 'left', positionY: 'bottom', replaceMessage: true
+            });
             ctrl.options = {
                 formatYear: 'yy',
                 startingDay: 1
@@ -41,7 +45,7 @@
 
             if (ctrl.deadlines.length - 1 == index) {
                 ctrl.deadlines.push({});
-            } else if (_.isEmpty(e.date) && _.isEmpty(e.description) && _.isEmpty(e.points)) {
+            } else if (_.isNil(e.date) && _.isEmpty(e.description) && _.isNil(e.points)) {
                 _.pullAt(ctrl.deadlines, index);
             }
         }

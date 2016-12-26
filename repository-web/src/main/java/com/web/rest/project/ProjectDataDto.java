@@ -7,7 +7,8 @@ import com.services.project.ProjectDeadlineDto;
 import java.util.List;
 
 public class ProjectDataDto {
-    private int studentsNumber;
+    private int minStudentsNumber;
+    private int maxStudentsNumber;
     private List<ProjectDeadlineDto> deadlines;
     private FileDto tutorFile;
     private FileDto studentFile;
@@ -28,12 +29,20 @@ public class ProjectDataDto {
         this.studentFile = studentFile;
     }
 
-    public int getStudentsNumber() {
-        return studentsNumber;
+    public int getMinStudentsNumber() {
+        return minStudentsNumber;
     }
 
-    public void setStudentsNumber(int studentsNumber) {
-        this.studentsNumber = studentsNumber;
+    public void setMinStudentsNumber(int minStudentsNumber) {
+        this.minStudentsNumber = minStudentsNumber;
+    }
+
+    public int getMaxStudentsNumber() {
+        return maxStudentsNumber;
+    }
+
+    public void setMaxStudentsNumber(int maxStudentsNumber) {
+        this.maxStudentsNumber = maxStudentsNumber;
     }
 
     public List<ProjectDeadlineDto> getDeadlines() {
@@ -47,7 +56,8 @@ public class ProjectDataDto {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("studentsNumber", studentsNumber)
+                .add("minStudentsNumber", minStudentsNumber)
+                .add("maxStudentsNumber", maxStudentsNumber)
                 .add("deadlines", deadlines)
                 .add("tutorFile", tutorFile)
                 .add("studentFile", studentFile)

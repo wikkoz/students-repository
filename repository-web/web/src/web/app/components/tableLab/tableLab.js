@@ -16,7 +16,7 @@
     }
 
     /*@ngInject*/
-    function tableLabCtrl($scope, $state, $resource) {
+    function tableLabCtrl($scope, $state, $resource, Notification) {
         var ctrl = this;
 
         var BASE_URL = '/tutor';
@@ -35,6 +35,10 @@
         }
 
         function load() {
+            Notification({
+                message: 'Wybierz temat, aby pokazać informacje o nim <br> Jeśli jakiś temat jest wolny to wejście w niego powoduje przejęcie go oraz usunięcie innych zaproszeń.',
+                delay: null, positionX: 'left', positionY: 'bottom', replaceMessage: true
+            });
             resource.projects().$promise.then(function (data) {
                 ctrl.model = data;
             })

@@ -1,4 +1,11 @@
 <div class="row ">
+    <div class="form-group col-md-12 col-xs-12" ng-if="ctrl.addresses">
+        <label for="mail-select">Wybierz do kogo wysłać maila</label>
+        <select class="form-control" id="mail-select"
+                ng-model="ctrl.model.addresses"
+                ng-options="addresses.addresses as addresses.description for addresses in ctrl.addresses">
+        </select>
+    </div>
     <div class="col-md-12 col-xs-12">
         <div class="email-margin">
             <table cellspacing="0" cellpadding="0" border="0" width="100%">
@@ -19,7 +26,7 @@
                                     <input class="form-control"
                                            size="100%" type="text"
                                            placeholder="Tytuł maila"
-                                           ng-model="ctrl.mailTitle">
+                                           ng-model="ctrl.model.topic">
                                     </input>
                                 </td>
                             </tr>
@@ -32,7 +39,7 @@
                             <tr>
                                 <td>
                                     <textarea class="form-control" rows="10" cols="100"
-                                              ng-model="ctrl.mailBody"
+                                              ng-model="ctrl.model.text"
                                               style="resize:none" placeholder="Tresc maila">
                                     </textarea>
                                 </td>
@@ -41,6 +48,13 @@
                     </td>
                 </tr>
             </table>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3">
+                    <button ng-if="ctrl.model.addresses" type="button" class="btn btn-width"
+                            ng-click="ctrl.send()">Wyślij
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

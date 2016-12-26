@@ -3,43 +3,78 @@
         <div class="row">
             <div class="form-group col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                 <div class="row">
-                    <label for="sel1">Wybierz zespół o temacie</label>
-                    <select class="form-control" id="sel1"
-                            ng-model="ctrl.team"
-                            ng-options="team.teamName for team in ctrl.model">
-                    </select>
-                    <div class="row">
-                        <div class="col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1">
-                            <span style="text-align:left;
-                               display:block;"
-                                  ng-disabled="!ctrl.team">
-                                Do zespołu należa:
-                            </span>
-                        </div>
-                        <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
-                            <div ng-repeat="student in ctrl.team.students">
-                                {{student.name}}
-                            </div>
+                    <div class="col-md-10 col-xs-10 col-md-offset-1 col-xs-offset-1">
+                        <label for="sel1">Wybierz zespół o temacie</label>
+                        <select class="form-control" id="sel1"
+                                ng-model="ctrl.team"
+                                ng-options="team.teamName for team in ctrl.model">
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1">
+                        <span class="label-text">
+                            Do zespołu należa:
+                        </span>
+                    </div>
+                    <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                        <div ng-repeat="student in ctrl.team.students">
+                            <span class="label-bold">{{student.name}}</span>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <input class="form-control"
-                           size="100%"
-                           type="text"
-                           placeholder="Temat projektu"
-                           ng-disabled="!ctrl.team"
-                           ng-model-options="{updateOn: 'blur'}"
-                           ng-model="ctrl.team.topic"
-                           ng-change="ctrl.changeTopic()">
+                    <form name="topic">
+                        <div class="col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1">
+                            <span class="label-text">
+                                Temat:
+                            </span>
+                        </div>
+                        <div class="col-md-10 col-xs-10 col-md-offset-1 col-xs-offset-1">
+                            <input class="form-control"
+                                   name="topicInput"
+                                   size="100%"
+                                   type="text"
+                                   placeholder="Temat projektu"
+                                   ng-disabled="!ctrl.team"
+                                   ng-model="ctrl.team.topic">
+                        </div>
+                        <div class="col-md-1 col-xs-1 character-padding glyphicon glyphicon-ok"
+                             ng-show="topic.topicInput.$dirty"
+                             ng-click="ctrl.changeTopic(topic)">
+                        </div>
+                    </form>
                 </div>
                 <div class="row">
-                    <button type="button"
-                            class="btn btn-new"
-                            ng-click="ctrl.acceptTeam()"
-                            ng-disabled="!ctrl.team">
-                        Dodaj zespół
-                    </button>
+                    <form name="description">
+                        <div class="col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1">
+                            <span class="label-text">
+                                Opis tematu:
+                            </span>
+                        </div>
+                        <div class="col-md-10 col-xs-10 col-md-offset-1 col-xs-offset-1">
+                            <textarea class="text-area-vertical"
+                                      name="descriptionTextarea"
+                                      ng-model="ctrl.team.description"
+                                      ng-change="ctrl.editTopic(topic)"
+                                      ng-disabled="!ctrl.team">
+                            </textarea>
+                        </div>
+                        <div class="col-md-1 col-xs-1 character-padding glyphicon glyphicon-ok"
+                             ng-show="description.descriptionTextarea.$dirty"
+                             ng-click="ctrl.changeDescription(description)">
+                        </div>
+                    </form>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1">
+                        <button type="button"
+                                class="btn btn-new"
+                                ng-click="ctrl.acceptTeam()"
+                                ng-disabled="!ctrl.team">
+                            Dodaj zespół
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -2,8 +2,12 @@ package com.services.student;
 
 import com.database.entity.*;
 import com.database.repository.*;
+import com.gitlab.GitLabApi;
 import com.google.common.base.Preconditions;
+import com.services.login.LoginService;
+import com.services.mail.MailService;
 import com.services.project.ProjectDeadlineDto;
+import com.services.topic.TopicDto;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
@@ -42,6 +46,15 @@ public class StudentService {
     @Autowired
     private TopicRepository topicRepository;
 
+    @Autowired
+    private MailService mailService;
+
+    @Autowired
+    private LoginService loginService;
+
+    @Autowired
+    private GitLabApi gitLabApi;
+
     public List<StudentsProjectDto> getProjectsOfStudent(String login) {
         User student = getUserWithTeamsAndProjects(login);
         List<Team> teamsOfStudent = student.getTeamsAsStudent().stream()
@@ -74,20 +87,22 @@ public class StudentService {
         teamResponse.setGitlabPage(team.getGitlabPage());
         teamResponse.setPoints(team.getPoints());
         teamResponse.setTopic(team.getTopic());
+        teamResponse.setDescription(team.getDescription());
         teamResponse.setDates(team.getProject().getDeadlines().stream()
                 .filter(p -> p.getDate().isAfter(LocalDate.now()))
                 .map(this::toDeadlineDto)
                 .collect(Collectors.toList()));
         List<UserWithIdDto> studentNames = team.getStudents()
                 .stream()
-                .map(UserTeam::getStudent)
                 .map(UserWithIdDto::new)
                 .collect(Collectors.toList());
         teamResponse.setStudents(studentNames);
-        teamResponse.setNumberOfStudents(team.getProject().getStudentsNumber());
+        teamResponse.setMinNumberOfStudents(team.getProject().getMinStudentsNumber());
+        teamResponse.setMaxNumberOfStudents(team.getProject().getMaxStudentsNumber());
         teamResponse.setConfirmedUser(userTeam.isConfirmed());
         teamResponse.setLeader(userTeam.isLeader());
         teamResponse.setCanBeAccepted(teamCanBeAccepted(team));
+        teamResponse.setMailAddresses(mailService.getAddressesForStudent(team));
 
         LOG.info("students response for login {} and team id {}: {}", login, id, teamResponse);
 
@@ -95,8 +110,7 @@ public class StudentService {
     }
 
     private boolean teamCanBeAccepted(Team team) {
-        return team.getStudents().stream().allMatch(UserTeam::isConfirmed)
-                && team.getStudents().size() == team.getProject().getStudentsNumber();
+        return team.getStudents().stream().allMatch(UserTeam::isConfirmed);
     }
 
     private ProjectDeadlineDto toDeadlineDto(ProjectDeadline projectDeadline) {
@@ -110,7 +124,7 @@ public class StudentService {
     @Transactional
     public List<User> findAllStudentsForTeam(long teamId) {
         Long id = teamRepository.findById(teamId).getProject().getId();
-        Project project =  projectRepository.findProjectWithTeams(id);
+        Project project = projectRepository.findProjectWithTeams(id);
         List<Team> teams = project.getTeams();
         return loadUserWithProjects(project.getId())
                 .stream()
@@ -177,15 +191,15 @@ public class StudentService {
     public StudentRemovalResponse deleteStudent(long teamId, long studentId, String userLogin) {
         User student = userRepository.findUsersWithTeam(studentId);
         Team team = teamRepository.findTeamWithStudents(teamId);
+        UserTeam userTeam = userTeamRepository.findUserTeamByTeamAndStudent(team, student);
 
-        boolean selfRemove = StringUtils.equals(userLogin, student.getLogin());
+        boolean selfRemove = StringUtils.equals(userLogin, student.getLogin()) && userTeam.isLeader();
 
-        if(team.getStudents().size() == 1 || selfRemove) {
+        if (team.getStudents().size() == 1 || selfRemove) {
             team.getStudents().forEach(ut -> userTeamRepository.delete(ut));
             team.setConfirmed(TeamState.EMPTY);
             team.setTopic(null);
         } else {
-            UserTeam userTeam = userTeamRepository.findUserTeamByTeamAndStudent(team, student);
             userTeamRepository.delete(userTeam);
         }
 
@@ -200,7 +214,7 @@ public class StudentService {
         Course course = team.getProject().getCourse();
         User tutor = team.getTutor();
 
-        return topicRepository.findTopicsByCourseAndUser(course, tutor);
+        return topicRepository.findTopicsByCourseAbbreviationAndUser(course.getAbbreviation(), tutor);
     }
 
     @Transactional
@@ -211,17 +225,45 @@ public class StudentService {
     }
 
     @Transactional
-    public void acceptTeam(long teamId, String login) {
+    public void saveDescription(long teamId, String description) {
+        Team team = teamRepository.findById(teamId);
+        team.setDescription(description);
+        teamRepository.save(team);
+    }
+
+    @Transactional
+    public void acceptTeam(long teamId, String login, TopicDto topicDto) {
         Team team = teamRepository.findTeamWithStudents(teamId);
-        User studnet = userRepository.findUserByLogin(login);
-        UserTeam userTeam = userTeamRepository.findUserTeamByTeamAndStudent(team, studnet);
+        User student = userRepository.findUserByLogin(login);
+        UserTeam userTeam = userTeamRepository.findUserTeamByTeamAndStudent(team, student);
 
         boolean allAcceptedStudents = team.getStudents().stream().allMatch(UserTeam::isConfirmed);
 
         Preconditions.checkArgument(allAcceptedStudents, "All students must be confirmed for team {} to accept", teamId);
         Preconditions.checkArgument(userTeam.isLeader(), "User with login {} is not leader of team {}", login, teamId);
 
-        team.setConfirmed(TeamState.PENDING);
+        team.setTopic(topicDto.getTopic());
+        team.setDescription(topicDto.getDescription());
+
+        if (isTeamAutoAcceptable(team)) {
+            team.setConfirmed(TeamState.ACCEPTED);
+            String privateToken = loginService.logAsAdmin();
+            String name = team.getTutor().getLogin() + '_' + team.getId();
+            gitLabApi.createProject(privateToken, team.getTopic(), team.getProject().getCourse().getGroupId(), name);
+        } else {
+            team.setConfirmed(TeamState.PENDING);
+        }
+    }
+
+    private boolean isTeamAutoAcceptable(Team team) {
+        Project project = team.getProject();
+        String course = project.getCourse().getAbbreviation();
+        List<Topic> tutorTopics = topicRepository.findTopicsByCourseAbbreviationAndUser(course, team.getTutor());
+        int sizeOfTeam = team.getStudents().size();
+        return sizeOfTeam >= project.getMinStudentsNumber() && sizeOfTeam <= project.getMaxStudentsNumber() &&
+                tutorTopics.stream()
+                        .filter(t -> StringUtils.equals(t.getTopic(), team.getTopic()))
+                        .anyMatch(t -> StringUtils.equals(t.getDescription(), team.getDescription()));
     }
 
     @Transactional
@@ -244,6 +286,15 @@ public class StudentService {
             userTeamRepository.delete(u);
         });
     }
+
+    @Transactional
+    public void rejectRequest(long teamId, String login) {
+        Team team = teamRepository.findById(teamId);
+        User student = userRepository.findUserByLogin(login);
+        UserTeam userTeam = userTeamRepository.findUserTeamByTeamAndStudent(team, student);
+        userTeamRepository.delete(userTeam);
+    }
+
 
     @Transactional
     public void takeTeam(long teamId, String login) {

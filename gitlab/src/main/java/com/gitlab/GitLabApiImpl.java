@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class GitLabApiImpl implements GitLabApi {
@@ -40,9 +41,9 @@ public class GitLabApiImpl implements GitLabApi {
     }
 
     @Override
-    public ProjectDto createProject(String private_token, String name, int groupId, int userId) {
+    public ProjectDto createProject(String private_token, String description, int groupId, String name) {
         GitlabAPI gitlab = loginApi.connect(private_token);
-        return projectApi.createProject(gitlab, name, groupId);
+        return projectApi.createProject(gitlab, description, groupId, name);
     }
 
     @Override
@@ -60,6 +61,14 @@ public class GitLabApiImpl implements GitLabApi {
     @Override
     public void addUsersToGroup(List<Integer> userIds, String privateToken, int groupId) {
         GitlabAPI gitlab = loginApi.connect(privateToken);
+        Set<Integer> userIdsInGroup = groupApi.usersInGroup(gitlab, groupId);
+        userIds.removeAll(userIdsInGroup);
         userIds.forEach(i -> groupApi.addUserToGroup(gitlab, i, groupId));
+    }
+
+    @Override
+    public void removeUserFromProject(Integer userId, String privateToken, Integer projectId) {
+        GitlabAPI gitlab = loginApi.connect(privateToken);
+        projectApi.removeUser(gitlab, userId, projectId);
     }
 }

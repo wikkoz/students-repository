@@ -14,6 +14,8 @@ import java.util.List;
 public interface UserTeamRepository extends JpaRepository<UserTeam, Long>{
     UserTeam findUserTeamByTeamAndStudent(Team team, User student);
 
+    List<UserTeam> findAllByStudent(User student);
+
     @Query("select u from Project p left join  p.teams t left join t.students u where p.id = :id")
     List<UserTeam> findAllUserTeamsForProject(@Param("id") long id);
 }

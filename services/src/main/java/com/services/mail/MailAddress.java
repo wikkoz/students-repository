@@ -4,25 +4,16 @@ import com.google.common.base.MoreObjects;
 
 import java.util.List;
 
-public class MailRequest {
-    private String text;
-    private String topic;
+public class MailAddress {
+    private String description;
     private List<String> addresses;
 
-    public String getText() {
-        return text;
+    public String getDescription() {
+        return description;
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getTopic() {
-        return topic;
-    }
-
-    public void setTopic(String topic) {
-        this.topic = topic;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public List<String> getAddresses() {
@@ -36,8 +27,7 @@ public class MailRequest {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("text", text)
-                .add("topic", topic)
+                .add("description", description)
                 .add("addresses", addresses)
                 .toString();
     }

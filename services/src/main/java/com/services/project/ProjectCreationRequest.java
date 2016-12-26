@@ -7,19 +7,28 @@ import java.util.List;
 
 public class ProjectCreationRequest {
     private long courseId;
-    private int studentsNumber;
+    private int minStudentsNumber;
+    private int maxStudentsNumber;
     private int points;
     private List<ProjectDeadlineDto> deadlines;
     private InputStream fileStudentData;
     private InputStream fileTutorData;
     private String privateToken;
 
-    public int getStudentsNumber() {
-        return studentsNumber;
+    public int getMinStudentsNumber() {
+        return minStudentsNumber;
     }
 
-    public void setStudentsNumber(int studentsNumber) {
-        this.studentsNumber = studentsNumber;
+    public void setMinStudentsNumber(int minStudentsNumber) {
+        this.minStudentsNumber = minStudentsNumber;
+    }
+
+    public int getMaxStudentsNumber() {
+        return maxStudentsNumber;
+    }
+
+    public void setMaxStudentsNumber(int maxStudentsNumber) {
+        this.maxStudentsNumber = maxStudentsNumber;
     }
 
     public int getPoints() {
@@ -74,11 +83,13 @@ public class ProjectCreationRequest {
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("courseId", courseId)
-                .add("studentsNumber", studentsNumber)
+                .add("minStudentsNumber", minStudentsNumber)
+                .add("maxStudentsNumber", maxStudentsNumber)
                 .add("points", points)
                 .add("deadlines", deadlines)
                 .add("fileStudentData", fileStudentData)
                 .add("fileTutorData", fileTutorData)
+                .add("privateToken", privateToken)
                 .toString();
     }
 }

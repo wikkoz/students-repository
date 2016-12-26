@@ -9,6 +9,7 @@ public class PendingTeamDto {
     private long id;
     private String teamName;
     private List<UserWithIdDto> students;
+    private String description;
     private String topic;
 
     public String getTeamName() {
@@ -43,12 +44,21 @@ public class PendingTeamDto {
         this.id = id;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .add("teamName", teamName)
                 .add("students", students)
+                .add("description", description)
                 .add("topic", topic)
                 .toString();
     }

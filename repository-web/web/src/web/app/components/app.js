@@ -58,6 +58,10 @@
             .state('login', {
                 url: '/login',
                 templateUrl: 'components/view/loginPageView.html'
+            })
+            .state('topic', {
+                url: '/topic',
+                templateUrl: 'components/view/topicPageView.html'
             });
         $urlRouterProvider.otherwise('/');
         notificationConfig(NotificationProvider);

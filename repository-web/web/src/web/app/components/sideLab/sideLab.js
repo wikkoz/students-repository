@@ -12,7 +12,7 @@
         };
     }
 
-    function sideLabCtrl($resource, $scope) {
+    function sideLabCtrl($resource, $scope, $state) {
         var ctrl = this;
 
         var BASE_URL = '/tutor';
@@ -21,6 +21,8 @@
         });
 
         init();
+
+        ctrl.goTopic = goTopic;
 
         function init() {
             load();
@@ -31,6 +33,10 @@
             resource.records().$promise.then(function (data) {
                 ctrl.model = data;
             });
+        }
+
+        function goTopic() {
+            $state.go('topic')
         }
     }
 })();

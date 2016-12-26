@@ -4,6 +4,8 @@ import com.database.entity.*;
 import com.database.repository.*;
 import com.gitlab.GitLabApi;
 import com.gitlab.project.ProjectDto;
+import com.google.common.collect.Lists;
+import com.services.mail.MailService;
 import com.services.project.ProjectDeadlineDto;
 import com.services.student.UserWithIdDto;
 import org.hibernate.Hibernate;
@@ -42,6 +44,9 @@ public class TutorService {
     @Autowired
     private GitLabApi gitLabApi;
 
+    @Autowired
+    private MailService mailService;
+
     public List<SignedRecordsResponse> getAllRecords(String login) {
         User tutor = userRepository.findUserByLogin(login);
         Map<String, List<Team>> teams = teamRepository.findTeamByTutorWithStudents(tutor).stream()
@@ -64,6 +69,10 @@ public class TutorService {
         response.setDeadlines(team.getProject().getDeadlines().stream()
                 .map(this::toDeadlineDto)
                 .collect(Collectors.toList()));
+        response.setMailAddresses(mailService.getAddressesForTutor(team));
+        response.setDescription(team.getDescription());
+
+        LOG.info("Found team with {}", response);
         return response;
     }
 
@@ -109,6 +118,10 @@ public class TutorService {
         long signed = entry.getValue().stream()
                 .filter(t -> t.getConfirmed() == TeamState.ACCEPTED)
                 .count();
+        long waiting = entry.getValue().stream()
+                .filter(t -> t.getConfirmed() == TeamState.PENDING)
+                .count();
+        response.setWaitingTeams(waiting);
         response.setName(entry.getKey());
         response.setSignedTeams(signed);
         long allTeams = entry.getValue().size();
@@ -133,6 +146,7 @@ public class TutorService {
                 .collect(Collectors.toList()));
         dto.setTopic(team.getTopic());
         dto.setTeamName(team.getTopic());
+        dto.setDescription(team.getDescription());
 
         LOG.info("Found team with id {},", team.getId());
 
@@ -154,7 +168,8 @@ public class TutorService {
 
         long courseId = team.getProject().getCourse().getId();
         int groupId = courseRepository.findOne(courseId).getGroupId();
-        ProjectDto dto = gitLabApi.createProject(privateToken, team.getTopic(), groupId, team.getTutor().getGitlabId());
+        String name = team.getTutor().getLogin() + '_' + team.getId();
+        ProjectDto dto = gitLabApi.createProject(privateToken, team.getTopic(), groupId, name);
         team.setGitlabId(dto.getId());
         team.setGitlabPage(dto.getPath());
         setUsersForProject(team, privateToken);
@@ -176,7 +191,7 @@ public class TutorService {
         Team team = teamRepository.findById(teamId);
         User student = userRepository.findOne(userId);
         UserTeam userTeam = userTeamRepository.findUserTeamByTeamAndStudent(team, student);
-        //gitlabremove
+        gitLabApi.removeUserFromProject(student.getGitlabId(), privateToken, team.getGitlabId());
         userTeamRepository.delete(userTeam);
     }
 
@@ -184,12 +199,28 @@ public class TutorService {
     public void changeTopic(long teamId, String topic) {
         Team team = teamRepository.findById(teamId);
         team.setTopic(topic);
+        teamRepository.save(team);
     }
+
+    @Transactional
+    public void changeDescription(long teamId, String description) {
+        Team team = teamRepository.findById(teamId);
+        team.setDescription(description);
+        teamRepository.save(team);
+    }
+
+    @Transactional
+    public void changePoints(long teamId, int points) {
+        Team team = teamRepository.findById(teamId);
+        team.setPoints(points);
+        teamRepository.save(team);
+    }
+
 
     @Transactional
     public List<UserWithIdDto> findFreeStudents(long teamId) {
         Long id = teamRepository.findById(teamId).getProject().getId();
-        Project project =  projectRepository.findProjectWithTeams(id);
+        Project project = projectRepository.findProjectWithTeams(id);
 
         LOG.info("Loading free students for project {}", project.getId());
         List<Team> teams = project.getTeams();
@@ -219,7 +250,11 @@ public class TutorService {
         Team team = teamRepository.findById(teamId);
         User student = userRepository.findOne(studentDto.getId());
 
-        //gitlab
+        LOG.info("deleting previous UserTeams for student {}", student.getId());
+        List<UserTeam> userTeams = userTeamRepository.findAllByStudent(student);
+        userTeamRepository.delete(userTeams);
+
+        gitLabApi.addUsersToProject(Lists.newArrayList(student.getGitlabId()), privateToken, team.getGitlabId());
 
         UserTeam userTeam = new UserTeam();
         userTeam.setStudent(student);

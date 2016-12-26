@@ -3,7 +3,9 @@ package com.web.rest.tutor;
 import com.services.login.LoginService;
 import com.services.student.UserWithIdDto;
 import com.services.tutor.*;
+import com.web.configuration.TypeWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -11,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/tutor")
+@PreAuthorize("hasAnyRole('LECTURER', 'TUTOR')")
 public class TutorRest {
 
     @Autowired
@@ -56,6 +59,11 @@ public class TutorRest {
         tutorService.changeTopic(id, topic);
     }
 
+    @RequestMapping(value = "/team/{id}/changeDescription", method = RequestMethod.POST)
+    public void changeDescription(Principal principal, @RequestBody String description, @PathVariable("id") long id) {
+        tutorService.changeDescription(id, description);
+    }
+
     @RequestMapping(value = "/team/{id}/students", method = RequestMethod.GET)
     public List<UserWithIdDto> freeStudents(@PathVariable("id") long id) {
        return tutorService.findFreeStudents(id);
@@ -65,5 +73,10 @@ public class TutorRest {
     public void addStudent(Principal user, @PathVariable("id") long id, @RequestBody UserWithIdDto student){
         String privateToken = loginService.getPrivateToken(user.getName());
         tutorService.addStudent(student, id, privateToken);
+    }
+
+    @RequestMapping(value = "/team/{id}/changePoints", method = RequestMethod.POST)
+    public void changePoints(Principal principal, @RequestBody TypeWrapper<Integer> points, @PathVariable("id") long id) {
+        tutorService.changePoints(id, points.getValue());
     }
 }

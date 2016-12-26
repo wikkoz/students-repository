@@ -20,7 +20,8 @@
             teams: {method: 'GET', url: BASE_URL + '/newTeams', isArray: true},
             accept: {method: 'POST', params: {id: '@id'}, url: BASE_URL + '/acceptTeam/:id'},
             isLogged: {method: 'GET', url: '/user/logged'},
-            changeTopic: {method: 'POST', params: {id: '@id'}, url: BASE_URL + '/team/:id/changeTopic'}
+            changeTopic: {method: 'POST', params: {id: '@id'}, url: BASE_URL + '/team/:id/changeTopic'},
+            changeDescription: {method: 'POST', params: {id: '@id'}, url: BASE_URL + '/team/:id/changeDescription'}
 
         });
 
@@ -28,18 +29,29 @@
 
         ctrl.acceptTeam = acceptTeam;
         ctrl.changeTopic = changeTopic;
+        ctrl.changeDescription = changeDescription;
 
         init();
 
         function init() {
+            Notification({
+                message: 'Wybierz temat, aby pokazać informacje o nim <br> Jeśli jakiś temat jest wolny to wejście w niego powoduje przejęcie go oraz usunięcie innych zaproszeń.',
+                delay: null, positionX: 'left', positionY: 'bottom', replaceMessage: true
+            });
             resource.teams().$promise.then(function (result) {
                 ctrl.model = result;
                 ctrl.team = result[0];
             });
         }
 
-        function changeTopic() {
+        function changeTopic(form) {
             resource.changeTopic({id: ctrl.team.id}, ctrl.team.topic);
+            form.$setPristine();
+        }
+
+        function changeDescription(form) {
+            resource.changeDescription({id: ctrl.team.id}, ctrl.team.description);
+            form.$setPristine();
         }
 
         function acceptTeam() {

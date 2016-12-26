@@ -17,19 +17,19 @@
     <changeSet id="role.3" author="wiktor">
         <insert tableName="role">
             <column name="id" valueSequenceNext="role_seq"/>
-            <column name="role" value="ADMIN"/>
+            <column name="role" value="ROLE_ADMIN"/>
         </insert>
         <insert tableName="role">
             <column name="id" valueSequenceNext="role_seq"/>
-            <column name="role" value="STUDENT"/>
+            <column name="role" value="ROLE_STUDENT"/>
         </insert>
         <insert tableName="role">
             <column name="id" valueSequenceNext="role_seq"/>
-            <column name="role" value="TUTOR"/>
+            <column name="role" value="ROLE_TUTOR"/>
         </insert>
         <insert tableName="role">
             <column name="id" valueSequenceNext="role_seq"/>
-            <column name="role" value="LECTURER"/>
+            <column name="role" value="ROLE_LECTURER"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

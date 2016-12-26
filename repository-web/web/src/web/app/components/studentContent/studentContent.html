@@ -7,16 +7,41 @@
                         <div class="label-text col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                             Zaproponuj temat:
                         </div>
-                        <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
-                            <input class="form-control"
-                                   size="100%"
-                                   type="text"
-                                   ng-change="ctrl.saveTopic()"
-                                   ng-model-options="{updateOn: 'blur'}"
-                                   ng-model="ctrl.model.topic"
-                                   placeholder="Temat">
+                        <form name="topic">
+                            <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                                <input class="form-control"
+                                       name="topicInput"
+                                       size="100%"
+                                       type="text"
+                                       ng-model="ctrl.model.topic"
+                                       typeahead-on-select="ctrl.updateDescription()"
+                                       uib-typeahead="topic.topic as topic.topic for topic in ctrl.topics | filter:{topic:$viewValue}
+                                            | limitTo:8"
+                                       placeholder="Temat">
+                            </div>
+                            <div class="col-md-2 character-padding glyphicon glyphicon-ok"
+                                 ng-show="topic.topicInput.$dirty"
+                                 ng-click="ctrl.saveTopic(topic)">
+                            </div>
+                        </form>
+                         <div class="label-text col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                            Opis tematu:
                         </div>
-                        <div class="label-text col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2" ng-if="ctrl.showNewStudent()">
+                        <form name="description">
+                            <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                                <textarea class="text-area-vertical"
+                                          name="descriptionTextarea"
+                                          ng-model="ctrl.model.description"
+                                          ng-change="ctrl.editTopic(topic)">
+                                </textarea>
+                            </div>
+                            <div class="col-md-2 character-padding glyphicon glyphicon-ok"
+                                 ng-show="description.descriptionTextarea.$dirty"
+                                 ng-click="ctrl.saveDescription(description)">
+                            </div>
+                        </form>
+                        <div class="label-text col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2"
+                             ng-if="ctrl.showNewStudent()">
                             Dodaj osobe do projektu:
                         </div>
                         <span ng-if="ctrl.showNewStudent()">
@@ -29,7 +54,7 @@
                                        placeholder="Imie nazwisko">
                             </div>
                             <div class="col-md-2 character-padding glyphicon glyphicon-plus"
-                                ng-click="ctrl.addStudent();">
+                                 ng-click="ctrl.addStudent()">
                             </div>
                         </span>
                     </span>
@@ -37,12 +62,24 @@
                          class="label-text col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                         Temat projektu: {{ctrl.model.topic}}
                     </div>
+                    <div ng-if='!ctrl.showLeaderOption()'
+                         class="label-text col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                        Opis tematu: {{ctrl.model.description}}
+                    </div>
+                    <div class="label-text col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2" ng-if="ctrl.showStudentsStates()">
+                        Proponowana liczba osób: {{::ctrl.model.minNumberOfStudents}} - {{::ctrl.model.maxNumberOfStudents}}
+                    </div>
                     <div class="label-text col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                         Do projektu należa:
                     </div>
                     <div ng-repeat="student in ctrl.model.students">
                         <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
-                            {{student.name}}
+                            <span class="label-bold">{{student.name}}
+                                <span ng-if="ctrl.showStudentsStates()"> -
+                                    <span ng-if="student.accepted">zaakceptowany</span>
+                                    <span ng-if="!student.accepted">oczekujący</span>
+                                </span>
+                            </span>
                         </div>
                         <div class="col-md-2 character-padding glyphicon glyphicon-minus"
                              ng-if="ctrl.showLeaderOption()"
@@ -62,7 +99,7 @@
                     <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                         <div>
                             <span class="label-text">Strona projektu:</span>
-                            <button type="button" class="btn btn-nav">GitLab</button>
+                            <button type="button" class="btn btn-nav" ng-click="ctrl.goGitlab()">GitLab</button>
                         </div>
                     </div>
                 </div>
@@ -74,6 +111,12 @@
                 </div>
                 <div class="small-row">
                     <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
+                        <span class="label-text">Opis tematu:</span>
+                        <span class="label-data">{{ctrl.model.description}}</span>
+                    </div>
+                </div>
+                <div class="small-row">
+                    <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                         <span class="label-text">Ilosc punktów:</span>
                         <span class="label-data">{{ctrl.model.points}}</span>
                     </div>
@@ -81,9 +124,9 @@
                 <div class="small-row">
                     <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
                         <span class="label-text">Członkowie:</span>
-                        <ui ng-repeat="student in ctrl.model.students">
-                            <li class="label-data">{{student.name}}</li>
-                        </ui>
+                        <div ng-repeat="student in ctrl.model.students">
+                            <span class="label-data">{{student.name}}</span>
+                        </div>
                     </div>
                 </div>
                 <div class="small-row" ng-if="ctrl.model.dates">
@@ -113,28 +156,25 @@
             <div ng-if='ctrl.showJoinToTeam()'>
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
-                        <span class="label-text">Zostałeś wybrany do zespołu przez:</span>
-                        <ui>
-                            <li>Jan Kowalski</li>
-                            <li>Jan Kowalski</li>
-                        </ui>
+                        <span class="label-text">Czy chcesz zaakcpetować zaproszenie do zespołu?</span>
                     </div>
                     <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
-                        <button type="button" class="btn btn-accept">Zaakceptuj</button>
-                        <button type="button" class="btn btn-reject">Odrzuc</button>
+                        <button type="button"
+                                class="btn btn-accept"
+                                ng-click="ctrl.acceptRequest()">Zaakceptuj
+                        </button>
+                        <button type="button"
+                                class="btn btn-reject"
+                                ng-click="ctrl.rejectRequest()">Odrzuc
+                        </button>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
-                    <label for="sel1">Wybierz do kogo wysłać maila</label>
-                    <select class="form-control" id="sel1">
-                        <option>Prowadzący projekt</option>
-                        <option>Prowadzący przedmiot</option>
-                    </select>
-                </div>
                 <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2">
-                    <email title="Napisz e-mail"></email>
+                    <email title="Napisz e-mail"
+                           addresses="ctrl.model.mailAddresses">
+                    </email>
                 </div>
             </div>
         </div>

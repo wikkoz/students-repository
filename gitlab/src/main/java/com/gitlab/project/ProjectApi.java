@@ -10,10 +10,10 @@ import java.io.IOException;
 @Component
 public class ProjectApi {
 
-    public ProjectDto createProject(GitlabAPI gitlab, String projectName, int namespace) {
+    public ProjectDto createProject(GitlabAPI gitlab, String projectName, int namespace, String name) {
         ProjectDto dto = new ProjectDto();
         try {
-            GitlabProject project = gitlab.createProject(projectName, namespace, null, null, null, null, null, null, null, null, null);
+            GitlabProject project = gitlab.createProject(name, namespace, projectName, null, null, null, null, null, null, null, null);
             dto.setId(project.getId());
             dto.setPath(project.getWebUrl());
         } catch (IOException e) {
@@ -28,6 +28,15 @@ public class ProjectApi {
             gitlab.addProjectMember(projectId, userId, GitlabAccessLevel.Developer);
         } catch (IOException e) {
             throw new IllegalStateException(String.format("Cannot add user  %d to project %d with message %s",
+                    userId, projectId, e.getMessage()), e);
+        }
+    }
+
+    public void removeUser(GitlabAPI gitlab, Integer userId, Integer projectId) {
+        try {
+            gitlab.deleteProjectMember(projectId, userId);
+        } catch (IOException e) {
+            throw new IllegalStateException(String.format("Cannot remove user %d from project %d with message %s",
                     userId, projectId, e.getMessage()), e);
         }
     }

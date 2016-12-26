@@ -2,7 +2,6 @@ package com.web.rest.login;
 
 import com.services.login.LoginRequest;
 import com.services.login.LoginService;
-import com.services.mail.MailRequest;
 import com.services.mail.MailService;
 import com.web.configuration.TypeWrapper;
 import org.slf4j.Logger;
@@ -53,7 +52,7 @@ public class LoginRest {
         map.put("roles", AuthorityUtils.authorityListToSet(((Authentication) user)
                 .getAuthorities()));
 
-        mailService.sendMail(new MailRequest());
+        //mailService.sendMail(new MailRequest());
         return map;
     }
 

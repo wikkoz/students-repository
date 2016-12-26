@@ -7,13 +7,23 @@ import com.database.repository.UserRepository;
 import com.gitlab.GitLabApi;
 import com.gitlab.login.LoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
 @Service
+@PropertySource("classpath:/repository.properties")
+
 public class LoginService {
+
+    @Value("${gitlab.login}")
+    private String USERNAME;
+
+    @Value("${gitlab.password}")
+    private String PASSWORD;
 
     @Autowired
     private GitLabApi gitLabApi;
@@ -23,6 +33,10 @@ public class LoginService {
 
     @Autowired
     private LoggedUserRepository loggedUserRepository;
+
+    public String logAsAdmin() {
+        return gitLabApi.login(USERNAME, PASSWORD).getPrivateToken();
+    }
 
     public String getNameLoggedUser(String login) {
         User logged = userRepository.findUserByLogin(login);

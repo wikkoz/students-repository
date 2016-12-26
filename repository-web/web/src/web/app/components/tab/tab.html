@@ -1,21 +1,25 @@
 <div class="row">
     <div class="col-md-12 col-xs-12">
         <ul class="nav nav-tabs">
-            <li ng-click="ctrl.reload('student')" ng-if="ctrl.hasRole('STUDENT')" class="active"><a data-toggle="tab" href="#home">Student</a></li>
-            <li ng-click="ctrl.reload('lab')" ng-if="ctrl.hasRole('TUTOR')" ><a data-toggle="tab" href="#menu1">Laborant</a></li>
-            <li ng-click="ctrl.reload('subject')" ng-if="ctrl.hasRole('LECTURER')" ><a data-toggle="tab" href="#menu2" >Prowadzacy przedmiot</a></li>
-            <li ng-click="ctrl.reload('admin')" ng-if="ctrl.hasRole('ADMIN')" ><a data-toggle="tab" href="#menu3">Admin</a></li>
+            <li class="{{ctrl.setActive('STUDENT')}}" ng-click="ctrl.reload('student')" ng-if="ctrl.hasRole('STUDENT')">
+                <a data-toggle="tab" href="#menu0">Student</a></li>
+            <li class="{{ctrl.setActive('TUTOR')}}" ng-click="ctrl.reload('lab')" ng-if="ctrl.hasRole('TUTOR')"><a
+                    data-toggle="tab" href="#menu1">Prowadzący projekt</a></li>
+            <li class="{{ctrl.setActive('LECTURER')}}" ng-click="ctrl.reload('subject')"
+                ng-if="ctrl.hasRole('LECTURER')"><a data-toggle="tab" href="#menu2">Prowadzący przedmiot</a></li>
+            <li class="{{ctrl.setActive('ADMIN')}}" ng-click="ctrl.reload('admin')" ng-if="ctrl.hasRole('ADMIN')"><a
+                    data-toggle="tab" href="#menu3">Admin</a></li>
         </ul>
         <div class="tab-content">
-            <div id="home" class="tab-pane fade in active">
+            <div ng-if="ctrl.hasRole('STUDENT')" id="menu0" class="tab-pane fade {{ctrl.setActive('STUDENT')}}">
                 <div class="row row-eq-height">
                     <div class="col-md-12 col-xs-12 content-bg">
                         <table-student></table-student>
                     </div>
                 </div>
             </div>
-            <div id="menu1" class="tab-pane fade">
-                <div class="row row-eq-height">
+            <div id="menu1" class="tab-pane fade {{ctrl.setActive('TUTOR')}}" ng-if="ctrl.hasRole('TUTOR')">
+                <div class="row row-eq-height ">
                     <div class="col-md-8 col-xs-8 table-bg">
                         <table-lab></table-lab>
                     </div>
@@ -24,27 +28,30 @@
                     </div>
                 </div>
             </div>
-            <div id="menu2" class="tab-pane fade">
-                <div class="row row-eq-height">
+            <div id="menu2" class="tab-pane fade {{ctrl.setActive('LECTURER')}}" ng-if="ctrl.hasRole('LECTURER')">
+                <div class="row row-eq-height ">
                     <div class="col-md-8 col-xs-8 table-bg">
                         <table-subject
-                            subject="ctrl.subject">
+                                subject="ctrl.subject"
+                                addresses="ctrl.addresses">
                         </table-subject>
                     </div>
                     <div class="col-md-4 col-xs-4 side-bg">
                         <side-subject
-                            subject="ctrl.subject">
+                                subject="ctrl.subject">
                         </side-subject>
                     </div>
                 </div>
                 <div class="row">
                     <div class="row col-md-8 col-md-offset-2 row col-xs-8 col-xs-offset-2">
-                        <email title="Do przedmiotu"></email>
+                        <email title="Do przedmiotu"
+                               addresses="ctrl.addresses">
+                        </email>
                     </div>
                 </div>
             </div>
-            <div id="menu3" class="tab-pane fade">
-                <div class="row row-eq-height">
+            <div id="menu3" class="tab-pane fade {{ctrl.setActive('ADMIN')}}" ng-if="ctrl.hasRole('ADMIN')">
+                <div class="row row-eq-height ">
                     <div class="col-md-12 content-bg">
                         <admin></admin>
                     </div>

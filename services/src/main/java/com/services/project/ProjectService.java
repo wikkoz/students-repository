@@ -8,12 +8,15 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.services.file.File;
 import com.services.file.FileService;
+import com.services.mail.MailService;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -63,6 +66,9 @@ public class ProjectService {
     @Autowired
     private GitLabApi gitLabApi;
 
+    @Autowired
+    private MailService mailService;
+
     @Transactional
     public List<CourseDto> findAllCoursesForUser(String login) {
         return courseRepository.findAllCoursesWithLecturerLogin(login).stream()
@@ -78,11 +84,26 @@ public class ProjectService {
         return dto;
     }
 
-    public List<LecturerTeamDto> findAllTeamsForCourse(long courseId) {
-        return courseRepository.findTeamsForCourse(courseId).stream()
+    public ProjectTeamResponse getProjectResponse(long courseId) {
+        ProjectTeamResponse response = new ProjectTeamResponse();
+        Set<Project> projects = initializeProjectsWithStudentsAndTeams(courseId);
+        List<LecturerTeamDto> teamsDtos = projects.stream()
+                .flatMap(p -> p.getTeams().stream())
                 .filter(Objects::nonNull)
                 .map(this::toLecturerTeamDto)
                 .collect(Collectors.toList());
+
+        response.setTeams(teamsDtos);
+        response.setMailAddresses(mailService.getAddressForSubject(projects));
+        LOG.info("Found course response {}", response);
+        return response;
+    }
+
+    private Set<Project> initializeProjectsWithStudentsAndTeams(long courseId) {
+        Set<Project> projects = courseRepository.findTeamsWithUsersForCourse(courseId);
+        projects.removeIf(Objects::isNull);
+        projects.forEach(p -> Hibernate.initialize(p.getStudents()));
+        return projects;
     }
 
     private LecturerTeamDto toLecturerTeamDto(Team team) {
@@ -95,6 +116,11 @@ public class ProjectService {
     }
 
     public void createProject(ProjectCreationRequest request) {
+        LOG.info("Creating project with request {}", request);
+
+        Course course = courseRepository.findCourseByIdWithProjects(request.getCourseId());
+        Preconditions.checkNotNull(course, "Cannot create project for empty course");
+
         File fileOfStudents = fileService.getFile(request.getFileStudentData(), StudentsFile.getAllNames());
         File fileOfTeams = fileService.getFile(request.getFileTutorData(), CoursesFile.getAllNames());
         List<User> students = fileService.getObjectFromFile(fileOfStudents, usersForProject());
@@ -134,7 +160,8 @@ public class ProjectService {
         Project project = new Project();
         project.setCourse(courseRepository.findOne(request.getCourseId()));
         project.setTeams(teams);
-        project.setStudentsNumber(request.getStudentsNumber());
+        project.setMinStudentsNumber(request.getMinStudentsNumber());
+        project.setMaxStudentsNumber(request.getMaxStudentsNumber());
         project.setMaxPoints(request.getDeadlines().stream()
                 .mapToInt(ProjectDeadlineDto::getPoints)
                 .sum());
@@ -165,5 +192,37 @@ public class ProjectService {
         users.remove(project.getCourse().getLecturer());
         List<Integer> usersId = users.stream().map(User::getGitlabId).collect(Collectors.toList());
         gitLabApi.addUsersToGroup(usersId, privateToken, project.getCourse().getGroupId());
+    }
+
+    public ProjectRecordsDto getRecordsForCourse(long courseId) {
+        Set<Project> courseProjects = courseRepository.findTeamsWithUsersForCourse(courseId);
+        return courseProjects.stream()
+                .filter(Objects::nonNull)
+                .sorted(Comparator.comparingLong(Project::getId))
+                .skip(courseProjects.size() - 1)
+                .map(this::toRecordsDto)
+                .findFirst()
+                .orElseGet(ProjectRecordsDto::new);
+    }
+
+    private ProjectRecordsDto toRecordsDto(Project project) {
+        Hibernate.initialize(project.getStudents());
+
+        ProjectRecordsDto recordsDto = new ProjectRecordsDto();
+        project.getTeams().forEach(t -> Hibernate.initialize(t.getStudents()));
+        long allStudents = project.getStudents().size();
+        long signedStudents = project.getTeams().stream()
+                .filter(t -> t.getConfirmed() == TeamState.ACCEPTED)
+                .mapToLong(t -> t.getStudents().size())
+                .sum();
+        long waitingStudents = project.getTeams().stream()
+                .filter(t -> t.getConfirmed() == TeamState.PENDING)
+                .mapToLong(t -> t.getStudents().size())
+                .sum();
+        recordsDto.setNumberOfStudents(allStudents);
+        recordsDto.setSignedStudents(signedStudents);
+        recordsDto.setWaitingStudents(waitingStudents);
+        recordsDto.setUnsignedStudents(allStudents - signedStudents - waitingStudents);
+        return recordsDto;
     }
 }

@@ -16,6 +16,7 @@ public class Team {
     private int gitlabId;
     private String gitlabPage;
     private int points;
+    private String description;
 
     @ManyToOne
     @JoinColumn(name = "tutor_id")
@@ -98,6 +99,14 @@ public class Team {
 
     public String getGitlabPage() {
         return gitlabPage;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

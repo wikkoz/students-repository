@@ -12,7 +12,7 @@ public class UserApi {
     public int createUser(GitlabAPI gitlab, UserDto user) {
         try {
             GitlabUser gitlabUser = gitlab.createUser(user.getEmail(), user.getPassword(), user.getUsername(), user.getName(),
-                    null, null, null, null, null, null, null, null, null, null, null);
+                    null, null, null, null, user.getProjects(), null, null, null, user.isAdmin(), user.isCanCreateGroup(), null);
             return gitlabUser.getId();
         } catch (IOException e) {
             throw new IllegalStateException(String.format("Cannot create user %s with message %s", user, e.getMessage()), e);

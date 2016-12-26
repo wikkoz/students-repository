@@ -5,6 +5,9 @@ public class UserDto {
     private String username;
     private String name;
     private String password;
+    private Integer projects;
+    private boolean canCreateGroup;
+    private boolean isAdmin;
 
     public String getEmail() {
         return email;
@@ -38,5 +41,27 @@ public class UserDto {
         this.name = name;
     }
 
+    public Integer getProjects() {
+        return projects;
+    }
 
+    public void setProjects(Integer projects) {
+        this.projects = projects;
+    }
+
+    public boolean isCanCreateGroup() {
+        return canCreateGroup;
+    }
+
+    public void setCanCreateGroup(boolean canCreateGroup) {
+        this.canCreateGroup = canCreateGroup;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
 }

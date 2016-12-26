@@ -16,7 +16,7 @@
     }
 
     /*@ngInject*/
-    function tableStudentCtrl($scope, $state, $resource) {
+    function tableStudentCtrl($scope, $state, $resource, Notification) {
         var ctrl = this;
         var STATES = {
             'EMPTY': 'Wolny',
@@ -41,6 +41,10 @@
         }
 
         function load() {
+            Notification({
+                message: 'Wybierz temat, aby pokazać informacje o nim <br> Jeśli jakiś temat jest wolny to wejście w niego powoduje przejęcie go oraz usunięcie innych zaproszeń.',
+                delay: null, positionX: 'left', positionY: 'bottom', replaceMessage: true
+            });
             ctrl.model = resource.getTeams();
         }
 

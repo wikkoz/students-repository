@@ -9,15 +9,26 @@
             bindToController: true,
             scope: {
                 title: '@',
-                address: '='
+                addresses: '='
             },
             controllerAs: 'ctrl',
             controller: emailCtrl
         };
     }
 
-    function emailCtrl() {
+    function emailCtrl($resource) {
         var ctrl = this;
+
+        var BASE_URL = '/mail';
+        var resource = $resource('', {}, {
+            send: {method: 'POST', url: BASE_URL + '/send'}
+        });
+
+        ctrl.send = send;
+
+        function send() {
+            resource.send(ctrl.model);
+        }
     }
 
 })(); 

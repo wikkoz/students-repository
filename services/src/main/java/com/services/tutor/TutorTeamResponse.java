@@ -1,6 +1,7 @@
 package com.services.tutor;
 
 import com.google.common.base.MoreObjects;
+import com.services.mail.MailAddress;
 import com.services.project.ProjectDeadlineDto;
 import com.services.student.UserWithIdDto;
 
@@ -12,6 +13,8 @@ public class TutorTeamResponse {
     private List<UserWithIdDto> students;
     private String topic;
     private List<ProjectDeadlineDto> deadlines;
+    private String description;
+    private List<MailAddress> mailAddresses;
 
     public String getGitlabPage() {
         return gitlabPage;
@@ -53,6 +56,22 @@ public class TutorTeamResponse {
         this.students = students;
     }
 
+    public List<MailAddress> getMailAddresses() {
+        return mailAddresses;
+    }
+
+    public void setMailAddresses(List<MailAddress> mailAddresses) {
+        this.mailAddresses = mailAddresses;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
@@ -61,6 +80,8 @@ public class TutorTeamResponse {
                 .add("students", students)
                 .add("topic", topic)
                 .add("deadlines", deadlines)
+                .add("description", description)
+                .add("mailAddresses", mailAddresses)
                 .toString();
     }
 }
