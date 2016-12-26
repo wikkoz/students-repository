@@ -16,10 +16,8 @@ public class CasUserDetailsService implements AuthenticationUserDetailsService<C
 
     @Override
     public UserDetails loadUserDetails(CasAssertionAuthenticationToken token) throws UsernameNotFoundException {
-        UserDetails details = (UserDetails) token.getPrincipal();
-        String login = details.getUsername();
-        String password = details.getPassword();
-        User user = userRepository.findUserByLogin(login);
-        return new AppUser(login, password,  user.getRoles());
+        String login = (String) token.getPrincipal();
+        User user = userRepository.findUserByLoginWithRoles("ADMIN");
+        return new AppUser(login, null, user.getRoles());
     }
 }

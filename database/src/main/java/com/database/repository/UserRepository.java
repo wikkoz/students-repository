@@ -16,6 +16,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<Role> getRolesByLogin(String login);
 
+    @Query("SELECT s from User s left join fetch s.roles p where s.login =:login")
+    User findUserByLoginWithRoles(@Param("login") String login);
+
     @Query("SELECT s from User s left join fetch s.projectsAsStudent p where p.id =:id")
     Set<User> findUsersForProject(@Param("id") long id);
 
