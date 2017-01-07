@@ -3,6 +3,7 @@ package com.services.student;
 import com.database.entity.*;
 import com.database.repository.*;
 import com.gitlab.GitLabApi;
+import com.gitlab.project.ProjectDto;
 import com.google.common.base.Preconditions;
 import com.services.login.LoginService;
 import com.services.mail.MailService;
@@ -249,10 +250,14 @@ public class StudentService {
             team.setConfirmed(TeamState.ACCEPTED);
             String privateToken = loginService.logAsAdmin();
             String name = team.getTutor().getLogin() + '_' + team.getId();
-            gitLabApi.createProject(privateToken, team.getTopic(), team.getProject().getCourse().getGroupId(), name);
+            ProjectDto gitlab = gitLabApi.createProject(privateToken, team.getTopic(), team.getProject().getCourse().getGroupId(), name);
+            team.setGitlabPage(gitlab.getPath());
+            team.setGitlabId(gitlab.getId());
+            team.setPoints(0);
         } else {
             team.setConfirmed(TeamState.PENDING);
         }
+        teamRepository.save(team);
     }
 
     private boolean isTeamAutoAcceptable(Team team) {
