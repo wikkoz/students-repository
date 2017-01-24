@@ -37,6 +37,8 @@
                 if (response.value) {
                     $state.go('/');
                     Notification.primary({message:"Pomyślnie zalogowano się do GitLab-a", positionY: 'bottom', positionX: 'right'});
+                } else {
+                    Notification.warning({message:"Podano złe dane. Spróbuj ponownie", positionY: 'bottom', positionX: 'right'});
                 }
             });
         }

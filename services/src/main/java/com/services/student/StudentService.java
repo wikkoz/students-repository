@@ -267,6 +267,7 @@ public class StudentService {
         int sizeOfTeam = team.getStudents().size();
         return sizeOfTeam >= project.getMinStudentsNumber() && sizeOfTeam <= project.getMaxStudentsNumber() &&
                 tutorTopics.stream()
+                        .filter(Topic::isChosen)
                         .filter(t -> StringUtils.equals(t.getTopic(), team.getTopic()))
                         .anyMatch(t -> StringUtils.equals(t.getDescription(), team.getDescription()));
     }

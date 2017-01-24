@@ -7,7 +7,7 @@
             ng-options="subject.abbreviation for subject in ctrl.projects">
         </select>
     </div>
-    <div class="row col-md-8 col-md-offset-1 form-horizontal">
+    <div class="row col-md-8 col-md-offset-1 form-horizontal" ng-if="ctrl.subject">
         <div class="label label-status">Stan zapisów: {{ctrl.records.signedStudents}}/{{ctrl.records.numberOfStudents}}</div>
         <div class="label label-status">Stan oczeujących: {{ctrl.records.waitingStudents}}/{{ctrl.records.numberOfStudents}}</div>
         <div class="label label-status">Stan niezapisanych: {{ctrl.records.unsignedStudents}}/{{ctrl.records.numberOfStudents}}</div>

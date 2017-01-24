@@ -166,8 +166,7 @@ public class TutorService {
     private void createGitlabProject(Team team, String privateToken) {
         LOG.info("Creating gitlab project for team with id {}", team.getId());
 
-        long courseId = team.getProject().getCourse().getId();
-        int groupId = courseRepository.findOne(courseId).getGroupId();
+        int groupId = team.getProject().getCourse().getGroupId();
         String name = team.getTutor().getLogin() + '_' + team.getId();
         ProjectDto dto = gitLabApi.createProject(privateToken, team.getTopic(), groupId, name);
         team.setGitlabId(dto.getId());

@@ -24,6 +24,7 @@
         ctrl.upload = upload;
         ctrl.open = open;
         ctrl.tableChange = tableChange;
+        ctrl.showConfirmButton = showConfirmButton;
 
         init();
 
@@ -52,12 +53,23 @@
 
         function upload() {
             ctrl.model.deadlines = _.cloneDeep(ctrl.deadlines);
-            console.log(ctrl);
             _.pullAt(ctrl.model.deadlines, ctrl.model.deadlines.length - 1);
             resource.data(getParams(), ctrl.model).$promise.then(function () {
                 Notification.info("Stworzono projekt");
                 $state.go('/');
             });
+        }
+
+        function showConfirmButton() {
+            var temp = _.cloneDeep(ctrl.deadlines);
+
+            var anyEmptyElelemt = _.some(_.dropRight(temp, 1), function(e) {
+                return _.isNil(e.date) || _.isNil(e.points) || _.isNil(e.description)
+            });
+            var deadlinesValidation = ctrl.deadlines.length > 1 && !anyEmptyElelemt;
+            var numberValidation = !_.isNil(ctrl.model.minStudentsNumber) && !_.isNil(ctrl.model.minStudentsNumber)
+                    && ctrl.model.minStudentsNumber <= ctrl.model.maxStudentsNumber;
+            return deadlinesValidation && numberValidation && !_.isEmpty(ctrl.model.tutorFile) && !_.isEmpty(ctrl.model.studentFile)
         }
 
         function open(index) {
