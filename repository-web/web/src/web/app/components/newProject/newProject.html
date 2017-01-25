@@ -11,6 +11,7 @@
                 <div class="col-md-2 col-xs-2">
                     <input type="number"
                            class="form-control"
+                           min="1"
                            ng-model="ctrl.model.minStudentsNumber">
                 </div>
                 <div class="col-md-1 col-xs-1">
@@ -19,6 +20,7 @@
                 <div class="col-md-2 col-xs-2">
                     <input type="number"
                            class="form-control"
+                           min="1"
                            ng-model="ctrl.model.maxStudentsNumber">
                 </div>
             </div>
@@ -53,6 +55,7 @@
                         <td class="col-md-4 col-xs-4">
                             <input type="number"
                                    class="form-control"
+                                   min="0"
                                    ng-model="deadline.points"
                                    ng-change="ctrl.tableChange($index)"
                                    ng-model-options="{updateOn: 'blur'}">

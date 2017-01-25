@@ -262,4 +262,12 @@ public class TutorService {
 
         userTeamRepository.save(userTeam);
     }
+
+    @Transactional
+    public void rejectTeam(long id) {
+        Team team = teamRepository.findTeamWithStudents(id);
+        team.setConfirmed(TeamState.FORMING);
+
+        LOG.info("Rejecting team with id {}", team.getId());
+    }
 }

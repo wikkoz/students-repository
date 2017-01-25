@@ -68,7 +68,7 @@
             });
             var deadlinesValidation = ctrl.deadlines.length > 1 && !anyEmptyElelemt;
             var numberValidation = !_.isNil(ctrl.model.minStudentsNumber) && !_.isNil(ctrl.model.minStudentsNumber)
-                    && ctrl.model.minStudentsNumber <= ctrl.model.maxStudentsNumber;
+                    && ctrl.model.minStudentsNumber <= ctrl.model.maxStudentsNumber ;
             return deadlinesValidation && numberValidation && !_.isEmpty(ctrl.model.tutorFile) && !_.isEmpty(ctrl.model.studentFile)
         }
 

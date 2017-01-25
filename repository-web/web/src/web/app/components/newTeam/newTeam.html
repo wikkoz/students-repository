@@ -11,7 +11,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" ng-if="ctrl.team">
                     <div class="col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1">
                         <span class="label-text">
                             Do zespołu należa:
@@ -23,7 +23,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" ng-if="ctrl.team">
                     <form name="topic">
                         <div class="col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1">
                             <span class="label-text">
@@ -45,19 +45,18 @@
                         </div>
                     </form>
                 </div>
-                <div class="row">
+                <div class="row" ng-if="ctrl.team">
                     <form name="description">
                         <div class="col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1">
                             <span class="label-text">
                                 Opis tematu:
                             </span>
                         </div>
-                        <div class="col-md-10 col-xs-10 col-md-offset-1 col-xs-offset-1">
+                        <div class="col-md-10 col-xs-10 col-md-offset-1 col-xs-offset-1" ng-if="ctrl.team">
                             <textarea class="text-area-vertical"
                                       name="descriptionTextarea"
                                       ng-model="ctrl.team.description"
-                                      ng-change="ctrl.editTopic(topic)"
-                                      ng-disabled="!ctrl.team">
+                                      ng-change="ctrl.editTopic(topic)">
                             </textarea>
                         </div>
                         <div class="col-md-1 col-xs-1 character-padding glyphicon glyphicon-ok"
@@ -66,13 +65,21 @@
                         </div>
                     </form>
                 </div>
-                <div class="row">
-                    <div class="col-md-10 col-md-offset-1 col-xs-10 col-xs-offset-1">
+                <div class="row"  ng-if="ctrl.team">
+                    <div class="col-md-4 col-md-offset-1 col-xs-4 col-xs-offset-1">
                         <button type="button"
                                 class="btn btn-new"
                                 ng-click="ctrl.acceptTeam()"
                                 ng-disabled="!ctrl.team">
                             Dodaj zespół
+                        </button>
+                    </div>
+                    <div class="col-md-4 col-md-offset-2 col-xs-4 col-xs-offset-2">
+                        <button type="button"
+                                class="btn btn-new"
+                                ng-click="ctrl.rejectTeam()"
+                                ng-disabled="!ctrl.team">
+                            Odrzuć zespół
                         </button>
                     </div>
                 </div>

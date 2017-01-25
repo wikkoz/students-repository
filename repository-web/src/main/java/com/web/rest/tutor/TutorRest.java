@@ -42,6 +42,10 @@ public class TutorRest {
         String privateToken = loginService.getPrivateToken(principal.getName());
         tutorService.acceptTeam(id, privateToken);
     }
+    @RequestMapping(value = "/rejectTeam/{id}", method = RequestMethod.POST)
+    public void rejectTeam(@PathVariable("id") long id) {
+        tutorService.rejectTeam(id);
+    }
 
     @RequestMapping(value = "/team/{id}", method = RequestMethod.GET)
     public TutorTeamResponse teamData(@PathVariable("id") long id) {

@@ -19,6 +19,7 @@
         var resource = $resource('', {}, {
             teams: {method: 'GET', url: BASE_URL + '/newTeams', isArray: true},
             accept: {method: 'POST', params: {id: '@id'}, url: BASE_URL + '/acceptTeam/:id'},
+            reject: {method: 'POST', params: {id: '@id'}, url: BASE_URL + '/rejectTeam/:id'},
             isLogged: {method: 'GET', url: '/user/logged'},
             changeTopic: {method: 'POST', params: {id: '@id'}, url: BASE_URL + '/team/:id/changeTopic'},
             changeDescription: {method: 'POST', params: {id: '@id'}, url: BASE_URL + '/team/:id/changeDescription'}
@@ -30,6 +31,7 @@
         ctrl.acceptTeam = acceptTeam;
         ctrl.changeTopic = changeTopic;
         ctrl.changeDescription = changeDescription;
+        ctrl.rejectTeam = rejectTeam;
 
         init();
 
@@ -66,6 +68,12 @@
             };
 
             GitlabService.login(success, failure);
+        }
+
+        function rejectTeam() {
+            resource.reject({id: ctrl.team.id}).$promise.then(function (){
+                $state.go('/');
+            });
         }
     }
 })(); 
