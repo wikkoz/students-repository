@@ -15,6 +15,7 @@
         </createTable>
     </changeSet>
     <changeSet id="topic.2" author="wiktor">
+        <addNotNullConstraint tableName="topic" columnName="id" columnDataType="number"/>
         <addPrimaryKey tableName="topic" columnNames="id"/>
         <addForeignKeyConstraint baseTableName="topic" baseColumnNames="user_id"
                                  constraintName="id_user_topics_foreign" referencedTableName="app_user" referencedColumnNames="id"/>

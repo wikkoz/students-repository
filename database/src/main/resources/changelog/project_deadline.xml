@@ -14,6 +14,7 @@
         </createTable>
     </changeSet>
     <changeSet id="user.team.2" author="wiktor">
+        <addNotNullConstraint tableName="project_deadline" columnName="id" columnDataType="number"/>
         <addPrimaryKey tableName="project_deadline" columnNames="id"/>
         <createSequence sequenceName="project_deadline_seq" startValue="1" cycle="false"/>
         <addForeignKeyConstraint baseTableName="project_deadline" baseColumnNames="project_id"

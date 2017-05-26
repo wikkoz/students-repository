@@ -11,6 +11,7 @@
         </createTable>
     </changeSet>
     <changeSet id="role.2" author="wiktor">
+        <addNotNullConstraint tableName="role" columnName="id" columnDataType="number"/>
         <addPrimaryKey tableName="role" columnNames="id"/>
         <createSequence sequenceName="role_seq" startValue="1" cycle="false"/>
     </changeSet>

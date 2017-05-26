@@ -18,6 +18,7 @@
         </createTable>
     </changeSet>
     <changeSet id="team.2" author="wiktor">
+        <addNotNullConstraint tableName="team" columnName="id" columnDataType="number"/>
         <addPrimaryKey tableName="team" columnNames="id"/>
         <addForeignKeyConstraint baseTableName="team" baseColumnNames="project_id"
                                  constraintName="id_project_foreign" referencedTableName="project" referencedColumnNames="id"/>

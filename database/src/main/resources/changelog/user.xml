@@ -17,6 +17,7 @@
         </createTable>
     </changeSet>
     <changeSet id="app_user.2" author="wiktor">
+        <addNotNullConstraint tableName="app_user" columnName="id" columnDataType="number"/>
         <addPrimaryKey tableName="app_user" columnNames="id"/>
         <addUniqueConstraint tableName="app_user" columnNames="mail"/>
         <addUniqueConstraint tableName="app_user" columnNames="login"/>

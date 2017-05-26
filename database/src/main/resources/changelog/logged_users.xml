@@ -13,6 +13,7 @@
         </createTable>
     </changeSet>
     <changeSet id="logged.2" author="wiktor">
+        <addNotNullConstraint tableName="logged_user" columnName="id" columnDataType="number"/>
         <addPrimaryKey tableName="logged_user" columnNames="id"/>
         <createSequence sequenceName="logged_user_seq" startValue="1" cycle="false"/>
     </changeSet>

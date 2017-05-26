@@ -61,7 +61,7 @@ public class AdminService {
         IMIE, NAZWISKO, LOGIN, ERES, MAIL, GITLAB_LOGIN, ADMIN, LECTURER, TUTOR, STUDENT;
 
         public static List<String> getAllNames() {
-            return Stream.of(values()).map(u -> u.name()).collect(Collectors.toList());
+            return Stream.of(values()).map(Enum::name).collect(Collectors.toList());
         }
     }
 
@@ -69,7 +69,7 @@ public class AdminService {
         NAZWA_PRZEDMIOTU, SKROT, ERES_PROWADZACEGO;
 
         public static List<String> getAllNames() {
-            return Stream.of(values()).map(u -> u.name()).collect(Collectors.toList());
+            return Stream.of(values()).map(Enum::name).collect(Collectors.toList());
         }
     }
 
