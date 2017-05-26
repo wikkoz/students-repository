@@ -13,6 +13,7 @@ public class TestUtil {
         course.setGroupId(10);
         course.setAbbreviation("test");
         Project project = new Project();
+        project.setId(1L);
         project.setCourse(course);
         project.setMaxStudentsNumber(5);
         project.setMinStudentsNumber(3);

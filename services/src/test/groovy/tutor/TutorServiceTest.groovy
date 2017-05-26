@@ -23,7 +23,7 @@ class TutorServiceTest extends Specification{
         service.gitLabApi = gitLabApi;
     }
 
-    def "should topic change state after accepting"() {
+    def "should team change state after accepting"() {
         Team team = TestUtil.initTeam()
         ProjectDto p =  new ProjectDto();
         p.setId(10);
@@ -37,5 +37,19 @@ class TutorServiceTest extends Specification{
         gitLabApi.createProject(*_) >> p;
         team.confirmed == TeamState.ACCEPTED;
         1 * gitLabApi.addUsersToProject([], *_)
+    }
+
+    def "should team change state after rejecting"() {
+        Team team = TestUtil.initTeam()
+        ProjectDto p =  new ProjectDto();
+        p.setId(10);
+        p.setPath("asd")
+
+        when:
+        service.rejectTeam(12L)
+
+        then:
+        teamRepository.findTeamWithStudents(_) >> team
+        team.confirmed == TeamState.FORMING;
     }
 }

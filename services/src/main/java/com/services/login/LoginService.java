@@ -38,11 +38,6 @@ public class LoginService {
         return gitLabApi.login(USERNAME, PASSWORD).getPrivateToken();
     }
 
-    public String getNameLoggedUser(String login) {
-        User logged = userRepository.findUserByLogin(login);
-        return logged.name();
-    }
-
     public boolean login(LoginRequest loginRequest, String login) {
         LoginDto dto = gitLabApi.login(loginRequest.getLogin(), loginRequest.getPassword());
         if (dto.isCorrect() && !isLogged(dto.getLogin())) {
