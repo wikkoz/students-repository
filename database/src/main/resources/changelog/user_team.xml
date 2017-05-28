@@ -22,4 +22,15 @@
         <addForeignKeyConstraint baseTableName="user_team" baseColumnNames="team_id"
                                  constraintName="id_team_foreign" referencedTableName="team" referencedColumnNames="id"/>
     </changeSet>
+    <changeSet id="user.team.4" author="wiktor">
+        <createIndex tableName="user_team" indexName="ut_inx">
+            <column name="id"/>
+        </createIndex>
+        <createIndex tableName="user_team" indexName="ut_id_team_inx">
+            <column name="team_id"/>
+        </createIndex>
+        <createIndex tableName="user_team" indexName="ut_id_user_inx">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

@@ -21,4 +21,15 @@
         <addForeignKeyConstraint baseTableName="course" baseColumnNames="lecturer_id"
                                  constraintName="id_lecturer_foreign" referencedTableName="app_user" referencedColumnNames="id"/>
     </changeSet>
+    <changeSet id="course.3" author="wiktor">
+        <createIndex tableName="course" indexName="course_id">
+            <column name="id"/>
+        </createIndex>
+        <createIndex tableName="course" indexName="course_abb">
+            <column name="abbreviation"/>
+        </createIndex>
+        <createIndex tableName="course" indexName="course_lec">
+            <column name="lecturer_id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

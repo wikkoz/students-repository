@@ -33,4 +33,9 @@
             <column name="role" value="ROLE_LECTURER"/>
         </insert>
     </changeSet>
+    <changeSet id="role.4" author="wiktor">
+        <createIndex tableName="role" indexName="role_id_inx">
+            <column name="id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

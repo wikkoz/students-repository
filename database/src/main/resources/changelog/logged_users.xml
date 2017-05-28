@@ -17,4 +17,9 @@
         <addPrimaryKey tableName="logged_user" columnNames="id"/>
         <createSequence sequenceName="logged_user_seq" startValue="1" cycle="false"/>
     </changeSet>
+    <changeSet id="logged.3" author="wiktor">
+        <createIndex tableName="logged_user" indexName="logged_user_id">
+            <column name="login"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

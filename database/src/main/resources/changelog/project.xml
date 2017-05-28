@@ -20,4 +20,12 @@
                                  constraintName="id_course_foreign" referencedTableName="course" referencedColumnNames="id"/>
         <createSequence sequenceName="project_seq" startValue="1" cycle="false"/>
     </changeSet>
+    <changeSet id="project.3" author="wiktor">
+        <createIndex tableName="project" indexName="project_id">
+            <column name="id"/>
+        </createIndex>
+        <createIndex tableName="project" indexName="project_course">
+            <column name="course_id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

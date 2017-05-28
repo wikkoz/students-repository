@@ -13,11 +13,16 @@
             <column name="description" type="varchar(100)" />
         </createTable>
     </changeSet>
-    <changeSet id="user.team.2" author="wiktor">
+    <changeSet id="project_deadline.2" author="wiktor">
         <addNotNullConstraint tableName="project_deadline" columnName="id" columnDataType="number"/>
         <addPrimaryKey tableName="project_deadline" columnNames="id"/>
         <createSequence sequenceName="project_deadline_seq" startValue="1" cycle="false"/>
         <addForeignKeyConstraint baseTableName="project_deadline" baseColumnNames="project_id"
                                  constraintName="id_deadline_foreign_2" referencedTableName="project" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="project_deadline.3" author="wiktor">
+        <createIndex tableName="project_deadline" indexName="deadline_project_id">
+            <column name="project_id"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>

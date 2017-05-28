@@ -17,4 +17,12 @@
         <addForeignKeyConstraint baseTableName="role_member" baseColumnNames="role_id"
                                  constraintName="id_role_foreign" referencedTableName="role" referencedColumnNames="id"/>
     </changeSet>
+    <changeSet id="role.member.3" author="wiktor">
+        <createIndex tableName="role_member" indexName="role_id_user_inx">
+            <column name="user_id"/>
+        </createIndex>
+        <createIndex tableName="role_member" indexName="role_id_role_inx">
+            <column name="role_id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

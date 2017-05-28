@@ -17,4 +17,12 @@
         <addForeignKeyConstraint baseTableName="student_project" baseColumnNames="project_id"
                                  constraintName="id_prostu_foreign" referencedTableName="project" referencedColumnNames="id"/>
     </changeSet>
+    <changeSet id="student.project.3" author="wiktor">
+        <createIndex tableName="student_project" indexName="sp_id_user_inx">
+            <column name="user_id"/>
+        </createIndex>
+        <createIndex tableName="student_project" indexName="sp_id_project_inx">
+            <column name="project_id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

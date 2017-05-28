@@ -36,4 +36,15 @@
             <column name="gitlab_id" value="1"/>
         </insert>
     </changeSet>
+    <changeSet id="app_user.4" author="wiktor">
+        <createIndex tableName="app_user" indexName="app_user_id_inx">
+            <column name="id"/>
+        </createIndex>
+        <createIndex tableName="app_user" indexName="app_user_login_inx">
+            <column name="login"/>
+        </createIndex>
+        <createIndex tableName="app_user" indexName="app_user_eres_inx">
+            <column name="eres"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

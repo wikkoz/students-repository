@@ -26,4 +26,15 @@
                                  constraintName="id_tutor_foreign" referencedTableName="app_user" referencedColumnNames="id"/>
         <createSequence sequenceName="team_seq" startValue="1" cycle="false"/>
     </changeSet>
+    <changeSet id="team.3" author="wiktor">
+        <createIndex tableName="team" indexName="team_id_inx">
+            <column name="id"/>
+        </createIndex>
+        <createIndex tableName="team" indexName="team_id_project_inx">
+            <column name="project_id"/>
+        </createIndex>
+        <createIndex tableName="team" indexName="team_id_tutor_inx">
+            <column name="tutor_id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

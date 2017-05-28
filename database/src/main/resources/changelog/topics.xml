@@ -21,4 +21,12 @@
                                  constraintName="id_user_topics_foreign" referencedTableName="app_user" referencedColumnNames="id"/>
         <createSequence sequenceName="topic_seq" startValue="1" cycle="false"/>
     </changeSet>
+    <changeSet id="topic.3" author="wiktor">
+        <createIndex tableName="topic" indexName="topic_id_inx">
+            <column name="id"/>
+        </createIndex>
+        <createIndex tableName="topic" indexName="topic_id_user_inx">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>
